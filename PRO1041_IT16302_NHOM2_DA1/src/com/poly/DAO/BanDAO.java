@@ -18,6 +18,7 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
     String DELETE_SQL = "DELETE FROM BAN WHERE MaBan=?";
     String SELECT_ALL_SQL = "SELECT * FROM BAN ";
     String SELECT_BY_ID_SQL = "SELECT * FROM BAN WHERE MaBan=?";
+    String SELECT_BY_MaBan = "SELECT TenBan FROM BAN WHERE MaBan=?";
 
     @Override
     public void insert(Ban entity) {
@@ -63,7 +64,7 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
 
     @Override
     protected List<Ban> selectBySql(String sql, Object... args) {
-        List<Ban> list = new ArrayList<Ban>();
+        List<Ban> list = new ArrayList<>();
         try {
             ResultSet rs = JdbcHelper.query(sql, args);
             while (rs.next()) {
@@ -78,5 +79,19 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String selectTenBan(String maban) {
+        String mb = "";
+        try {
+            ResultSet rs = JdbcHelper.query(SELECT_BY_MaBan, maban);
+            while (rs.next()) {
+                mb=rs.getString("MaBan");
+            }
+            rs.getStatement().getConnection().close();
+        } catch (Exception e) {
+            
+        }
+        return mb;
     }
 }

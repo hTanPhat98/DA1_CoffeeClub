@@ -75,5 +75,6 @@ public class LoaiMonDAO extends CoffeShopSysDAO<LoaiMon, String> {
             throw new RuntimeException(e);
         }
     }
-
+    
+    
 }

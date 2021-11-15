@@ -22,6 +22,8 @@ public class MenuDAO extends CoffeShopSysDAO<Menu, String> {
     String DELETE_SQL = "DELETE FROM MENU WHERE MaMon=?";
     String SELECT_ALL_SQL = "SELECT * FROM MENU ";
     String SELECT_BY_ID_SQL = "SELECT * FROM MENU WHERE MaMon=?";
+    String SELECT_BY_KEYWORD_SQL="SELECT * FROM MENU WHERE TenMon LIKE ? OR MaLoai LIKE ?";
+    
 
     @Override
     public void insert(Menu entity) {
@@ -86,6 +88,10 @@ public class MenuDAO extends CoffeShopSysDAO<Menu, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public List<Menu> selectByKeyword(String keyword) {
+        return selectBySql(SELECT_BY_KEYWORD_SQL, "%" + keyword + "%", "%" + keyword + "%");
     }
 
 }

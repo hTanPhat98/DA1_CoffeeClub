@@ -42,7 +42,7 @@ public class XImage {
         }
     }
 
-    public static ImageIcon read(String fileName, int w, int h) {
+    public static ImageIcon read(String fileName) {
         File defaut = new File("image", "add-photo.png");
         File path = new File("image", fileName);
         Image img = null;

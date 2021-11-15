@@ -14,6 +14,9 @@ public class LoaiMon {
     private String maLoai;
     private String tenLoai;
 
+    public LoaiMon() {
+    }
+    
     public String getMaLoai() {
         return maLoai;
     }
@@ -30,4 +33,10 @@ public class LoaiMon {
         this.tenLoai = tenLoai;
     }
 
+    @Override
+    public String toString() {
+        return tenLoai+"-"+maLoai;
+    }
+    
+    
 }

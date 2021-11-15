@@ -31,13 +31,17 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         initComponents();
         init();
     }
+
     private void init() {
         this.setLocationRelativeTo(null);
-        index = -1;
-        loadToListLM();
+        this.indexM = -1;
+        this.indexLM = -1;
+        this.loadToListLM();
+        this.updateStatusMon();
+        this.updateStatusLoaiMon();
     }
 
-    int index = -1;
+    int indexM = -1, indexLM = -1;
     MenuDAO daomenu = new MenuDAO();
     List<Menu> listmn = new ArrayList();
     LoaiMonDAO daoloaimon = new LoaiMonDAO();
@@ -56,14 +60,12 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                     mon.getTenMon(),
                     mon.getGia(),
                     listlm.getMaLoai()};
-
                 Menu listmenu = new Menu();
                 listmenu.setMaMon(mon.getMaMon());
                 listmenu.setTenMon(mon.getTenMon());
                 listmenu.setGia(mon.getGia());
                 listmenu.setMaLoai(mon.getMaLoai());
                 listmn.add(listmenu);
-
                 model.addRow(row);
             }
         } catch (Exception e) {
@@ -119,7 +121,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void editMon() {
         try {
-            String mnu = (String) tblLoaiMon.getValueAt(this.index, 0);
+            String mnu = (String) tblLoaiMon.getValueAt(this.indexM, 0);
             Menu model = daomenu.selectById(mnu);
             if (model != null) {
                 this.setmodelMon(model);
@@ -132,16 +134,23 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void clearMon() {
         this.setmodelMon(new Menu());
+        this.indexM = -1;
         this.updateStatusMon();
     }
 
     private void updateStatusMon() {
-//        boolean edit = (this.index > 0);
-//      //  txtMaMon.setEditable(!edit);
-//        btnSaveM.setEnabled(!edit);
-//        btnUpdateM.setEnabled(edit);
-//        btnDeleteM.setEnabled(edit);
+        boolean edit = (this.indexM >= 0);
+        //  txtMaMon.setEditable(!edit);
+        btnSaveM.setEnabled(!edit);
+        btnUpdateM.setEnabled(edit);
+        btnDeleteM.setEnabled(edit);
+    }
 
+    private void updateStatusLoaiMon() {
+        boolean edit = (this.indexLM >= 0);
+        btnSaveLM.setEnabled(!edit);
+        btnUpdateLM.setEnabled(edit);
+        btnDeleteLM.setEnabled(edit);
     }
 
     private void setmodelLoai(LoaiMon lm) {
@@ -156,9 +165,11 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
         return model;
     }
+
     private void clearLoaiMon() {
         this.setmodelLoai(new LoaiMon());
-        this.updateStatusMon();
+        this.indexLM=-1;
+        this.updateStatusLoaiMon();
     }
 
     private void editLoaiMon() {
@@ -187,7 +198,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
         try {
-
             List<Menu> list = (List<Menu>) daomenu.SelectByIDmaloai(key[1]);
             for (Menu m : list) {
                 Object[] row = {
@@ -201,15 +211,21 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
-
     }
-
+    
+    private void clickListLM(MouseEvent evt) {
+        if (evt.getClickCount() == 1) {
+            this.indexLM = lstLoaiMon.getSelectedIndex();
+            this.editListDanhMuc();
+            this.updateStatusLoaiMon();
+        }
+    }
+    
     private void clickTableMenu(MouseEvent evt) {
         if (evt.getClickCount() == 1) {
-            this.index = tblLoaiMon.getSelectedRow();
+            this.indexM = tblLoaiMon.getSelectedRow();
             this.editMon();
             this.updateStatusMon();
-
         }
     }
 
@@ -243,11 +259,12 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
         }
     }
-      private void deleteMon() {
+
+    private void deleteMon() {
         if (!Auth.isManager()) {
             new ThongBaoJDialog(null, true).alert(2, "Bạn không có quyền xóa!");
-        } else {           
-             if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa món ăn này?")) {
+        } else {
+            if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa món ăn này?")) {
                 String maloaimon = txtMaMon.getText();
                 try {
                     daomenu.delete(maloaimon);
@@ -260,9 +277,8 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             }
         }
     }
-      
-      
-       private void insertLoaiMon() {       
+
+    private void insertLoaiMon() {
         LoaiMon lm = getLoaiMon();
         try {
             daoloaimon.insert(lm);
@@ -275,7 +291,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         }
     }
 
-    private void updateLoaiMon() {       
+    private void updateLoaiMon() {
         try {
             LoaiMon lm = getLoaiMon();
             daoloaimon.update(lm);
@@ -285,11 +301,12 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
         }
     }
-      private void deleteLoaiMon() {
+
+    private void deleteLoaiMon() {
         if (!Auth.isManager()) {
             new ThongBaoJDialog(null, true).alert(2, "Bạn không có quyền xóa!");
-        } else{
-                if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa món ăn này?")) {
+        } else {
+            if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa món ăn này?")) {
                 String maloaimon = txtMaLoaiMon.getText();
                 try {
                     daoloaimon.delete(maloaimon);
@@ -304,7 +321,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }
 
     //CONTROL
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -713,44 +729,43 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNewMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewMActionPerformed
-      clearMon();
+        this.clearMon();
     }//GEN-LAST:event_btnNewMActionPerformed
 
     private void btnSaveMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveMActionPerformed
-      insertMon();
+        this.insertMon();
     }//GEN-LAST:event_btnSaveMActionPerformed
 
     private void btnUpdateMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateMActionPerformed
-       updateMon();
+        this.updateMon();
     }//GEN-LAST:event_btnUpdateMActionPerformed
 
     private void btnDeleteMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteMActionPerformed
-       deleteMon();
+        this.deleteMon();
     }//GEN-LAST:event_btnDeleteMActionPerformed
 
     private void lstLoaiMonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLoaiMonMouseClicked
-       editListDanhMuc();
+        this.clickListLM(evt);
     }//GEN-LAST:event_lstLoaiMonMouseClicked
 
     private void tblLoaiMonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiMonMouseClicked
-       this.index = tblLoaiMon.getSelectedRow();
-       this.editMon();
+        this.clickTableMenu(evt);
     }//GEN-LAST:event_tblLoaiMonMouseClicked
 
     private void btnNewLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewLMActionPerformed
-      clearLoaiMon();
+        this.clearLoaiMon();
     }//GEN-LAST:event_btnNewLMActionPerformed
 
     private void btnSaveLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveLMActionPerformed
-      insertLoaiMon();
+        this.insertLoaiMon();
     }//GEN-LAST:event_btnSaveLMActionPerformed
 
     private void btnUpdateLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateLMActionPerformed
-      updateLoaiMon();
+        this.updateLoaiMon();
     }//GEN-LAST:event_btnUpdateLMActionPerformed
 
     private void btnDeleteLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLMActionPerformed
-      deleteLoaiMon();
+        this.deleteLoaiMon();
     }//GEN-LAST:event_btnDeleteLMActionPerformed
 
     /**

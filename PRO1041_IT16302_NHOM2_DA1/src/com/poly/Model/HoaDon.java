@@ -19,6 +19,11 @@ public class HoaDon {
     private float tongTien;
     private boolean trangThai;
 
+    public HoaDon() {
+    }
+    
+    
+    
     public int getMaHD() {
         return maHD;
     }
@@ -64,6 +69,14 @@ public class HoaDon {
     }
 
     public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
+    }
+
+    public HoaDon(String maBan, String maNV, Date ngayHD, float tongTien, boolean trangThai) {
+        this.maBan = maBan;
+        this.maNV = maNV;
+        this.ngayHD = ngayHD;
+        this.tongTien = tongTien;
         this.trangThai = trangThai;
     }
     

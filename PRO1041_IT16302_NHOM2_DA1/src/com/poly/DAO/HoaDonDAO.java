@@ -22,7 +22,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
     String DELETE_SQL = "DELETE FROM HOADON WHERE MaHD=?";
     String SELECT_ALL_SQL = "SELECT * FROM HOADON ";
     String SELECT_BY_ID_SQL = "SELECT * FROM HOADON WHERE MaHD=?";
-    
+    String SELECT_BY_ID_SQL_MaHD = "SELECT * FROM HOADON WHERE MaBan=?";
     @Override
     public void insert(HoaDon entity) {
         JdbcHelper.update(INSERT_SQL,
@@ -85,5 +85,13 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    public HoaDon selectByMahd(String key) {
+        List<HoaDon> list = this.selectBySql(SELECT_BY_ID_SQL_MaHD, key);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 }

@@ -188,7 +188,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         dtcNgayVaoLam.setDate(nv.getNgayVaoLam());
         if (nv.getHinhNV() != null) {
             lblAnhNhanVien.setToolTipText(nv.getHinhNV());
-            lblAnhNhanVien.setIcon(XImage.read(nv.getHinhNV(), w, h));
+            lblAnhNhanVien.setIcon(XImage.read(nv.getHinhNV()));
         }
     }
 
@@ -235,7 +235,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             XImage.save(file);
-            ImageIcon icon = XImage.read(file.getName(), w, h);
+            ImageIcon icon = XImage.read(file.getName());
             lblAnhNhanVien.setIcon(icon);
             lblAnhNhanVien.setToolTipText(file.getName());
         }
