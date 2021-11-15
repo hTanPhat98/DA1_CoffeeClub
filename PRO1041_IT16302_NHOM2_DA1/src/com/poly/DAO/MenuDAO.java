@@ -63,7 +63,10 @@ public class MenuDAO extends CoffeShopSysDAO<Menu, String> {
         }
         return list.get(0);
     }
-
+    public List<Menu> SelectByIDmaloai(String maloaimon) {
+        String sql = "SELECT * FROM MENU where MaLoai='" + maloaimon + "'";
+        return selectBySql(sql);
+    }
     @Override
     protected List<Menu> selectBySql(String sql, Object... args) {
         List<Menu> list = new ArrayList<Menu>();
