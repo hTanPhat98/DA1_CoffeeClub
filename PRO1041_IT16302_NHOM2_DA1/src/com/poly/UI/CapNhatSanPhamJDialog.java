@@ -5,6 +5,11 @@
  */
 package com.poly.UI;
 
+import com.poly.DAO.HoaDonCTDAO;
+import com.poly.Model.HoaDonShow;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  *
  * @author phong
@@ -17,6 +22,26 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     public CapNhatSanPhamJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
+    }
+    Locale localeVN = new Locale("vi", "VN");
+    NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+    private HoaDonShow hds;
+    HoaDonCTDAO daohdct = new HoaDonCTDAO();
+
+    public void setHDCT(HoaDonShow HDCT) {
+        txtTenSP.setText(HDCT.getTenMon());
+        txtGiaTienSP.setText(currencyVN.format(HDCT.getDonGia()));
+        spnSoLuong.setValue(HDCT.getSoLuong());
+        hds = HDCT;
+        this.setVisible(true);
+    }
+
+    private void updateSL() {
+        hds.setSoLuong((int) spnSoLuong.getValue());
+        daohdct.updateSl(hds);
+        new BanHangJDialog(null, true).resetHDCT();
+        this.dispose();
     }
 
     /**
@@ -34,7 +59,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         lblHeader = new javax.swing.JLabel();
         pnlCapNhatSP = new javax.swing.JPanel();
         lblTenSP = new javax.swing.JLabel();
-        txtGiaTien = new javax.swing.JLabel();
+        lblGiaTien = new javax.swing.JLabel();
         lblSoLuong = new javax.swing.JLabel();
         txtTenSP = new javax.swing.JTextField();
         txtGiaTienSP = new javax.swing.JTextField();
@@ -64,27 +89,40 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         lblTenSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTenSP.setText("Tên sản phẩm:");
 
-        txtGiaTien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtGiaTien.setText("Giá tiền:");
+        lblGiaTien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblGiaTien.setText("Giá tiền:");
 
         lblSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblSoLuong.setText("Số lượng:");
 
+        txtTenSP.setEditable(false);
         txtTenSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        txtGiaTienSP.setEditable(false);
         txtGiaTienSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
 
         btnDone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_done_x32.png"))); // NOI18N
         btnDone.setText("DONE");
         btnDone.setIconTextGap(10);
+        btnDone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDoneActionPerformed(evt);
+            }
+        });
 
         btnClose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_close_x32.png"))); // NOI18N
         btnClose.setText("CLOSE");
         btnClose.setIconTextGap(10);
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlCapNhatSPLayout = new javax.swing.GroupLayout(pnlCapNhatSP);
         pnlCapNhatSP.setLayout(pnlCapNhatSPLayout);
@@ -99,7 +137,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                     .addGroup(pnlCapNhatSPLayout.createSequentialGroup()
                         .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTenSP)
-                            .addComponent(txtGiaTien)
+                            .addComponent(lblGiaTien)
                             .addComponent(lblSoLuong))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlCapNhatSPLayout.createSequentialGroup()
@@ -116,7 +154,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtTenSP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(txtGiaTien)
+                .addComponent(lblGiaTien)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtGiaTienSP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -162,6 +200,14 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
+        updateSL();
+    }//GEN-LAST:event_btnDoneActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -209,6 +255,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDone;
+    private javax.swing.JLabel lblGiaTien;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblSoLuong;
     private javax.swing.JLabel lblTenSP;
@@ -217,7 +264,6 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlWall;
     private javax.swing.JSpinner spnSoLuong;
-    private javax.swing.JLabel txtGiaTien;
     private javax.swing.JTextField txtGiaTienSP;
     private javax.swing.JTextField txtTenSP;
     // End of variables declaration//GEN-END:variables

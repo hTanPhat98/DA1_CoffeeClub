@@ -86,7 +86,7 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
         try {
             ResultSet rs = JdbcHelper.query(SELECT_BY_MaBan, maban);
             while (rs.next()) {
-                mb=rs.getString("MaBan");
+                mb=rs.getString("TenBan");
             }
             rs.getStatement().getConnection().close();
         } catch (Exception e) {

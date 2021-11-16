@@ -9,39 +9,22 @@ package com.poly.Model;
  *
  * @author Patnight
  */
-public class HoaDonCT {
+public class HoaDonShow {
     private int maHDCT;
-    private int maHD;
     private String maMon;
-    private int soLuong;
+    private String tenMon;
     private float donGia;
+    private int soLuong;
 
-    public HoaDonCT() {
+    public HoaDonShow() {
     }
 
-    public HoaDonCT(int maHD, String maMon, int soLuong, float donGia) {
-        this.maHD = maHD;
-        this.maMon = maMon;
-        this.soLuong = soLuong;
-        this.donGia = donGia;
-    }
-
-    
-    
     public int getMaHDCT() {
         return maHDCT;
     }
 
     public void setMaHDCT(int maHDCT) {
         this.maHDCT = maHDCT;
-    }
-
-    public int getMaHD() {
-        return maHD;
-    }
-
-    public void setMaHD(int maHD) {
-        this.maHD = maHD;
     }
 
     public String getMaMon() {
@@ -52,12 +35,12 @@ public class HoaDonCT {
         this.maMon = maMon;
     }
 
-    public int getSoLuong() {
-        return soLuong;
+    public String getTenMon() {
+        return tenMon;
     }
 
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
+    public void setTenMon(String tenMon) {
+        this.tenMon = tenMon;
     }
 
     public float getDonGia() {
@@ -68,7 +51,13 @@ public class HoaDonCT {
         this.donGia = donGia;
     }
 
-    
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
     
     
 }

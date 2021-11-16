@@ -15,14 +15,16 @@ import java.util.List;
  *
  * @author Patnight
  */
-public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
-    
+public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
+
     String INSERT_SQL = "INSERT INTO HOADON (MaBan, MaNV, NgayHD, Tongtien, Trangthai) VALUES (?, ?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE HOADON SET MaBan=?, MaNV=?, NgayHD=?, Tongtien=?, Trangthai=? WHERE MaHD=?";
     String DELETE_SQL = "DELETE FROM HOADON WHERE MaHD=?";
-    String SELECT_ALL_SQL = "SELECT * FROM HOADON ";
+    String SELECT_ALL_SQL = "SELECT * FROM HOADON";
     String SELECT_BY_ID_SQL = "SELECT * FROM HOADON WHERE MaHD=?";
     String SELECT_BY_ID_SQL_MaHD = "SELECT * FROM HOADON WHERE MaBan=?";
+    String UPDATE_TT_SQL = "UPDATE HOADON SET Tongtien=?, Trangthai=? WHERE MaHD=?";
+
     @Override
     public void insert(HoaDon entity) {
         JdbcHelper.update(INSERT_SQL,
@@ -31,7 +33,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
                 entity.getNgayHD(),
                 entity.getTongTien(),
                 entity.isTrangThai()
-                );
+        );
     }
 
     @Override
@@ -43,9 +45,17 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
                 entity.getTongTien(),
                 entity.isTrangThai(),
                 entity.getMaHD()
-                );
+        );
     }
-
+    
+    public void updateTT(float tien,int mhd,boolean tt) {
+        JdbcHelper.update(UPDATE_TT_SQL,
+                tien,
+                tt,
+                mhd
+        );
+    }
+    
     @Override
     public void delete(Integer key) {
         JdbcHelper.update(DELETE_SQL, key);
@@ -86,7 +96,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
             throw new RuntimeException(e);
         }
     }
-    
+
     public HoaDon selectByMahd(String key) {
         List<HoaDon> list = this.selectBySql(SELECT_BY_ID_SQL_MaHD, key);
         if (list.isEmpty()) {
@@ -94,4 +104,6 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer>{
         }
         return list.get(0);
     }
+    
+    
 }

@@ -6,33 +6,34 @@
 package com.poly.UI;
 
 import com.poly.DAO.BanDAO;
+import com.poly.DAO.HoaDonCTDAO;
 import com.poly.DAO.HoaDonDAO;
 import com.poly.DAO.KhuVucDAO;
 import com.poly.DAO.LoaiMonDAO;
 import com.poly.DAO.MenuDAO;
-import com.poly.Help.ForButton;
-import com.poly.Help.MouseMoveButton;
 import com.poly.Helper.Auth;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
 import com.poly.Model.HoaDon;
+import com.poly.Model.HoaDonCT;
+import com.poly.Model.HoaDonShow;
 import com.poly.Model.KhuVuc;
 import com.poly.Model.LoaiMon;
 import com.poly.Model.Menu;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Scrollbar;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
@@ -52,14 +53,16 @@ public class BanHangJDialog extends javax.swing.JDialog {
         init();
     }
 
-    KhuVucDAO daokv = new KhuVucDAO();
+    int rowsp, vtT;
+    String keyWorld, getMaBan;
     BanDAO daoB = new BanDAO();
     MenuDAO daomn = new MenuDAO();
     HoaDonDAO daohd = new HoaDonDAO();
+    KhuVucDAO daokv = new KhuVucDAO();
     LoaiMonDAO daolm = new LoaiMonDAO();
-    MouseMoveButton moveButton = new MouseMoveButton();
-    int rowsp;
-    String keyWorld;
+    HoaDonCTDAO daohdct = new HoaDonCTDAO();
+    Locale localeVN = new Locale("vi", "VN");
+    NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
 
     private void init() {
         setLocationRelativeTo(null);
@@ -78,7 +81,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 Object[] row = {
                     mon.getMaMon(),
                     mon.getTenMon(),
-                    mon.getGia()
+                    currencyVN.format(mon.getGia())
                 };
                 model.addRow(row);
             }
@@ -89,8 +92,12 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void timKiemSP() {
         keyWorld = txtTiemKiemTenMon.getText();
-        fillTableSP();
-        cboLoaiSP.setSelectedIndex(0);
+        if (keyWorld.equals("")) {
+            fillTableSP();
+            cboLoaiSP.setSelectedIndex(0);
+        } else {
+            fillTableSP();
+        }
     }
 
     private void editSP() {
@@ -103,7 +110,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void setFormSP(Menu mon) {
         txtTenMon.setText(mon.getTenMon());
-        txtGia.setText(String.valueOf(mon.getGia()));
+        txtGia.setText(currencyVN.format(mon.getGia()));
         txtLoaiMon.setText(mon.getMaLoai());
     }
 
@@ -113,6 +120,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     private void fillTTB() {
+        tabBan.removeAll();
         try {
             List<KhuVuc> list = daokv.selectAll();
             for (KhuVuc kv : list) {
@@ -131,18 +139,16 @@ public class BanHangJDialog extends javax.swing.JDialog {
         kv.setAutoscrolls(true);
         kv.setLayout(new GridLayout(6, 0, 20, 20));
         kv.setBackground(Color.WHITE);
-
         for (JButton btn1 : btn) {
             kv.add(btn1);
         }
-
         return kv;
     }
 
     private List<JButton> taoListButton(KhuVuc kv) {
         List<JButton> listban = new ArrayList<>();
         List<Ban> list1 = daoB.findByIdKhuVuc(kv.getMaKV());
-        List<ForButton> list2 = new ArrayList<>();
+        List<HoaDon> list = daohd.selectAll();
         for (Ban b : list1) {
             JButton btn = new JButton();
             btn.setText(b.getTenBan());
@@ -154,30 +160,101 @@ public class BanHangJDialog extends javax.swing.JDialog {
             btn.setFont(new Font("Tahoma", 1, 14));
             btn.setFocusable(false);
             btn.setToolTipText(b.getMaBan());
-            list2.add(new ForButton(btn));
+            for (HoaDon hd : list) {
+                if (btn.getToolTipText().equals(hd.getMaBan()) && !hd.isTrangThai()) {
+                    btn.setBackground(Color.red);
+                    break;
+                }
+            }
+            btn.addMouseListener(new MouseListener() {
+
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    HoaDon hd = daohd.selectByMahd(b.getMaBan());
+                    if (hd != null) {
+                        if (!hd.isTrangThai()) {
+                            editHD(hd);
+                            fillTbHD();
+                            btnOrder.setEnabled(true);
+                            btnThanhToan.setEnabled(true);
+                            btnXemBill.setEnabled(true);
+                            btnGopBanGhepBan.setEnabled(true);
+                            btnDatBan.setEnabled(false);
+                        }
+                    } else {
+                        System.out.println(b.getMaKV());
+                        switch (b.getMaKV()) {
+                            case "KV01 ":
+                                vtT = 0;
+                                break;
+                            case "KV02 ":
+                                vtT = 1;
+                                break;
+                            case "KV03 ":
+                                vtT = 2;
+                                break;
+                        }
+                        System.out.println(vtT);
+                        resetHD();
+                        tabBan.setSelectedIndex(vtT);
+                        btnOrder.setEnabled(false);
+                        btnThanhToan.setEnabled(false);
+                        btnXemBill.setEnabled(false);
+                        btnDatBan.setEnabled(true);
+                        btnGopBanGhepBan.setEnabled(false);
+                    }
+                    getMaBan = b.getMaBan();
+
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+
+                }
+            });
             listban.add(btn);
         }
-        moveButton.setEvent(list2);
         return listban;
     }
 
     private void datBan() {
-        String maBan = moveButton.getTextString();
-        if (maBan != null) {
+        String maBan = getMaBan;
+        if (!maBan.equals("")) {
             try {
                 daohd.insert(new HoaDon(maBan, Auth.user.getMaNV(), new Date(), 0, false));
+                HoaDon hd = daohd.selectByMahd(maBan);
+                this.editHD(hd);
+                btnOrder.setEnabled(true);
             } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
             }
-            HoaDon hd = daohd.selectByMahd(maBan);
-            this.setForm(hd);
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, "Chưa chọn bàn!!!");
         }
+        getMaBan = "";
+        fillTTB();
     }
 
-    private void setForm(HoaDon hd) {
+    private void editHD(HoaDon hd) {
         txtMaHoaDon.setText(String.valueOf(hd.getMaHD()));
         txtBanDangChon.setText(daoB.selectTenBan(hd.getMaBan()));
-        jdcNgay.setDate(hd.getNgayHD());
-
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        txtNgay.setText(formatter.format(hd.getNgayHD()));
     }
 
     private void fillComBoBox() {
@@ -196,11 +273,85 @@ public class BanHangJDialog extends javax.swing.JDialog {
             String[] key = loaiMon.split("-");
             if (key.length == 2) {
                 keyWorld = key[1];
-                System.out.println(keyWorld);
+                fillTableSP();
+            } else {
+                keyWorld = "";
                 fillTableSP();
             }
         }
+    }
 
+    private void fillTbHD() {
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+        float TT = 0;
+        float ttmon;
+        try {
+            List<HoaDonShow> list = daohdct.selectHDShow(Integer.valueOf(txtMaHoaDon.getText()));
+            for (HoaDonShow hdct : list) {
+                ttmon = hdct.getDonGia() * hdct.getSoLuong();
+                Object[] row = {
+                    hdct.getMaHDCT(),
+                    hdct.getMaMon(),
+                    hdct.getTenMon(),
+                    currencyVN.format(hdct.getDonGia()),
+                    hdct.getSoLuong(),
+                    currencyVN.format(ttmon)
+                };
+                model.addRow(row);
+                TT = TT + ttmon;
+            }
+            txtThanhTien.setText(String.valueOf(TT));
+        } catch (Exception e) {
+
+        }
+    }
+
+    private void insertHDCT() {
+        if (txtMaHoaDon.getText() != null) {
+            String maMon = (String) tblSanPham.getValueAt(this.rowsp, 0);
+            Menu mon = daomn.selectById(maMon);
+            daohdct.insert(new HoaDonCT(Integer.valueOf(txtMaHoaDon.getText()), mon.getMaMon(), 1, mon.getGia()));
+            fillTbHD();
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, "Chưa đặt bàn không thể Order");
+        }
+
+    }
+
+    private void updateSLSP(MouseEvent evt) {
+        int row=tblHoaDon.getSelectedRow();
+        if (evt.getClickCount()==2) {
+            HoaDonShow hdct=daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(row, 0));
+            new CapNhatSanPhamJDialog(null, true).setHDCT(hdct);
+        }
+    }
+    
+    private void updateTT() {
+        daohd.updateTT(Float.valueOf(txtThanhTien.getText()), Integer.valueOf(txtMaHoaDon.getText()), true);
+    }
+
+    private void resetHD() {
+        try {
+            txtMaHoaDon.setText(null);
+            txtBanDangChon.setText(null);
+            txtNgay.setText(null);
+            DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+            model.setRowCount(0);
+            txtThanhTien.setText(null);
+            btnOrder.setEnabled(false);
+            fillTTB();
+        } catch (Exception e) {
+        }
+    }
+
+    private void thanhToan() {
+        this.updateTT();
+        resetHD();
+    }
+    
+    public void resetHDCT(){
+        this.fillTbHD();
     }
 
     /**
@@ -228,7 +379,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblGiaMota = new javax.swing.JLabel();
         lblLoaiMoTa = new javax.swing.JLabel();
         lblLoaiMota = new javax.swing.JLabel();
-        btnOder = new javax.swing.JButton();
+        btnOrder = new javax.swing.JButton();
         txtTenMon = new javax.swing.JTextField();
         txtGia = new javax.swing.JTextField();
         txtLoaiMon = new javax.swing.JTextField();
@@ -240,20 +391,18 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblMaHoaDon = new javax.swing.JLabel();
         lblBanDangChon = new javax.swing.JLabel();
         lblNgay = new javax.swing.JLabel();
-        lblThoiGian = new javax.swing.JLabel();
         lblOderList = new javax.swing.JLabel();
         lblThanhTien = new javax.swing.JLabel();
         lblVND = new javax.swing.JLabel();
         txtMaHoaDon = new javax.swing.JTextField();
         txtBanDangChon = new javax.swing.JTextField();
-        txtThoiGian = new javax.swing.JTextField();
+        txtNgay = new javax.swing.JTextField();
         txtThanhTien = new javax.swing.JTextField();
         btnXemBill = new javax.swing.JButton();
         btnThanhToan = new javax.swing.JButton();
         btnGopBanGhepBan = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
-        jdcNgay = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -291,6 +440,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         btnLamMoi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLamMoi.setText("LÀM MỚI");
         btnLamMoi.setFocusable(false);
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLamMoiActionPerformed(evt);
+            }
+        });
 
         tabBan.setBackground(new java.awt.Color(204, 204, 204));
         tabBan.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -354,16 +508,25 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblLoaiMota.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblLoaiMota.setText("Loại:");
 
-        btnOder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnOder.setText("ODER");
-        btnOder.setFocusable(false);
+        btnOrder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnOrder.setText("ORDER");
+        btnOrder.setEnabled(false);
+        btnOrder.setFocusable(false);
+        btnOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrderActionPerformed(evt);
+            }
+        });
 
+        txtTenMon.setEditable(false);
         txtTenMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtTenMon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
+        txtGia.setEditable(false);
         txtGia.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtGia.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
+        txtLoaiMon.setEditable(false);
         txtLoaiMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtLoaiMon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
@@ -384,7 +547,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                     .addComponent(txtTenMon)
                     .addComponent(txtGia)
                     .addComponent(txtLoaiMon)
-                    .addComponent(btnOder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         pnlMoTaLayout.setVerticalGroup(
@@ -403,7 +566,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                     .addComponent(lblLoaiMota)
                     .addComponent(txtLoaiMon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addComponent(btnOder, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(39, Short.MAX_VALUE))
             .addGroup(pnlMoTaLayout.createSequentialGroup()
                 .addContainerGap()
@@ -460,19 +623,17 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addGroup(pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThucDonLayout.createSequentialGroup()
                         .addGroup(pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE)
                             .addComponent(pnlMoTa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThucDonLayout.createSequentialGroup()
+                        .addGroup(pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblLoaiSP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblTenMon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
                         .addGroup(pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlThucDonLayout.createSequentialGroup()
-                                .addComponent(lblLoaiSP)
-                                .addGap(18, 18, 18)
-                                .addComponent(cboLoaiSP, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(pnlThucDonLayout.createSequentialGroup()
-                                .addComponent(lblTenMon)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTiemKiemTenMon)))
+                            .addComponent(txtTiemKiemTenMon)
+                            .addComponent(cboLoaiSP, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18))))
         );
         pnlThucDonLayout.setVerticalGroup(
@@ -482,7 +643,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addGroup(pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTiemKiemTenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(30, 30, 30)
                 .addGroup(pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLoaiSP, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboLoaiSP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -507,11 +668,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblNgay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblNgay.setText("Ngày:");
 
-        lblThoiGian.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblThoiGian.setText("Thời gian:");
-
         lblOderList.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblOderList.setText("Danh sách sản phẩm đã oder:");
+        lblOderList.setText("Danh sách sản phẩm đã order:");
         lblOderList.setToolTipText("");
 
         lblThanhTien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -520,15 +678,19 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblVND.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblVND.setText("VND");
 
+        txtMaHoaDon.setEditable(false);
         txtMaHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaHoaDon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
+        txtBanDangChon.setEditable(false);
         txtBanDangChon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBanDangChon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        txtThoiGian.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtThoiGian.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        txtNgay.setEditable(false);
+        txtNgay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNgay.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
+        txtThanhTien.setEditable(false);
         txtThanhTien.setBackground(new java.awt.Color(244, 244, 244));
         txtThanhTien.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtThanhTien.setForeground(new java.awt.Color(0, 153, 51));
@@ -537,14 +699,22 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
         btnXemBill.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnXemBill.setText("XEM BILL");
+        btnXemBill.setEnabled(false);
         btnXemBill.setFocusable(false);
 
         btnThanhToan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnThanhToan.setText("THANH TOÁN");
+        btnThanhToan.setEnabled(false);
         btnThanhToan.setFocusable(false);
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThanhToanActionPerformed(evt);
+            }
+        });
 
         btnGopBanGhepBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGopBanGhepBan.setText("GỘP BÀN - GHÉP BÀN");
+        btnGopBanGhepBan.setEnabled(false);
         btnGopBanGhepBan.setFocusable(false);
 
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -558,12 +728,22 @@ public class BanHangJDialog extends javax.swing.JDialog {
             new String [] {
                 "Mã HDCT", "Mã món", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
             }
-        ));
-        tblHoaDon.setRowHeight(20);
-        jScrollPane2.setViewportView(tblHoaDon);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true, false
+            };
 
-        jdcNgay.setDateFormatString("dd/MM/yyyy");
-        jdcNgay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblHoaDon.setRowHeight(20);
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblHoaDon);
 
         javax.swing.GroupLayout pnlHoaDonLayout = new javax.swing.GroupLayout(pnlHoaDon);
         pnlHoaDon.setLayout(pnlHoaDonLayout);
@@ -572,31 +752,27 @@ public class BanHangJDialog extends javax.swing.JDialog {
             .addGroup(pnlHoaDonLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlHoaDonLayout.createSequentialGroup()
-                        .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblBanDangChon)
-                            .addComponent(lblMaHoaDon)
-                            .addComponent(lblNgay)
-                            .addComponent(lblThoiGian))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMaHoaDon)
-                            .addComponent(txtBanDangChon)
-                            .addGroup(pnlHoaDonLayout.createSequentialGroup()
-                                .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jdcNgay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(pnlHoaDonLayout.createSequentialGroup()
-                        .addComponent(lblOderList)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHoaDonLayout.createSequentialGroup()
                         .addComponent(lblThanhTien)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtThanhTien)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblVND))
-                    .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane2)
+                    .addGroup(pnlHoaDonLayout.createSequentialGroup()
+                        .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlHoaDonLayout.createSequentialGroup()
+                                .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblBanDangChon)
+                                    .addComponent(lblMaHoaDon)
+                                    .addComponent(lblNgay))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtBanDangChon, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNgay, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblOderList))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHoaDonLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -609,7 +785,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addGap(79, 79, 79))
         );
 
-        pnlHoaDonLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jdcNgay, txtThoiGian});
+        pnlHoaDonLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {txtBanDangChon, txtMaHoaDon});
+
+        pnlHoaDonLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lblBanDangChon, lblMaHoaDon, lblNgay});
 
         pnlHoaDonLayout.setVerticalGroup(
             pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -623,14 +801,10 @@ public class BanHangJDialog extends javax.swing.JDialog {
                     .addComponent(txtBanDangChon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblBanDangChon))
                 .addGap(30, 30, 30)
-                .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNgay)
-                    .addComponent(jdcNgay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtThoiGian, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblThoiGian))
-                .addGap(30, 30, 30)
+                    .addComponent(txtNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(92, 92, 92)
                 .addComponent(lblOderList)
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -648,7 +822,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlHoaDonLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jdcNgay, txtThoiGian});
+        pnlHoaDonLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblBanDangChon, lblMaHoaDon, lblNgay, txtBanDangChon, txtMaHoaDon});
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
@@ -657,10 +831,10 @@ public class BanHangJDialog extends javax.swing.JDialog {
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlThongTinBan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlThucDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(pnlThucDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(pnlHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlWallLayout.setVerticalGroup(
@@ -707,6 +881,23 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void cboLoaiSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboLoaiSPActionPerformed
         this.chonLoaiMon();
     }//GEN-LAST:event_cboLoaiSPActionPerformed
+
+    private void btnOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrderActionPerformed
+        this.insertHDCT();
+    }//GEN-LAST:event_btnOrderActionPerformed
+
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+        this.thanhToan();
+    }//GEN-LAST:event_btnThanhToanActionPerformed
+
+    private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
+        this.fillTTB();
+        this.resetHD();
+    }//GEN-LAST:event_btnLamMoiActionPerformed
+
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        this.updateSLSP(evt);
+    }//GEN-LAST:event_tblHoaDonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -755,13 +946,12 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnDatBan;
     private javax.swing.JButton btnGopBanGhepBan;
     private javax.swing.JButton btnLamMoi;
-    private javax.swing.JButton btnOder;
+    private javax.swing.JButton btnOrder;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnXemBill;
     private javax.swing.JComboBox cboLoaiSP;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private com.toedter.calendar.JDateChooser jdcNgay;
     private javax.swing.JLabel lblBanDangChon;
     private javax.swing.JLabel lblGiaMota;
     private javax.swing.JLabel lblHeader;
@@ -774,7 +964,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblTenMon;
     private javax.swing.JLabel lblTenMonMota;
     private javax.swing.JLabel lblThanhTien;
-    private javax.swing.JLabel lblThoiGian;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblVND;
     private javax.swing.JPanel pnlHeader;
@@ -790,10 +979,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtGia;
     private javax.swing.JTextField txtLoaiMon;
     private javax.swing.JTextField txtMaHoaDon;
+    private javax.swing.JTextField txtNgay;
     private javax.swing.JTextField txtTenMon;
     private javax.swing.JTextField txtThanhTien;
-    private javax.swing.JTextField txtThoiGian;
     private javax.swing.JTextField txtTiemKiemTenMon;
     // End of variables declaration//GEN-END:variables
-
 }
