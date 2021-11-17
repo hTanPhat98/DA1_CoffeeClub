@@ -182,7 +182,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                             btnDatBan.setEnabled(false);
                         }
                     } else {
-                        System.out.println(b.getMaKV());
                         switch (b.getMaKV()) {
                             case "KV01 ":
                                 vtT = 0;
@@ -194,7 +193,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                                 vtT = 2;
                                 break;
                         }
-                        System.out.println(vtT);
                         resetHD();
                         tabBan.setSelectedIndex(vtT);
                         btnOrder.setEnabled(false);
@@ -234,12 +232,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void datBan() {
         String maBan = getMaBan;
-        if (!maBan.equals("")) {
+        if (!maBan.equals("") || maBan == null) {
             try {
                 daohd.insert(new HoaDon(maBan, Auth.user.getMaNV(), new Date(), 0, false));
                 HoaDon hd = daohd.selectByMahd(maBan);
                 this.editHD(hd);
-                btnOrder.setEnabled(true);
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
             }
@@ -248,6 +245,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
         }
         getMaBan = "";
         fillTTB();
+        btnOrder.setEnabled(true);
+        btnThanhToan.setEnabled(true);
+        btnXemBill.setEnabled(true);
     }
 
     private void editHD(HoaDon hd) {
@@ -320,13 +320,13 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     private void updateSLSP(MouseEvent evt) {
-        int row=tblHoaDon.getSelectedRow();
-        if (evt.getClickCount()==2) {
-            HoaDonShow hdct=daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(row, 0));
+        int row = tblHoaDon.getSelectedRow();
+        if (evt.getClickCount() == 2) {
+            HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(row, 0));
             new CapNhatSanPhamJDialog(null, true).setHDCT(hdct);
         }
     }
-    
+
     private void updateTT() {
         daohd.updateTT(Float.valueOf(txtThanhTien.getText()), Integer.valueOf(txtMaHoaDon.getText()), true);
     }
@@ -340,6 +340,10 @@ public class BanHangJDialog extends javax.swing.JDialog {
             model.setRowCount(0);
             txtThanhTien.setText(null);
             btnOrder.setEnabled(false);
+            btnThanhToan.setEnabled(false);
+            btnXemBill.setEnabled(false);
+            btnGopBanGhepBan.setEnabled(false);
+            btnDatBan.setEnabled(true);
             fillTTB();
         } catch (Exception e) {
         }
@@ -349,8 +353,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
         this.updateTT();
         resetHD();
     }
-    
-    public void resetHDCT(){
+
+    public void resetHDCT() {
         this.fillTbHD();
     }
 
@@ -430,6 +434,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
         btnDatBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDatBan.setText("ĐẶT BÀN");
+        btnDatBan.setEnabled(false);
         btnDatBan.setFocusable(false);
         btnDatBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -607,7 +612,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblLoaiSP.setText("Loại sản phẩm:");
 
         cboLoaiSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboLoaiSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboLoaiSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboLoaiSPActionPerformed(evt);
@@ -893,6 +897,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         this.fillTTB();
         this.resetHD();
+        btnDatBan.setEnabled(false);
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked

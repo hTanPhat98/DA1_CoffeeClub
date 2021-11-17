@@ -22,7 +22,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
     String DELETE_SQL = "DELETE FROM HOADON WHERE MaHD=?";
     String SELECT_ALL_SQL = "SELECT * FROM HOADON";
     String SELECT_BY_ID_SQL = "SELECT * FROM HOADON WHERE MaHD=?";
-    String SELECT_BY_ID_SQL_MaHD = "SELECT * FROM HOADON WHERE MaBan=?";
+    String SELECT_BY_ID_SQL_MaHD = "SELECT * FROM HOADON WHERE MaBan=? AND TrangThai=0";
     String UPDATE_TT_SQL = "UPDATE HOADON SET Tongtien=?, Trangthai=? WHERE MaHD=?";
 
     @Override
