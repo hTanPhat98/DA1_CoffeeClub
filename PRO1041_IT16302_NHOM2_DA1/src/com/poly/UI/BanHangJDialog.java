@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
@@ -327,25 +328,31 @@ public class BanHangJDialog extends javax.swing.JDialog {
         } else {
             new ThongBaoJDialog(null, true).alert(2, "Chưa đặt bàn không thể Order");
         }
-
     }
 
     private void updateTT() {
         daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), true);
         TTHD = 0;
+        this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
     }
 
     private void xuatBill(int mahd) {
+        daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), false);
         try {
-            
             Hashtable map = new Hashtable();
             JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\report1.jrxml");
-
             map.put("MaHD", mahd);
             new JdbcHelper();
             JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
-            JasperViewer.viewReport(p, false);
+            JasperViewer jasperViewer = new JasperViewer(p, false);
+            JDialog jdl = new JDialog(this);
+            jdl.setContentPane(jasperViewer.getContentPane());
+            jdl.setSize(jasperViewer.getSize());
+            jdl.setTitle("Xem Hóa Đơn");
+            jdl.setLocationRelativeTo(null);
+            jdl.setVisible(true);
             JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
+            JasperExportManager.exportReportToHtmlFile(p, "bill.html");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
