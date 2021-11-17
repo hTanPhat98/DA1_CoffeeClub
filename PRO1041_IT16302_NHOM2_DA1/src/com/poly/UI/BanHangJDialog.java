@@ -12,6 +12,7 @@ import com.poly.DAO.KhuVucDAO;
 import com.poly.DAO.LoaiMonDAO;
 import com.poly.DAO.MenuDAO;
 import com.poly.Helper.Auth;
+import com.poly.Helper.JdbcHelper;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
 import com.poly.Model.HoaDon;
@@ -31,6 +32,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
@@ -38,6 +40,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -55,7 +63,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     int rowsp, vtT;
-    float TTHD=0;
+    float TTHD = 0;
     String keyWorld, getMaBan;
     BanDAO daoB = new BanDAO();
     MenuDAO daomn = new MenuDAO();
@@ -304,7 +312,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 TT = TT + ttmon;
             }
             txtThanhTien.setText(currencyVN.format(TT));
-            TTHD=TT;
+            TTHD = TT;
         } catch (Exception e) {
 
         }
@@ -324,7 +332,23 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void updateTT() {
         daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), true);
-        TTHD=0;
+        TTHD = 0;
+    }
+
+    private void xuatBill(int mahd) {
+        try {
+            
+            Hashtable map = new Hashtable();
+            JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\report1.jrxml");
+
+            map.put("MaHD", mahd);
+            new JdbcHelper();
+            JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
+            JasperViewer.viewReport(p, false);
+            JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void resetHD() {
@@ -712,6 +736,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         btnXemBill.setText("XEM BILL");
         btnXemBill.setEnabled(false);
         btnXemBill.setFocusable(false);
+        btnXemBill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXemBillActionPerformed(evt);
+            }
+        });
 
         btnThanhToan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnThanhToan.setText("THANH TOÁN");
@@ -911,6 +940,10 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void tblHoaDonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblHoaDonKeyReleased
         this.updateSL(evt);
     }//GEN-LAST:event_tblHoaDonKeyReleased
+
+    private void btnXemBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXemBillActionPerformed
+        this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
+    }//GEN-LAST:event_btnXemBillActionPerformed
 
     /**
      * @param args the command line arguments

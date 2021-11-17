@@ -21,6 +21,7 @@ public class JdbcHelper {
     private static String dburl = "jdbc:sqlserver://localhost;database=TheCoffeShop1";
     private static String username = "sa";
     private static String password = "123";
+    public static Connection connection;
 
     static {
         try {
@@ -74,4 +75,13 @@ public class JdbcHelper {
             throw new RuntimeException(e);
         }
     }
+
+    public JdbcHelper() {
+        try {
+            connection = DriverManager.getConnection(dburl, username, password);
+        } catch (Exception e) {
+        }
+    }
+
+    
 }
