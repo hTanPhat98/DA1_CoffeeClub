@@ -40,7 +40,8 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     private void updateSL() {
         hds.setSoLuong((int) spnSoLuong.getValue());
         daohdct.updateSl(hds);
-        new BanHangJDialog(null, true).resetHDCT();
+        BanHangJDialog cnsl=new BanHangJDialog(null, true);
+        cnsl.resetHDCT();
         this.dispose();
     }
 
@@ -202,7 +203,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoneActionPerformed
-        updateSL();
+        this.updateSL();
     }//GEN-LAST:event_btnDoneActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed

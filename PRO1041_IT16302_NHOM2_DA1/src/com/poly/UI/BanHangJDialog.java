@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
@@ -54,6 +55,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     int rowsp, vtT;
+    float TTHD=0;
     String keyWorld, getMaBan;
     BanDAO daoB = new BanDAO();
     MenuDAO daomn = new MenuDAO();
@@ -301,7 +303,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 model.addRow(row);
                 TT = TT + ttmon;
             }
-            txtThanhTien.setText(String.valueOf(TT));
+            txtThanhTien.setText(currencyVN.format(TT));
+            TTHD=TT;
         } catch (Exception e) {
 
         }
@@ -319,16 +322,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     }
 
-    private void updateSLSP(MouseEvent evt) {
-        int row = tblHoaDon.getSelectedRow();
-        if (evt.getClickCount() == 2) {
-            HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(row, 0));
-            new CapNhatSanPhamJDialog(null, true).setHDCT(hdct);
-        }
-    }
-
     private void updateTT() {
-        daohd.updateTT(Float.valueOf(txtThanhTien.getText()), Integer.valueOf(txtMaHoaDon.getText()), true);
+        daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), true);
+        TTHD=0;
     }
 
     private void resetHD() {
@@ -344,7 +340,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             btnXemBill.setEnabled(false);
             btnGopBanGhepBan.setEnabled(false);
             btnDatBan.setEnabled(true);
-            fillTTB();
+            this.fillTTB();
         } catch (Exception e) {
         }
     }
@@ -356,6 +352,21 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     public void resetHDCT() {
         this.fillTbHD();
+    }
+
+    public void updateSL(KeyEvent evt) {
+        if (evt.getKeyCode() == 10) {
+            int rowsl = tblHoaDon.getSelectedRow();
+            try {
+                int sl = (int) tblHoaDon.getValueAt(rowsl, 4);
+                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+                hdct.setSoLuong(sl);
+                daohdct.updateSl(hdct);
+                fillTbHD();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
     }
 
     /**
@@ -397,7 +408,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblNgay = new javax.swing.JLabel();
         lblOderList = new javax.swing.JLabel();
         lblThanhTien = new javax.swing.JLabel();
-        lblVND = new javax.swing.JLabel();
         txtMaHoaDon = new javax.swing.JTextField();
         txtBanDangChon = new javax.swing.JTextField();
         txtNgay = new javax.swing.JTextField();
@@ -679,9 +689,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblThanhTien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblThanhTien.setText("Thành tiền:");
 
-        lblVND.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblVND.setText("VND");
-
         txtMaHoaDon.setEditable(false);
         txtMaHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaHoaDon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -724,27 +731,31 @@ public class BanHangJDialog extends javax.swing.JDialog {
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Mã HDCT", "Mã món", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, true, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         tblHoaDon.setRowHeight(20);
-        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblHoaDonMouseClicked(evt);
+        tblHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblHoaDonKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(tblHoaDon);
@@ -759,9 +770,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHoaDonLayout.createSequentialGroup()
                         .addComponent(lblThanhTien)
                         .addGap(18, 18, 18)
-                        .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblVND))
+                        .addComponent(txtThanhTien))
                     .addComponent(jScrollPane2)
                     .addGroup(pnlHoaDonLayout.createSequentialGroup()
                         .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -815,8 +824,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblVND, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtThanhTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(pnlHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXemBill, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -900,9 +908,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
         btnDatBan.setEnabled(false);
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
-    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-        this.updateSLSP(evt);
-    }//GEN-LAST:event_tblHoaDonMouseClicked
+    private void tblHoaDonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblHoaDonKeyReleased
+        this.updateSL(evt);
+    }//GEN-LAST:event_tblHoaDonKeyReleased
 
     /**
      * @param args the command line arguments
@@ -970,7 +978,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblTenMonMota;
     private javax.swing.JLabel lblThanhTien;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblVND;
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlHoaDon;
     private javax.swing.JPanel pnlMoTa;

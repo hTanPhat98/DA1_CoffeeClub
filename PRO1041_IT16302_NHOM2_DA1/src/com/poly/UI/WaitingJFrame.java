@@ -52,6 +52,7 @@ public class WaitingJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Waiting");
         setMinimumSize(new java.awt.Dimension(1280, 720));
+        setUndecorated(true);
         setResizable(false);
 
         jPanel_Wall.setBackground(new java.awt.Color(255, 255, 255));
