@@ -37,6 +37,11 @@ public class Ban {
     public void setMaKV(String maKV) {
         this.maKV = maKV;
     }
+
+    @Override
+    public String toString() {
+        return getTenBan()+"-"+getMaBan();
+    }
     
     
 }

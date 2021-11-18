@@ -19,11 +19,12 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
 
     String INSERT_SQL = "INSERT INTO HOADON (MaBan, MaNV, NgayHD, Tongtien, Trangthai) VALUES (?, ?, ?, ?, ?)";
     String UPDATE_SQL = "UPDATE HOADON SET MaBan=?, MaNV=?, NgayHD=?, Tongtien=?, Trangthai=? WHERE MaHD=?";
+    String UPDATE_TT_SQL = "UPDATE HOADON SET Tongtien=?, Trangthai=? WHERE MaHD=?";
     String DELETE_SQL = "DELETE FROM HOADON WHERE MaHD=?";
     String SELECT_ALL_SQL = "SELECT * FROM HOADON";
     String SELECT_BY_ID_SQL = "SELECT * FROM HOADON WHERE MaHD=?";
     String SELECT_BY_ID_SQL_MaHD = "SELECT * FROM HOADON WHERE MaBan=? AND TrangThai=0";
-    String UPDATE_TT_SQL = "UPDATE HOADON SET Tongtien=?, Trangthai=? WHERE MaHD=?";
+    String SELECT_ANY_SQL = "SELECT * FROM HOADON WHERE TrangThai=0 AND MaHD!=?";
 
     @Override
     public void insert(HoaDon entity) {
@@ -105,5 +106,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
         return list.get(0);
     }
     
-    
+    public List<HoaDon> selectANY(Integer MaHD) {
+        return this.selectBySql(SELECT_ANY_SQL,MaHD);
+    }
 }

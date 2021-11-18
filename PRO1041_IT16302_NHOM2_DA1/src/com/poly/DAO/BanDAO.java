@@ -94,4 +94,5 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
         }
         return mb;
     }
+    
 }

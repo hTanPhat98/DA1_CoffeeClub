@@ -12,6 +12,7 @@ import java.util.Date;
  * @author Patnight
  */
 public class HoaDon {
+
     private int maHD;
     private String maBan;
     private String maNV;
@@ -21,9 +22,7 @@ public class HoaDon {
 
     public HoaDon() {
     }
-    
-    
-    
+
     public int getMaHD() {
         return maHD;
     }
@@ -79,6 +78,5 @@ public class HoaDon {
         this.tongTien = tongTien;
         this.trangThai = trangThai;
     }
-    
     
 }

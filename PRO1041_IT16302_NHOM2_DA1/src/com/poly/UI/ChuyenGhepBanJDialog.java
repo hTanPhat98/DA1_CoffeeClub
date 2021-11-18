@@ -5,6 +5,21 @@
  */
 package com.poly.UI;
 
+import com.poly.DAO.BanDAO;
+import com.poly.DAO.HoaDonCTDAO;
+import com.poly.DAO.HoaDonDAO;
+import com.poly.Model.Ban;
+import com.poly.Model.HoaDon;
+import com.poly.Model.HoaDonCT;
+import com.poly.Model.HoaDonShow;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author phong
@@ -18,6 +33,141 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+    }
+
+    public ChuyenGhepBanJDialog(java.awt.Frame parent, boolean modal, Integer MaHD,BanHangJDialog bhjd) {
+        super(parent, modal);
+        initComponents();
+        setLocationRelativeTo(null);
+        loadTTBan(MaHD);
+        fillTable1(MaHD);
+        loadDSBan(MaHD);
+        this.athis=bhjd;
+    }
+    BanDAO daoban = new BanDAO();
+    HoaDonDAO daohd = new HoaDonDAO();
+    HoaDonCTDAO daohdct = new HoaDonCTDAO();
+    Locale localeVN = new Locale("vi", "VN");
+    NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+    BanHangJDialog athis;
+
+    private void fillTable1(Integer MaHD) {
+        DefaultTableModel model = (DefaultTableModel) tblHoaDonGoc.getModel();
+        model.setRowCount(0);
+        try {
+            List<HoaDonShow> list = daohdct.selectHDShow(MaHD);
+            for (HoaDonShow hdct : list) {
+                Object[] row = {
+                    hdct.getMaHDCT(),
+                    hdct.getMaMon(),
+                    hdct.getTenMon(),
+                    currencyVN.format(hdct.getDonGia()),
+                    hdct.getSoLuong(),};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void loadTTBan(Integer MaHD) {
+        HoaDon hd = daohd.selectById(MaHD);
+        txtBanDangChon.setText(daoban.selectTenBan(hd.getMaBan()));
+        txtMaBan.setText(hd.getMaBan());
+        txtMaHoaDon.setText(String.valueOf(hd.getMaHD()));
+    }
+
+    private void loadMon() {
+        int rows = tblHoaDonGoc.getSelectedRow();
+        int hdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+        HoaDonShow hds = daohdct.selecthdctShow(hdct);
+        txtMon.setText(hds.getTenMon());
+        SpinnerModel model = new SpinnerNumberModel(hds.getSoLuong(), 1, hds.getSoLuong(), 1);
+        spnSoLuongChuyen.setModel(model);
+        spnSoLuongChuyen.setValue(1);
+    }
+
+    private void loadDSBan(Integer MaHD) {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboChuyenGhep.getModel();
+        model.removeAllElements();
+        List<HoaDon> list = daohd.selectANY(MaHD);
+        for (HoaDon hd : list) {
+            Ban b = daoban.selectById(hd.getMaBan());
+            model.addElement(b.toString());
+        }
+        loadMahdC(model.getElementAt(0).toString());
+    }
+
+    private void loadMahdC(String ttb) {
+        String[] TTB = ttb.split("-");
+        String maHD = TTB[1];
+        HoaDon hd = daohd.selectByMahd(maHD);
+        txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
+        fillTable2(hd.getMaHD());
+    }
+
+    private void chuyenBan() {
+        if (cboChuyenGhep.getSelectedItem() != null) {
+            String ttb = cboChuyenGhep.getSelectedItem().toString();
+            loadMahdC(ttb);
+        }
+    }
+
+    private void fillTable2(Integer Mahd) {
+        DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
+        model.setRowCount(0);
+        try {
+            List<HoaDonShow> list = daohdct.selectHDShow(Mahd);
+            for (HoaDonShow hdct : list) {
+                Object[] row = {
+                    hdct.getMaHDCT(),
+                    hdct.getMaMon(),
+                    hdct.getTenMon(),
+                    currencyVN.format(hdct.getDonGia()),
+                    hdct.getSoLuong(),};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    private void chuyenHDCT(int rows) {
+        int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+        HoaDonCT hdct = daohdct.selectById(mahdct);
+        hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+        daohdct.update(hdct);
+    }
+
+    private void chuyen1() {
+        int rows = tblHoaDonGoc.getSelectedRow();
+        int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
+        int slc = (int) spnSoLuongChuyen.getValue();
+        if (slc < sld) {
+            int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+            HoaDonCT hdct = daohdct.selectById(mahdct);
+            sls = sld - slc;
+            hdct.setSoLuong(sls);
+            daohdct.update(hdct);
+            hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+            hdct.setSoLuong(slc);
+            daohdct.insert(hdct);
+        } else {
+            chuyenHDCT(rows);
+        }
+        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+    }
+
+    private void chuyenAll() {
+        for (int i = 0; i < tblHoaDonGoc.getRowCount(); i++) {
+            this.chuyenHDCT(i);
+        }
+        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+    }
+
+    private void close() {
+        athis.fillTbHDdc(Integer.valueOf(txtMaHoaDon.getText()));
+        this.dispose();
     }
 
     /**
@@ -48,7 +198,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         txtMaHoaDon = new javax.swing.JTextField();
         txtMaHoaDonBanChuyen = new javax.swing.JTextField();
         txtMon = new javax.swing.JTextField();
-        cboChuyenGhep = new javax.swing.JComboBox<>();
+        cboChuyenGhep = new javax.swing.JComboBox<String>();
         spnSoLuongChuyen = new javax.swing.JSpinner();
         btnClose = new javax.swing.JButton();
         btnClose1 = new javax.swing.JButton();
@@ -80,10 +230,20 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnChuyenMotRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_next_x32.png"))); // NOI18N
         btnChuyenMotRow.setContentAreaFilled(false);
         btnChuyenMotRow.setFocusable(false);
+        btnChuyenMotRow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChuyenMotRowActionPerformed(evt);
+            }
+        });
 
         btnChuyenToanBo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_last_x32.png"))); // NOI18N
         btnChuyenToanBo.setContentAreaFilled(false);
         btnChuyenToanBo.setFocusable(false);
+        btnChuyenToanBo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChuyenToanBoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlButtonBoxLayout = new javax.swing.GroupLayout(pnlButtonBox);
         pnlButtonBox.setLayout(pnlButtonBoxLayout);
@@ -127,23 +287,40 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         lblSoLuongChuyen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblSoLuongChuyen.setText("Số lượng chuyển:");
 
+        txtBanDangChon.setEditable(false);
         txtBanDangChon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        txtMaBan.setEditable(false);
         txtMaBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        txtMaHoaDon.setEditable(false);
         txtMaHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        txtMaHoaDonBanChuyen.setEditable(false);
         txtMaHoaDonBanChuyen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
+        txtMon.setEditable(false);
         txtMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         cboChuyenGhep.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboChuyenGhep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboChuyenGhepActionPerformed(evt);
+            }
+        });
 
         spnSoLuongChuyen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        spnSoLuongChuyen.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnSoLuongChuyen.setValue(1);
 
         btnClose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnClose.setText("CLOSE");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
 
         btnClose1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnClose1.setText("DONE");
@@ -158,7 +335,20 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             new String [] {
                 "Mã HDCT", "Mã món", "Tên Món", "Giá", "Số lượng"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblHoaDonGoc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblHoaDonGocMousePressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblHoaDonGoc);
 
         tblHoaDonDaChuyen.setModel(new javax.swing.table.DefaultTableModel(
@@ -171,7 +361,20 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             new String [] {
                 "Mã HDCT", "Mã món", "Tên món", "Giá", "Số lượng"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblHoaDonDaChuyen.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblHoaDonDaChuyenMousePressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblHoaDonDaChuyen);
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
@@ -287,6 +490,30 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cboChuyenGhepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChuyenGhepActionPerformed
+        this.chuyenBan();
+    }//GEN-LAST:event_cboChuyenGhepActionPerformed
+
+    private void btnChuyenMotRowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChuyenMotRowActionPerformed
+        this.chuyen1();
+    }//GEN-LAST:event_btnChuyenMotRowActionPerformed
+
+    private void btnChuyenToanBoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChuyenToanBoActionPerformed
+        this.chuyenAll();
+    }//GEN-LAST:event_btnChuyenToanBoActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        this.close();
+    }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void tblHoaDonGocMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonGocMousePressed
+        this.loadMon();
+    }//GEN-LAST:event_tblHoaDonGocMousePressed
+
+    private void tblHoaDonDaChuyenMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonDaChuyenMousePressed
+        
+    }//GEN-LAST:event_tblHoaDonDaChuyenMousePressed
 
     /**
      * @param args the command line arguments
