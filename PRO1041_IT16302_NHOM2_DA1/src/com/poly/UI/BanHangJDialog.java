@@ -332,12 +332,16 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void updateTT() {
         daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), true);
+        this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
         TTHD = 0;
+    }
+    
+    private void xembill(){
+        daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), false);
         this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
     }
-
+    
     private void xuatBill(int mahd) {
-        daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), false);
         try {
             Hashtable map = new Hashtable();
             JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\report1.jrxml");
@@ -949,7 +953,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_tblHoaDonKeyReleased
 
     private void btnXemBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXemBillActionPerformed
-        this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
+        this.xembill();
     }//GEN-LAST:event_btnXemBillActionPerformed
 
     /**
