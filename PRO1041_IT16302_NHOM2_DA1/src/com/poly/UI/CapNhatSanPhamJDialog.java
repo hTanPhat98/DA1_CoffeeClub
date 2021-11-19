@@ -6,9 +6,12 @@
 package com.poly.UI;
 
 import com.poly.DAO.HoaDonCTDAO;
+import com.poly.Model.HoaDonCT;
 import com.poly.Model.HoaDonShow;
+import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.Locale;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -24,24 +27,33 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
     }
+    private HoaDonShow hds;
+    BanHangJDialog athis;
+    HoaDonCTDAO daohdct = new HoaDonCTDAO();
     Locale localeVN = new Locale("vi", "VN");
     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-    private HoaDonShow hds;
-    HoaDonCTDAO daohdct = new HoaDonCTDAO();
 
-    public void setHDCT(HoaDonShow HDCT) {
+    public CapNhatSanPhamJDialog(java.awt.Frame parent, boolean modal, BanHangJDialog bhjd, HoaDonShow HDCT) {
+        super(parent, modal);
+        initComponents();
+        setLocationRelativeTo(null);
+        this.setHDCT(HDCT);
+        athis = bhjd;
+        
+    }
+
+    private void setHDCT(HoaDonShow HDCT) {
         txtTenSP.setText(HDCT.getTenMon());
         txtGiaTienSP.setText(currencyVN.format(HDCT.getDonGia()));
         spnSoLuong.setValue(HDCT.getSoLuong());
         hds = HDCT;
-        this.setVisible(true);
     }
 
     private void updateSL() {
         hds.setSoLuong((int) spnSoLuong.getValue());
         daohdct.updateSl(hds);
-        BanHangJDialog cnsl=new BanHangJDialog(null, true);
-        cnsl.resetHDCT();
+        HoaDonCT hdct = daohdct.selectById(hds.getMaHDCT());
+        athis.fillTbHDdc(hdct.getMaHD());
         this.dispose();
     }
 
@@ -103,7 +115,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         txtGiaTienSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 
         btnDone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_done_x32.png"))); // NOI18N

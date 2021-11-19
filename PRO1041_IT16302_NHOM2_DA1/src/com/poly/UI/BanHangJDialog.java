@@ -419,25 +419,30 @@ public class BanHangJDialog extends javax.swing.JDialog {
         this.fillTbHD();
     }
 
-    public void updateSL(KeyEvent evt) {
-        if (evt.getKeyCode() == 10) {
-            int rowsl = tblHoaDon.getSelectedRow();
-            try {
-                int sl = (int) tblHoaDon.getValueAt(rowsl, 4);
-                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
-                hdct.setSoLuong(sl);
-                daohdct.updateSl(hdct);
-                fillTbHD();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
+    //    public void updateSL(KeyEvent evt) {
+    //        if (evt.getKeyCode() == 10) {
+    //            int rowsl = tblHoaDon.getSelectedRow();
+    //            try {
+    //                int sl = (int) tblHoaDon.getValueAt(rowsl, 4);
+    //                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+    //                hdct.setSoLuong(sl);
+    //                daohdct.updateSl(hdct);
+    //                fillTbHD();
+    //            } catch (Exception e) {
+    //                System.out.println(e);
+    //            }
+    //        }
+    //    }
 
     private void chuyenGhepBan() {
         new ChuyenGhepBanJDialog(null, true, Integer.valueOf(txtMaHoaDon.getText()),this).setVisible(true);
     }
-
+    
+    private void capNhatSoLuong(){
+        int rowsl = tblHoaDon.getSelectedRow();
+        HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+        new CapNhatSanPhamJDialog(null, true, this, hdct).setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -832,9 +837,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
         tblHoaDon.setRowHeight(20);
-        tblHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tblHoaDonKeyReleased(evt);
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblHoaDonMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(tblHoaDon);
@@ -983,10 +988,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
         btnDatBan.setEnabled(false);
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
-    private void tblHoaDonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblHoaDonKeyReleased
-        this.updateSL(evt);
-    }//GEN-LAST:event_tblHoaDonKeyReleased
-
     private void btnXemBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXemBillActionPerformed
         this.xembill();
     }//GEN-LAST:event_btnXemBillActionPerformed
@@ -998,6 +999,10 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void tblSanPhamMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamMousePressed
         this.clickTableSP();
     }//GEN-LAST:event_tblSanPhamMousePressed
+
+    private void tblHoaDonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMousePressed
+        this.capNhatSoLuong();
+    }//GEN-LAST:event_tblHoaDonMousePressed
 
     /**
      * @param args the command line arguments
