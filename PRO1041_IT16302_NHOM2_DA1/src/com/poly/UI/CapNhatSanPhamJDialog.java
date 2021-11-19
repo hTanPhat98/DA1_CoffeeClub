@@ -79,8 +79,10 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         spnSoLuong = new javax.swing.JSpinner();
         btnDone = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cập nhật sản phẩm");
 
         pnlWall.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -115,7 +117,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         txtGiaTienSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         btnDone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_done_x32.png"))); // NOI18N
@@ -137,6 +139,9 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton1.setText("DELETE");
+
         javax.swing.GroupLayout pnlCapNhatSPLayout = new javax.swing.GroupLayout(pnlCapNhatSP);
         pnlCapNhatSP.setLayout(pnlCapNhatSPLayout);
         pnlCapNhatSPLayout.setHorizontalGroup(
@@ -146,7 +151,6 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                 .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTenSP)
                     .addComponent(txtGiaTienSP)
-                    .addComponent(spnSoLuong)
                     .addGroup(pnlCapNhatSPLayout.createSequentialGroup()
                         .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblTenSP)
@@ -154,9 +158,13 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                             .addComponent(lblSoLuong))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlCapNhatSPLayout.createSequentialGroup()
-                        .addComponent(btnDone, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(spnSoLuong))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnClose, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         pnlCapNhatSPLayout.setVerticalGroup(
@@ -173,12 +181,14 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(lblSoLuong)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(spnSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDone, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                    .addComponent(spnSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
@@ -268,6 +278,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDone;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblGiaTien;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblSoLuong;

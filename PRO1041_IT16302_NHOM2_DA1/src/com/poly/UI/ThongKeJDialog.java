@@ -44,6 +44,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         cboSort = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
         pnlChiTiet = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblChiTietHoaDon = new javax.swing.JTable();
@@ -128,6 +129,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         ));
         jScrollPane2.setViewportView(tblHoaDon);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("VNĐ");
+
         javax.swing.GroupLayout pnlHomNayLayout = new javax.swing.GroupLayout(pnlHomNay);
         pnlHomNay.setLayout(pnlHomNayLayout);
         pnlHomNayLayout.setHorizontalGroup(
@@ -144,8 +149,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                                     .addComponent(lblTongTienHomNay))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlHomNayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtTongHDHomNay, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                                    .addComponent(txtTongTienHomNay)))
+                                    .addComponent(txtTongHDHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlHomNayLayout.createSequentialGroup()
+                                        .addComponent(txtTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                             .addGroup(pnlHomNayLayout.createSequentialGroup()
                                 .addGap(30, 30, 30)
                                 .addComponent(lblSort)
@@ -168,9 +176,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                     .addComponent(txtTongHDHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTongSoHoaDonHomNay))
                 .addGap(20, 20, 20)
-                .addGroup(pnlHomNayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTongTienHomNay))
+                .addGroup(pnlHomNayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtTongTienHomNay, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(lblTongTienHomNay)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(60, Short.MAX_VALUE))
         );
 
@@ -233,10 +242,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         pnlLichSu.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblThongKe.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblThongKe.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblThongKe.setText("THỐNG KÊ");
 
-        tblThongKe.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tblThongKe.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         tblThongKe.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null}
@@ -555,6 +564,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cboSort;
     private com.toedter.calendar.JDateChooser dtcDenNgay;
     private com.toedter.calendar.JDateChooser dtcTuNgay;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
