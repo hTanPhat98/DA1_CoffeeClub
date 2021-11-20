@@ -6,7 +6,6 @@
 package com.poly.Model;
 
 import java.util.Date;
-
 /**
  *
  * @author Patnight
@@ -19,7 +18,9 @@ public class HoaDon {
     private Date ngayHD;
     private float tongTien;
     private boolean trangThai;
-
+    
+    
+    
     public HoaDon() {
     }
 

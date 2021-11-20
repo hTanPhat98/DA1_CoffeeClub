@@ -25,7 +25,6 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
     String SELECT_BY_ID_SQL = "SELECT * FROM HOADON WHERE MaHD=?";
     String SELECT_BY_ID_SQL_MaHD = "SELECT * FROM HOADON WHERE MaBan=? AND TrangThai=0";
     String SELECT_ANY_SQL = "SELECT * FROM HOADON WHERE TrangThai=0 AND MaHD!=?";
-    String SELECT_By_MaBan_SQL = "SELECT * FROM HOADON WHERE MaBan=?";
 
     @Override
     public void insert(HoaDon entity) {
@@ -111,11 +110,5 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
         return this.selectBySql(SELECT_ANY_SQL,MaHD);
     }
     
-    public HoaDon selectByMaBan(String key) {
-        List<HoaDon> list = this.selectBySql(SELECT_By_MaBan_SQL, key);
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
-    }
+    
 }
