@@ -1355,7 +1355,7 @@
                         <Property name="rowHeight" type="int" value="22"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblAccountMouseClicked"/>
+                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblAccountMousePressed"/>
                       </Events>
                     </Component>
                   </SubComponents>

@@ -483,10 +483,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void clickTableAcc(MouseEvent evt) {
-        if (evt.getClickCount() == 2) {
             this.rowacc = tblAccount.getSelectedRow();
             this.editAcc();
-        }
     }
 
     private void sort() {
@@ -1134,7 +1132,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtTimKiemDS, javax.swing.GroupLayout.PREFERRED_SIZE, 1025, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnTimKiemDS, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE))
+                        .addComponent(btnTimKiemDS, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DanhSachjPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblSort)
@@ -1197,8 +1195,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         });
         tblAccount.setRowHeight(22);
         tblAccount.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblAccountMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblAccountMousePressed(evt);
             }
         });
         jScrollPane2.setViewportView(tblAccount);
@@ -1285,7 +1283,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
                 .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                        .addContainerGap(189, Short.MAX_VALUE)
+                        .addContainerGap(223, Short.MAX_VALUE)
                         .addComponent(btnChiTietThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(166, 166, 166))
                     .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
@@ -1450,10 +1448,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.xemTTCT();
     }//GEN-LAST:event_btnChiTietThongTinActionPerformed
 
-    private void tblAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountMouseClicked
-        this.clickTableAcc(evt);
-    }//GEN-LAST:event_tblAccountMouseClicked
-
     private void btnTaoTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoTKActionPerformed
         this.taoTaiKhoan();
     }//GEN-LAST:event_btnTaoTKActionPerformed
@@ -1477,6 +1471,10 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void cboMaNVKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cboMaNVKeyReleased
         this.chonMaNV();
     }//GEN-LAST:event_cboMaNVKeyReleased
+
+    private void tblAccountMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountMousePressed
+        this.clickTableAcc(evt);
+    }//GEN-LAST:event_tblAccountMousePressed
 
     /**
      * @param args the command line arguments

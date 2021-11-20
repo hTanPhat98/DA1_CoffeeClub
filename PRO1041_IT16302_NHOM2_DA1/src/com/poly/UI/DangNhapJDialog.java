@@ -262,7 +262,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         lblIconPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/login_icon_password_x32.png"))); // NOI18N
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtPassword.setText("taipro");
+        txtPassword.setText("huutai80");
         txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1)));
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
