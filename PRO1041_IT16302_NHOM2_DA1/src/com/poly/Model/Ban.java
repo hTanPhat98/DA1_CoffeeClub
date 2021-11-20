@@ -13,6 +13,7 @@ public class Ban {
     private String maBan;
     private String tenBan;
     private String maKV;
+    private String ghepBan;
 
     public String getMaBan() {
         return maBan;
@@ -38,6 +39,16 @@ public class Ban {
         this.maKV = maKV;
     }
 
+    public String getGhepBan() {
+        return ghepBan;
+    }
+
+    public void setGhepBan(String ghepBan) {
+        this.ghepBan = ghepBan;
+    }
+    
+    
+    
     @Override
     public String toString() {
         return getTenBan()+"-"+getMaBan();

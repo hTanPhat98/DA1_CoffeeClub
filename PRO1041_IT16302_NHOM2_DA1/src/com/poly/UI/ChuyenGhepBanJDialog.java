@@ -16,6 +16,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
@@ -32,24 +33,28 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     public ChuyenGhepBanJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
     }
 
-    public ChuyenGhepBanJDialog(java.awt.Frame parent, boolean modal, Integer MaHD,BanHangJDialog bhjd) {
+    public ChuyenGhepBanJDialog(java.awt.Frame parent, boolean modal, Integer MaHD, BanHangJDialog bhjd) {
         super(parent, modal);
-        initComponents();
-        setLocationRelativeTo(null);
-        loadTTBan(MaHD);
-        fillTable1(MaHD);
-        loadDSBan(MaHD);
-        this.athis=bhjd;
+        this.initComponents();
+        this.init(MaHD, bhjd);
     }
     BanDAO daoban = new BanDAO();
     HoaDonDAO daohd = new HoaDonDAO();
     HoaDonCTDAO daohdct = new HoaDonCTDAO();
     Locale localeVN = new Locale("vi", "VN");
     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-    BanHangJDialog athis;
+    private BanHangJDialog athis;
+    private HoaDon hd1, hd2;
+
+    private void init(Integer MaHD, BanHangJDialog bhjd) {
+        this.setLocationRelativeTo(null);
+        this.loadTTBan(MaHD);
+        this.fillTable1(MaHD);
+        this.loadDSBan(MaHD);
+        this.athis = bhjd;
+    }
 
     private void fillTable1(Integer MaHD) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDonGoc.getModel();
@@ -71,14 +76,13 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
     private void loadTTBan(Integer MaHD) {
         HoaDon hd = daohd.selectById(MaHD);
+        hd1 = hd;
         txtBanDangChon.setText(daoban.selectTenBan(hd.getMaBan()));
         txtMaBan.setText(hd.getMaBan());
         txtMaHoaDon.setText(String.valueOf(hd.getMaHD()));
     }
 
-    private void loadMon() {
-        int rows = tblHoaDonGoc.getSelectedRow();
-        int hdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+    private void loadMon(int hdct) {
         HoaDonShow hds = daohdct.selecthdctShow(hdct);
         txtMon.setText(hds.getTenMon());
         SpinnerModel model = new SpinnerNumberModel(hds.getSoLuong(), 1, hds.getSoLuong(), 1);
@@ -101,6 +105,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         String[] TTB = ttb.split("-");
         String maHD = TTB[1];
         HoaDon hd = daohd.selectByMahd(maHD);
+        hd2=hd;
         txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
         fillTable2(hd.getMaHD());
     }
@@ -130,14 +135,14 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         }
     }
 
-    private void chuyenHDCT(int rows) {
+    private void chuyenHdctR(int rows) {
         int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
         HoaDonCT hdct = daohdct.selectById(mahdct);
         hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
         daohdct.update(hdct);
     }
 
-    private void chuyen1() {
+    private void chuyenR() {
         int rows = tblHoaDonGoc.getSelectedRow();
         int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
         int slc = (int) spnSoLuongChuyen.getValue();
@@ -151,23 +156,94 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             hdct.setSoLuong(slc);
             daohdct.insert(hdct);
         } else {
-            chuyenHDCT(rows);
+            chuyenHdctR(rows);
         }
         fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
         fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
     }
 
-    private void chuyenAll() {
+    private void chuyenAllR() {
         for (int i = 0; i < tblHoaDonGoc.getRowCount(); i++) {
-            this.chuyenHDCT(i);
+            this.chuyenHdctR(i);
         }
         fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
         fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
     }
 
-    private void close() {
-        athis.fillTbHDdc(Integer.valueOf(txtMaHoaDon.getText()));
-        this.dispose();
+    private void chuyenHdctL(int rows) {
+        int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+        HoaDonCT hdct = daohdct.selectById(mahdct);
+        hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
+        daohdct.update(hdct);
+    }
+
+    private void chuyenL() {
+        int rows = tblHoaDonDaChuyen.getSelectedRow();
+        int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 4), sls;
+        int slc = (int) spnSoLuongChuyen.getValue();
+        if (slc < sld) {
+            int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+            HoaDonCT hdct = daohdct.selectById(mahdct);
+            sls = sld - slc;
+            hdct.setSoLuong(sls);
+            daohdct.update(hdct);
+            hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
+            hdct.setSoLuong(slc);
+            daohdct.insert(hdct);
+        } else {
+            chuyenHdctL(rows);
+        }
+        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+    }
+
+    private void chuyenAllL() {
+        for (int i = 0; i < tblHoaDonDaChuyen.getRowCount(); i++) {
+            this.chuyenHdctL(i);
+        }
+        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+    }
+
+    private void clickTblLeft() {
+        btnMoveAllLeft.setEnabled(false);
+        btnMoveLeft.setEnabled(false);
+        btnMoveRight.setEnabled(true);
+        btnMoveAllRight.setEnabled(true);
+        int rows = tblHoaDonGoc.getSelectedRow();
+        int hdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+        this.loadMon(hdct);
+    }
+
+    private void clickTblRight() {
+        btnMoveAllLeft.setEnabled(true);
+        btnMoveLeft.setEnabled(true);
+        btnMoveRight.setEnabled(false);
+        btnMoveAllRight.setEnabled(false);
+        int rows = tblHoaDonDaChuyen.getSelectedRow();
+        int hdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+        this.loadMon(hdct);
+    }
+
+    private void chuyenDoiBan() {
+        if (tblHoaDonGoc.getRowCount() == 0) {
+            daohd.delete(Integer.valueOf(txtMaHoaDon.getText()));
+            athis.resetForm();
+            this.dispose();
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, "Danh sách của hóa đơn cần chuyển còn sản phẩm!");
+        }
+    }
+
+    private void gopGhepBan() {
+        if (tblHoaDonGoc.getRowCount() == 0 || tblHoaDonDaChuyen.getRowCount() == 0) {
+            daoban.updateGB(hd2.getMaBan(), hd1.getMaBan());
+            daoban.updateGB(hd1.getMaBan(), hd2.getMaBan());
+            athis.resetForm();
+            this.dispose();
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, "1 trong 2 danh sách sản phẩm phải để trống!");
+        }
     }
 
     /**
@@ -187,7 +263,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveRight = new javax.swing.JButton();
         btnMoveAllRight = new javax.swing.JButton();
         btnMoveLeft = new javax.swing.JButton();
-        btnMoveAllRight1 = new javax.swing.JButton();
+        btnMoveAllLeft = new javax.swing.JButton();
         lblBanDangChon = new javax.swing.JLabel();
         lblMaBan = new javax.swing.JLabel();
         lblMaHoaDon = new javax.swing.JLabel();
@@ -200,10 +276,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         txtMaHoaDon = new javax.swing.JTextField();
         txtMaHoaDonBanChuyen = new javax.swing.JTextField();
         txtMon = new javax.swing.JTextField();
-        cboChuyenGhep = new javax.swing.JComboBox<>();
+        cboChuyenGhep = new javax.swing.JComboBox<String>();
         spnSoLuongChuyen = new javax.swing.JSpinner();
-        btnClose = new javax.swing.JButton();
-        btnClose1 = new javax.swing.JButton();
+        btnGopBan = new javax.swing.JButton();
+        btnChuyenBan = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHoaDonGoc = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -263,14 +339,14 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             }
         });
 
-        btnMoveAllRight1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32.png"))); // NOI18N
-        btnMoveAllRight1.setBorderPainted(false);
-        btnMoveAllRight1.setContentAreaFilled(false);
-        btnMoveAllRight1.setFocusable(false);
-        btnMoveAllRight1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32blue.png"))); // NOI18N
-        btnMoveAllRight1.addActionListener(new java.awt.event.ActionListener() {
+        btnMoveAllLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32.png"))); // NOI18N
+        btnMoveAllLeft.setBorderPainted(false);
+        btnMoveAllLeft.setContentAreaFilled(false);
+        btnMoveAllLeft.setFocusable(false);
+        btnMoveAllLeft.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32blue.png"))); // NOI18N
+        btnMoveAllLeft.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMoveAllRight1ActionPerformed(evt);
+                btnMoveAllLeftActionPerformed(evt);
             }
         });
 
@@ -284,7 +360,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                     .addComponent(btnMoveRight)
                     .addComponent(btnMoveAllRight)
                     .addComponent(btnMoveLeft)
-                    .addComponent(btnMoveAllRight1))
+                    .addComponent(btnMoveAllLeft))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         pnlButtonBoxLayout.setVerticalGroup(
@@ -297,7 +373,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMoveLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnMoveAllRight1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMoveAllLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -338,7 +414,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         txtMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         cboChuyenGhep.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboChuyenGhep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboChuyenGhepActionPerformed(evt);
@@ -346,19 +422,24 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         });
 
         spnSoLuongChuyen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuongChuyen.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnSoLuongChuyen.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         spnSoLuongChuyen.setValue(1);
 
-        btnClose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnClose.setText("GỘP BÀN");
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
+        btnGopBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnGopBan.setText("GỘP BÀN");
+        btnGopBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
+                btnGopBanActionPerformed(evt);
             }
         });
 
-        btnClose1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnClose1.setText("CHUYỂN BÀN");
+        btnChuyenBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnChuyenBan.setText("CHUYỂN BÀN");
+        btnChuyenBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChuyenBanActionPerformed(evt);
+            }
+        });
 
         tblHoaDonGoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -453,9 +534,9 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                                             .addComponent(cboChuyenGhep, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(txtMaHoaDonBanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(pnlWallLayout.createSequentialGroup()
-                                        .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jScrollPane2))
                                 .addGap(50, 50, 50))
                             .addGroup(pnlWallLayout.createSequentialGroup()
@@ -503,8 +584,8 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMon)
                     .addComponent(txtMon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spnSoLuongChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -531,32 +612,36 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cboChuyenGhepActionPerformed
 
     private void btnMoveAllRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveAllRightActionPerformed
-        this.chuyenAll();
+        this.chuyenAllR();
     }//GEN-LAST:event_btnMoveAllRightActionPerformed
 
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        this.close();
-    }//GEN-LAST:event_btnCloseActionPerformed
-
     private void tblHoaDonGocMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonGocMousePressed
-        this.loadMon();
+        this.clickTblLeft();
     }//GEN-LAST:event_tblHoaDonGocMousePressed
 
     private void tblHoaDonDaChuyenMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonDaChuyenMousePressed
-        
+        this.clickTblRight();
     }//GEN-LAST:event_tblHoaDonDaChuyenMousePressed
 
     private void btnMoveRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveRightActionPerformed
-        this.chuyen1();
+        this.chuyenR();
     }//GEN-LAST:event_btnMoveRightActionPerformed
 
     private void btnMoveLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveLeftActionPerformed
-        // TODO add your handling code here:
+        this.chuyenL();
     }//GEN-LAST:event_btnMoveLeftActionPerformed
 
-    private void btnMoveAllRight1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveAllRight1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnMoveAllRight1ActionPerformed
+    private void btnMoveAllLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveAllLeftActionPerformed
+        this.chuyenAllL();
+    }//GEN-LAST:event_btnMoveAllLeftActionPerformed
+
+    private void btnChuyenBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChuyenBanActionPerformed
+        this.chuyenDoiBan();
+    }//GEN-LAST:event_btnChuyenBanActionPerformed
+
+    private void btnGopBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGopBanActionPerformed
+        this.gopGhepBan();
+    }//GEN-LAST:event_btnGopBanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -601,10 +686,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnClose1;
+    private javax.swing.JButton btnChuyenBan;
+    private javax.swing.JButton btnGopBan;
+    private javax.swing.JButton btnMoveAllLeft;
     private javax.swing.JButton btnMoveAllRight;
-    private javax.swing.JButton btnMoveAllRight1;
     private javax.swing.JButton btnMoveLeft;
     private javax.swing.JButton btnMoveRight;
     private javax.swing.JComboBox<String> cboChuyenGhep;

@@ -13,19 +13,22 @@ import java.util.List;
 
 public class BanDAO extends CoffeShopSysDAO<Ban, String> {
 
-    String INSERT_SQL = "INSERT INTO BAN (MaBan, TenBan, MaKV) VALUES (?, ?, ?)";
-    String UPDATE_SQL = "UPDATE BAN SET TenBan=?, MaKV=? WHERE MaBan=?";
+    String INSERT_SQL = "INSERT INTO BAN (MaBan, TenBan, MaKV, GhepBan) VALUES (?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE BAN SET TenBan=?, MaKV=?, GhepBan=? WHERE MaBan=?";
+    String UPDATE_GB="UPDATE BAN SET GhepBan=? WHERE MaBan=?";
     String DELETE_SQL = "DELETE FROM BAN WHERE MaBan=?";
     String SELECT_ALL_SQL = "SELECT * FROM BAN ";
     String SELECT_BY_ID_SQL = "SELECT * FROM BAN WHERE MaBan=?";
     String SELECT_BY_MaBan = "SELECT TenBan FROM BAN WHERE MaBan=?";
+    
 
     @Override
     public void insert(Ban entity) {
         JdbcHelper.update(INSERT_SQL,
                 entity.getMaBan(),
                 entity.getTenBan(),
-                entity.getMaKV()
+                entity.getMaKV(),
+                entity.getGhepBan()
         );
     }
 
@@ -34,10 +37,17 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
         JdbcHelper.update(UPDATE_SQL,
                 entity.getTenBan(),
                 entity.getMaKV(),
+                entity.getGhepBan(),
                 entity.getMaBan()
         );
     }
 
+    public void updateGB(String MaBG,String MaBan) {
+        JdbcHelper.update(UPDATE_GB,
+                MaBG,MaBan
+        );
+    }
+    
     @Override
     public void delete(String key) {
         JdbcHelper.update(DELETE_SQL, key);
@@ -72,6 +82,7 @@ public class BanDAO extends CoffeShopSysDAO<Ban, String> {
                 entity.setMaBan(rs.getString("MaBan"));
                 entity.setTenBan(rs.getString("TenBan"));
                 entity.setMaKV(rs.getString("MaKV"));
+                entity.setGhepBan(rs.getString("GhepBan"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

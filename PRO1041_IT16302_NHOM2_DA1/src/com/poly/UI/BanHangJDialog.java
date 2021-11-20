@@ -41,6 +41,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -62,12 +63,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         initComponents();
         init();
     }
-    
-    
 
     private int rowsp, vtT;
     private float TTHD = 0;
     private String keyWorld, getMaBan;
+    private boolean ktgb;
     BanDAO daoB = new BanDAO();
     MenuDAO daomn = new MenuDAO();
     HoaDonDAO daohd = new HoaDonDAO();
@@ -76,6 +76,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     HoaDonCTDAO daohdct = new HoaDonCTDAO();
     private Locale localeVN = new Locale("vi", "VN");
     private NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+    
 
     private void init() {
         setLocationRelativeTo(null);
@@ -128,9 +129,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     private void clickTableSP() {
-        this.rowsp = tblSanPham.getSelectedRow();
-        this.editSP();
-        btnOrder.setEnabled(true);
+        if (!txtMaHoaDon.getText().isEmpty()) {
+            this.rowsp = tblSanPham.getSelectedRow();
+            this.editSP();
+            btnOrder.setEnabled(ktgb); 
+        }
     }
 
     private void fillTTB() {
@@ -173,10 +176,25 @@ public class BanHangJDialog extends javax.swing.JDialog {
             btn.setForeground(Color.BLACK);
             btn.setFont(new Font("Tahoma", 1, 14));
             btn.setFocusable(false);
-            btn.setToolTipText(b.getMaBan());
+            btn.setToolTipText(b.getMaBan() + "-" + b.getGhepBan());
             for (HoaDon hd : list) {
-                if (btn.getToolTipText().equals(hd.getMaBan()) && !hd.isTrangThai()) {
-                    btn.setBackground(Color.red);
+                String[] maBan = btn.getToolTipText().split("-");
+                if (maBan[0].equals(hd.getMaBan()) && !hd.isTrangThai()) {
+                    try {
+                        if (!maBan[1].equals("null")) {
+                            btn.setText(btn.getText() + "-" + daoB.selectTenBan(maBan[1]));
+                            if (ktHdBanGhep(maBan[0])) {
+                                btn.setBackground(Color.orange);
+                            } else {
+                                btn.setBackground(Color.red);
+                            }
+                        } else {
+                            btn.setBackground(Color.red);
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+
                     break;
                 }
             }
@@ -191,14 +209,28 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 public void mousePressed(MouseEvent e) {
                     HoaDon hd = daohd.selectByMahd(b.getMaBan());
                     if (hd != null) {
-                        if (!hd.isTrangThai()) {
-                            
-                            editHD(hd);
-                            fillTbHD();
-                            btnThanhToan.setEnabled(true);
-                            btnXemBill.setEnabled(true);
-                            btnGopBanGhepBan.setEnabled(true);
-                            btnDatBan.setEnabled(false);
+                        List<HoaDonShow> list = daohdct.selectHDShow(hd.getMaHD());
+                        if (!b.getGhepBan().equals("null") && list.isEmpty()) {
+                            if (!hd.isTrangThai()) {
+                                editHD(hd);
+                                fillTbHD();
+                                btnThanhToan.setEnabled(false);
+                                btnXemBill.setEnabled(false);
+                                btnGopBanGhepBan.setEnabled(false);
+                                btnDatBan.setEnabled(false);
+                                btnOrder.setEnabled(false);
+                                ktgb=false;
+                            }
+                        } else {
+                            if (!hd.isTrangThai()) {
+                                editHD(hd);
+                                fillTbHD();
+                                btnThanhToan.setEnabled(true);
+                                btnXemBill.setEnabled(true);
+                                btnGopBanGhepBan.setEnabled(true);
+                                btnDatBan.setEnabled(false);
+                                ktgb=true;
+                            }
                         }
                     } else {
                         switch (b.getMaKV()) {
@@ -219,6 +251,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                         btnXemBill.setEnabled(false);
                         btnDatBan.setEnabled(true);
                         btnGopBanGhepBan.setEnabled(false);
+                        ktgb=true;
                     }
                     getMaBan = b.getMaBan();
                 }
@@ -243,6 +276,12 @@ public class BanHangJDialog extends javax.swing.JDialog {
         return listban;
     }
 
+    private boolean ktHdBanGhep(String maBan) {
+        HoaDon hd = daohd.selectByMahd(maBan);
+        List<HoaDonShow> list = daohdct.selectHDShow(hd.getMaHD());
+        return list.isEmpty();
+    }
+
     private void datBan() {
         String maBan = getMaBan;
         if (!maBan.equals("") || maBan == null) {
@@ -257,7 +296,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             new ThongBaoJDialog(null, true).alert(2, "Chưa chọn bàn!!!");
         }
         getMaBan = "";
-        fillTTB();
+        this.fillTTB();
         btnThanhToan.setEnabled(true);
         btnXemBill.setEnabled(true);
         btnGopBanGhepBan.setEnabled(true);
@@ -316,12 +355,12 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
             txtThanhTien.setText(currencyVN.format(TT));
             TTHD = TT;
-            
-        } catch (Exception e) {
+
+        } catch (NumberFormatException e) {
             System.out.println(e);
         }
     }
-    
+
     public void fillTbHDdc(Integer Mahd) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
@@ -348,7 +387,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             System.out.println(e);
         }
     }
-    
+
     private void insertHDCT() {
         if (txtMaHoaDon.getText() != null) {
             String maMon = (String) tblSanPham.getValueAt(this.rowsp, 0);
@@ -361,8 +400,14 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     private void updateTT() {
-        daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), true);
-        this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
+        HoaDon hd = daohd.selectById(Integer.valueOf(txtMaHoaDon.getText()));
+        this.xuatBill(hd.getMaHD());
+        daohd.updateTT(TTHD, hd.getMaHD(), true);
+        Ban ban = daoB.selectById(hd.getMaBan());
+        HoaDon hdgb = daohd.selectByMaBan(ban.getGhepBan());
+        daohd.delete(hdgb.getMaHD());
+        daoB.updateGB("null", ban.getGhepBan());
+        daoB.updateGB("null", ban.getMaBan());
         TTHD = 0;
     }
 
@@ -387,7 +432,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             jdl.setVisible(true);
             JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
             JasperExportManager.exportReportToHtmlFile(p, "bill.html");
-        } catch (Exception ex) {
+        } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
     }
@@ -412,37 +457,44 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void thanhToan() {
         this.updateTT();
-        resetHD();
+        this.resetHD();
     }
 
-    public void resetHDCT() {
-        this.fillTbHD();
+    public void updateSL(KeyEvent evt) {
+        if (evt.getKeyCode() == 10) {
+            int rowsl = tblHoaDon.getSelectedRow();
+            try {
+                int sl = (int) tblHoaDon.getValueAt(rowsl, 4);
+                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+                hdct.setSoLuong(sl);
+                daohdct.updateSl(hdct);
+                fillTbHD();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
     }
-
-    //    public void updateSL(KeyEvent evt) {
-    //        if (evt.getKeyCode() == 10) {
-    //            int rowsl = tblHoaDon.getSelectedRow();
-    //            try {
-    //                int sl = (int) tblHoaDon.getValueAt(rowsl, 4);
-    //                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
-    //                hdct.setSoLuong(sl);
-    //                daohdct.updateSl(hdct);
-    //                fillTbHD();
-    //            } catch (Exception e) {
-    //                System.out.println(e);
-    //            }
-    //        }
-    //    }
 
     private void chuyenGhepBan() {
-        new ChuyenGhepBanJDialog(null, true, Integer.valueOf(txtMaHoaDon.getText()),this).setVisible(true);
+
+        new ChuyenGhepBanJDialog(null, true, Integer.valueOf(txtMaHoaDon.getText()), this).setVisible(true);
     }
-    
-    private void capNhatSoLuong(){
-        int rowsl = tblHoaDon.getSelectedRow();
-        HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
-        new CapNhatSanPhamJDialog(null, true, this, hdct).setVisible(true);
+
+    private void capNhatSoLuong(MouseEvent evt) {
+        if (evt.getClickCount() == 2) {
+            int rowsl = tblHoaDon.getSelectedRow();
+            HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+            new CapNhatSanPhamJDialog(null, true, this, hdct).setVisible(true);
+        }
+
     }
+
+    public void resetForm() {
+        this.fillTTB();
+        this.resetHD();
+        btnDatBan.setEnabled(false);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -858,6 +910,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 tblHoaDonMousePressed(evt);
             }
         });
+        tblHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblHoaDonKeyReleased(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblHoaDon);
 
         javax.swing.GroupLayout pnlHoaDonLayout = new javax.swing.GroupLayout(pnlHoaDon);
@@ -999,9 +1056,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
-        this.fillTTB();
-        this.resetHD();
-        btnDatBan.setEnabled(false);
+        this.resetForm();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void btnXemBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXemBillActionPerformed
@@ -1017,8 +1072,12 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_tblSanPhamMousePressed
 
     private void tblHoaDonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMousePressed
-        this.capNhatSoLuong();
+        this.capNhatSoLuong(evt);
     }//GEN-LAST:event_tblHoaDonMousePressed
+
+    private void tblHoaDonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblHoaDonKeyReleased
+        this.updateSL(evt);
+    }//GEN-LAST:event_tblHoaDonKeyReleased
 
     /**
      * @param args the command line arguments

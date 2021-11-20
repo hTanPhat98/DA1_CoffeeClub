@@ -8,10 +8,8 @@ package com.poly.UI;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.Model.HoaDonCT;
 import com.poly.Model.HoaDonShow;
-import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.Locale;
-import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -39,7 +37,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         this.setHDCT(HDCT);
         athis = bhjd;
-        
+
     }
 
     private void setHDCT(HoaDonShow HDCT) {
@@ -55,6 +53,18 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         HoaDonCT hdct = daohdct.selectById(hds.getMaHDCT());
         athis.fillTbHDdc(hdct.getMaHD());
         this.dispose();
+    }
+
+    private void deleteHDCT() {
+        try {
+            daohdct.delete(hds.getMaHDCT());
+            HoaDonCT hdct = daohdct.selectById(hds.getMaHDCT());
+            athis.fillTbHDdc(hdct.getMaHD());
+            new ThongBaoJDialog(null, true).alert(1, "Xóa món thành công!");
+        } catch (Exception e) {
+            new ThongBaoJDialog(null, true).alert(2, "Xóa món thất bại!");
+        }
+
     }
 
     /**
@@ -79,7 +89,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         spnSoLuong = new javax.swing.JSpinner();
         btnDone = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cập nhật sản phẩm");
@@ -117,7 +127,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         txtGiaTienSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 
         btnDone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_done_x32.png"))); // NOI18N
@@ -139,8 +149,14 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("DELETE");
+        btnDelete.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/close_red_x32.png"))); // NOI18N
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlCapNhatSPLayout = new javax.swing.GroupLayout(pnlCapNhatSP);
         pnlCapNhatSP.setLayout(pnlCapNhatSPLayout);
@@ -159,7 +175,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlCapNhatSPLayout.createSequentialGroup()
                         .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                             .addComponent(spnSoLuong))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                         .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,8 +203,8 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
                 .addGap(26, 26, 26)
                 .addGroup(pnlCapNhatSPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
@@ -231,6 +247,10 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        this.deleteHDCT();
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,8 +297,8 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDone;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel lblGiaTien;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblSoLuong;
