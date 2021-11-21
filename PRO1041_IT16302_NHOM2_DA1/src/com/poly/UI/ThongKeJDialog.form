@@ -45,11 +45,8 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="pnlHeader" alignment="0" pref="0" max="32767" attributes="0"/>
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="tabThongKe" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
+              <Component id="pnlHeader" alignment="0" max="32767" attributes="0"/>
+              <Component id="tabThongKe" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -58,7 +55,6 @@
                   <Component id="pnlHeader" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="tabThongKe" max="32767" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -146,11 +142,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="pnlHomNay" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="pnlChiTiet" max="32767" attributes="0"/>
+                              <Component id="pnlHomNay" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -203,7 +199,7 @@
                                               <Component id="cboSort" min="-2" pref="530" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="0" pref="13" max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="35" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
@@ -231,7 +227,7 @@
                                   <Component id="lblTongTienHomNay" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="jLabel1" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="71" max="32767" attributes="0"/>
+                              <EmptySpace pref="91" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -657,7 +653,7 @@
                             </Property>
                             <Property name="rowHeight" type="int" value="20"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                              <TableHeader reorderingAllowed="true" resizingAllowed="false"/>
                             </Property>
                           </Properties>
                           <Events>
@@ -760,7 +756,7 @@
                                       <Component id="btnLineChart" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                       <Component id="btnBarChart" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="32" max="32767" attributes="0"/>
+                                  <EmptySpace pref="46" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -780,12 +776,13 @@
                               <Font name="Tahoma" size="14" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                              <StringArray count="5">
-                                <StringItem index="0" value="100000"/>
-                                <StringItem index="1" value="200000"/>
-                                <StringItem index="2" value="500000"/>
-                                <StringItem index="3" value="1000000"/>
-                                <StringItem index="4" value="2000000"/>
+                              <StringArray count="6">
+                                <StringItem index="0" value="T&#x1ea5;t c&#x1ea3;"/>
+                                <StringItem index="1" value="100000"/>
+                                <StringItem index="2" value="200000"/>
+                                <StringItem index="3" value="500000"/>
+                                <StringItem index="4" value="1000000"/>
+                                <StringItem index="5" value="2000000"/>
                               </StringArray>
                             </Property>
                           </Properties>
@@ -811,7 +808,7 @@
                             </Property>
                             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                               <StringArray count="1">
-                                <StringItem index="0" value="T&#x1ea5;t C&#x1ea3;"/>
+                                <StringItem index="0" value="T&#x1ea5;t c&#x1ea3;"/>
                               </StringArray>
                             </Property>
                           </Properties>
@@ -930,7 +927,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jScrollPane5" pref="881" max="32767" attributes="0"/>
+                              <Component id="jScrollPane5" pref="903" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -999,7 +996,7 @@
                             </Property>
                             <Property name="rowHeight" type="int" value="20"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                              <TableHeader reorderingAllowed="true" resizingAllowed="false"/>
                             </Property>
                           </Properties>
                         </Component>
@@ -1021,12 +1018,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="1597" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1607" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="800" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="811" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
