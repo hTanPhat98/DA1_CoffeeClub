@@ -43,7 +43,6 @@ import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -88,15 +87,18 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void fillTableSP() {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<Menu> list = daomn.selectByKeyword(keyWorld);
             for (Menu mon : list) {
                 Object[] row = {
+                    i,
                     mon.getMaMon(),
                     mon.getTenMon(),
                     currencyVN.format(mon.getGia())
                 };
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
 
@@ -114,7 +116,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     private void editSP() {
-        String maMon = (String) tblSanPham.getValueAt(this.rowsp, 0);
+        String maMon = (String) tblSanPham.getValueAt(this.rowsp, 1);
         Menu mon = daomn.selectById(maMon);
         if (mon != null) {
             this.setFormSP(mon);
@@ -133,6 +135,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             this.editSP();
             spnSoLuong.setValue(1);
             btnOrder.setEnabled(ktgb);
+            spnSoLuong.setEnabled(ktgb);
         }
     }
 
@@ -221,6 +224,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                                 btnGopBanGhepBan.setEnabled(false);
                                 btnDatBan.setEnabled(false);
                                 btnOrder.setEnabled(false);
+                                spnSoLuong.setEnabled(false);
                                 ktgb = false;
                             }
                         } else {
@@ -253,6 +257,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                         btnXemBill.setEnabled(false);
                         btnDatBan.setEnabled(true);
                         btnGopBanGhepBan.setEnabled(false);
+                        spnSoLuong.setEnabled(false);
                         ktgb = true;
                     }
 
@@ -460,6 +465,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             btnXemBill.setEnabled(false);
             btnGopBanGhepBan.setEnabled(false);
             btnDatBan.setEnabled(true);
+            spnSoLuong.setEnabled(false);
             this.fillTTB();
         } catch (Exception e) {
         }
@@ -689,6 +695,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spnSoLuong.setEnabled(false);
 
         javax.swing.GroupLayout pnlMoTaLayout = new javax.swing.GroupLayout(pnlMoTa);
         pnlMoTa.setLayout(pnlMoTaLayout);
@@ -747,17 +754,17 @@ public class BanHangJDialog extends javax.swing.JDialog {
         tblSanPham.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Mã món", "Tên món", "Giá tiền"
+                "Stt", "Mã món", "Tên món", "Giá tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

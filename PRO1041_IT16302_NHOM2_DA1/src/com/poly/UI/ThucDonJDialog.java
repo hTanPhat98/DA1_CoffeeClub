@@ -51,11 +51,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     private void fillToTableMenu() {
         DefaultTableModel model = (DefaultTableModel) tblLoaiMon.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<Menu> list = daomenu.selectAll();
             for (Menu mon : list) {
                 LoaiMon listlm = daoloaimon.selectById(mon.getMaLoai());
                 Object[] row = {
+                    i,
                     mon.getMaMon(),
                     mon.getTenMon(),
                     mon.getGia(),
@@ -67,6 +69,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 listmenu.setMaLoai(mon.getMaLoai());
                 listmn.add(listmenu);
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -121,7 +124,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void editMon() {
         try {
-            String mnu = (String) tblLoaiMon.getValueAt(this.indexM, 0);
+            String mnu = (String) tblLoaiMon.getValueAt(this.indexM, 1);
             Menu model = daomenu.selectById(mnu);
             if (model != null) {
                 this.setmodelMon(model);
@@ -168,7 +171,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void clearLoaiMon() {
         this.setmodelLoai(new LoaiMon());
-        this.indexLM=-1;
+        this.indexLM = -1;
         this.updateStatusLoaiMon();
     }
 
@@ -189,6 +192,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         String[] key = maloai.split("-");
         DefaultTableModel modelbang = (DefaultTableModel) tblLoaiMon.getModel();
         modelbang.setRowCount(0);
+        int i = 1;
         try {
             LoaiMon model = daoloaimon.selectById(key[1]);
             if (model != null) {
@@ -201,18 +205,20 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             List<Menu> list = (List<Menu>) daomenu.SelectByIDmaloai(key[1]);
             for (Menu m : list) {
                 Object[] row = {
+                    i,
                     m.getMaMon(),
                     m.getTenMon(),
                     m.getGia(),
                     m.getMaLoai()
                 };
                 modelbang.addRow(row);
+                i++;
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
     }
-    
+
     private void clickListLM(MouseEvent evt) {
         if (evt.getClickCount() == 1) {
             this.indexLM = lstLoaiMon.getSelectedIndex();
@@ -220,11 +226,11 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             this.updateStatusLoaiMon();
         }
     }
-    
+
     private void clickTableMenu(MouseEvent evt) {
-            this.indexM = tblLoaiMon.getSelectedRow();
-            this.editMon();
-            this.updateStatusMon();
+        this.indexM = tblLoaiMon.getSelectedRow();
+        this.editMon();
+        this.updateStatusMon();
     }
 
     //CONTROL
@@ -551,15 +557,23 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         tblLoaiMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblLoaiMon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã món", "Tên", "Đơn giá", "Mã loại món"
+                "Stt", "Mã món", "Tên", "Đơn giá", "Mã loại món"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblLoaiMon.setRowHeight(20);
         tblLoaiMon.getTableHeader().setResizingAllowed(false);
         tblLoaiMon.getTableHeader().setReorderingAllowed(false);

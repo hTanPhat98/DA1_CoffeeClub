@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="550" pageHeight="1300" columnWidth="510" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eaffb2e8-91b0-4f03-883e-174841a657c8">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PhieuThanhToan" language="groovy" pageWidth="550" pageHeight="700" columnWidth="510" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eaffb2e8-91b0-4f03-883e-174841a657c8">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -178,7 +178,7 @@ WHERE
 	<columnHeader>
 		<band height="41" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="170" height="34" uuid="51cd445c-14f3-45b6-a5b2-ba4b24540d6b"/>
+				<reportElement x="39" y="0" width="131" height="34" uuid="51cd445c-14f3-45b6-a5b2-ba4b24540d6b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="14" isBold="true"/>
 				</textElement>
@@ -205,33 +205,40 @@ WHERE
 				</textElement>
 				<text><![CDATA[Thành tiền]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="39" height="34" uuid="045007cc-f594-4e8b-9806-bbcc6eaff1c4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STT]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="26" splitType="Stretch">
 			<textField>
-				<reportElement x="39" y="1" width="131" height="20" uuid="caa0bea7-802e-4e08-a014-01b767718eae"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement positionType="FixRelativeToBottom" x="40" y="1" width="130" height="20" uuid="caa0bea7-802e-4e08-a014-01b767718eae"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MENU_TenMon}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="170" y="1" width="100" height="20" uuid="d8639959-dd2a-46c7-9ae6-b204fffac8ba"/>
+				<reportElement positionType="FixRelativeToBottom" x="170" y="1" width="100" height="20" uuid="d8639959-dd2a-46c7-9ae6-b204fffac8ba"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{HOADONCT_SoLuong}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0 VND">
-				<reportElement x="270" y="1" width="120" height="20" uuid="a556ebe0-972a-426a-b839-79aacc382bed"/>
+				<reportElement positionType="FixRelativeToBottom" x="270" y="1" width="120" height="20" uuid="a556ebe0-972a-426a-b839-79aacc382bed"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{HOADONCT_DonGia}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0 VND" isBlankWhenNull="true">
-				<reportElement x="390" y="1" width="120" height="20" uuid="06ef488f-6f1c-4c2b-9b56-0a501d3159ed"/>
+				<reportElement positionType="FixRelativeToBottom" x="390" y="1" width="120" height="20" uuid="06ef488f-6f1c-4c2b-9b56-0a501d3159ed"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
@@ -240,6 +247,13 @@ WHERE
 			<line>
 				<reportElement x="0" y="0" width="510" height="1" uuid="e7cd4b17-50ad-4108-8656-4058b4e95a31"/>
 			</line>
+			<textField>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="1" width="39" height="20" uuid="13ebb0c8-90eb-425a-9f09-00af700bc4bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>

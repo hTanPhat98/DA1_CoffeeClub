@@ -61,16 +61,19 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private void fillTable1(Integer MaHD) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDonGoc.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<HoaDonShow> list = daohdct.selectHDShow(MaHD);
             for (HoaDonShow hdct : list) {
                 Object[] row = {
+                    i,
                     hdct.getMaHDCT(),
                     hdct.getMaMon(),
                     hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),};
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
         }
@@ -161,23 +164,26 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private void fillTable2(Integer Mahd) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<HoaDonShow> list = daohdct.selectHDShow(Mahd);
             for (HoaDonShow hdct : list) {
                 Object[] row = {
+                    i,
                     hdct.getMaHDCT(),
                     hdct.getMaMon(),
                     hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),};
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
         }
     }
 
     private void chuyenHdctR(int rows) {
-        int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+        int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 1);
         HoaDonCT hdct = daohdct.selectById(mahdct);
         hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
         this.daohdct.update(hdct);
@@ -203,10 +209,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             if (rows == -1) {
                 new ThongBaoJDialog(null, true).alert(2, "Chưa chọn món!!!");
             } else {
-                int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
+                int sld = (int) tblHoaDonGoc.getValueAt(rows, 5), sls;
                 int slc = (int) spnSoLuongChuyen.getValue();
                 if (slc < sld) {
-                    int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+                    int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 1);
                     HoaDonCT hdct = daohdct.selectById(mahdct);
                     sls = sld - slc;
                     hdct.setSoLuong(sls);
@@ -237,7 +243,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }
 
     private void chuyenHdctL(int rows) {
-        int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+        int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
         HoaDonCT hdct = daohdct.selectById(mahdct);
         hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
         daohdct.update(hdct);
@@ -248,10 +254,13 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             new ThongBaoJDialog(null, true).alert(2, "Bàn mới chưa có hóa đơn không thể chuyên món!!!");
         } else {
             int rows = tblHoaDonDaChuyen.getSelectedRow();
-            int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 4), sls;
+            if (rows == -1) {
+                new ThongBaoJDialog(null, true).alert(2, "Chưa chọn món!!!");
+            } else {
+            int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 5), sls;
             int slc = (int) spnSoLuongChuyen.getValue();
             if (slc < sld) {
-                int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+                int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
                 HoaDonCT hdct = daohdct.selectById(mahdct);
                 sls = sld - slc;
                 hdct.setSoLuong(sls);
@@ -264,6 +273,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             }
             fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
             fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+            }
         }
     }
 
@@ -285,7 +295,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveRight.setEnabled(true);
         btnMoveAllRight.setEnabled(true);
         int rows = tblHoaDonGoc.getSelectedRow();
-        int hdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+        int hdct = (int) tblHoaDonGoc.getValueAt(rows, 1);
         this.loadMon(hdct);
     }
 
@@ -295,7 +305,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveRight.setEnabled(false);
         btnMoveAllRight.setEnabled(false);
         int rows = tblHoaDonDaChuyen.getSelectedRow();
-        int hdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+        int hdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
         this.loadMon(hdct);
     }
 
@@ -536,17 +546,17 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         tblHoaDonGoc.setAutoCreateRowSorter(true);
         tblHoaDonGoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã HDCT", "Mã món", "Tên Món", "Giá", "Số lượng"
+                "Stt", "Mã HDCT", "Mã món", "Tên Món", "Giá", "Số lượng"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -566,17 +576,17 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         tblHoaDonDaChuyen.setAutoCreateRowSorter(true);
         tblHoaDonDaChuyen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã HDCT", "Mã món", "Tên món", "Giá", "Số lượng"
+                "Stt", "Mã HDCT", "Mã món", "Tên món", "Giá", "Số lượng"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

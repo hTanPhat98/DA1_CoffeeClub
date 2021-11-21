@@ -78,6 +78,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private void LoadHDhomnay() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
 
             LocalDateTime now = LocalDateTime.now();
@@ -89,12 +90,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             for (HoaDon hd : list) {
                 NhanVien listnv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
+                    i,
                     hd.getMaHD(),
                     dateformat.format(hd.getNgayHD()),
                     currencyVN.format(hd.getTongTien()),
                     listnv.getTenNV()
                 };
                 model.addRow(row);
+                i++;
                 tongtienHN = tongtienHN + hd.getTongTien();
             }
 
@@ -109,6 +112,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private void Sort() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             LocalDateTime now = LocalDateTime.now();
             int year = now.getYear();
@@ -129,28 +133,31 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
             for (HDTHONGKE hd : listHD) {
                 Object[] row = {
+                    i,
                     hd.getMaHD(),
                     hd.getNgayHD(),
                     currencyVN.format(hd.getTongTien()),
                     hd.getTenNV()
                 };
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
         }
     }
 
     private void showHDCT() {
-        Integer mahd = (Integer) tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0);
+        Integer mahd = (Integer) tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 1);
         DefaultTableModel model = (DefaultTableModel) tblChiTietHoaDon.getModel();
         model.setRowCount(0);
-
+        int i=1;
         List<HoaDonCT> listHDCT = (List<HoaDonCT>) hdctdao.selectByHDCT(mahd);
 
         for (HoaDonCT hdct : listHDCT) {
             Menu mon = daoMenu.selectById(hdct.getMaMon());
             ttmon = hdct.getDonGia() * hdct.getSoLuong();
             Object[] row = {
+                i,
                 hdct.getMaHDCT(),
                 mon.getTenMon(),
                 currencyVN.format(hdct.getDonGia()),
@@ -158,6 +165,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 currencyVN.format(ttmon)
             };
             model.addRow(row);
+            i++;
         }
     }
 
@@ -168,11 +176,13 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         int tongHD = 0;
         model.setRowCount(0);
         model2.setRowCount(0);
+        int i=1;
         try {
             List<HoaDon> list = tkdao.selectLichSuHD();
             for (HoaDon hd : list) {
                 NhanVien listnv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
+                    i,
                     hd.getMaHD(),
                     dateformat.format(hd.getNgayHD()),
                     currencyVN.format(hd.getTongTien()),
@@ -181,6 +191,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 model.addRow(row);
                 tongHD = hd.getMaHD();
                 tongTien += hd.getTongTien();
+                i++;
             }
 
             Object[] row = {
@@ -209,17 +220,20 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         } else {
             DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
             model.setRowCount(0);
+            int i=1;
             try {
                 List<HDTHONGKE> listTK = tkdao.selectListByTenNV(TenNV);
                 for (HDTHONGKE hd : listTK) {
 
                     Object[] row = {
+                        i,
                         hd.getMaHD(),
                         dateformat.format(hd.getNgayHD()),
                         currencyVN.format(hd.getTongTien()),
                         hd.getTenNV()
                     };
                     model.addRow(row);
+                    i++;
                 }
             } catch (Exception e) {
             }
@@ -228,10 +242,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }
 
     private void showLichSuHDCT() {
-        Integer MaHD = (Integer) tblLichSuHoaDon.getValueAt(tblLichSuHoaDon.getSelectedRow(), 0);
+        Integer MaHD = (Integer) tblLichSuHoaDon.getValueAt(tblLichSuHoaDon.getSelectedRow(), 1);
         DefaultTableModel model = (DefaultTableModel) tblCTHD.getModel();
         model.setRowCount(0);
-
+        int i=1;
         try {
             List<HoaDonCT> listCTHD = hdctdao.selectByHDCT(MaHD);
 
@@ -239,6 +253,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 Menu mon = daoMenu.selectById(list.getMaMon());
                 ttmon = list.getSoLuong() * list.getDonGia();
                 Object[] row = {
+                    i,
                     list.getMaHDCT(),
                     mon.getTenMon(),
                     currencyVN.format(list.getDonGia()),
@@ -246,6 +261,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                     currencyVN.format(ttmon)
                 };
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
         }
@@ -257,18 +273,20 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<HoaDon> listhd = tkdao.findNgayThangNam(formatter.format(dt1), formatter.format(dt2));
             for (HoaDon list : listhd) {
                 NhanVien nv = nvdao.selectById(list.getMaNV());
                 Object[] row = {
+                    i,
                     list.getMaHD(),
                     dateformat.format(list.getNgayHD()),
                     currencyVN.format(list.getTongTien()),
                     nv.getTenNV()
                 };
-
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
         }
@@ -278,6 +296,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
         String money = "" + cboSoTien.getSelectedItem();
         model.setRowCount(0);
+        int i=1;
         if (money.equals("Tất cả")) {
             this.LoadLichSuHD();
         } else {
@@ -286,13 +305,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 for (HoaDon list : listHD) {
                     NhanVien nv = nvdao.selectById(list.getMaNV());
                     Object[] row = {
+                        i,
                         list.getMaHD(),
                         dateformat.format(list.getNgayHD()),
                         currencyVN.format(list.getTongTien()),
                         nv.getTenNV()
-
                     };
                     model.addRow(row);
+                    i++;
                 }
             } catch (Exception e) {
             }
@@ -504,17 +524,17 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
+                "Stt", "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -593,17 +613,17 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblChiTietHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblChiTietHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã HDCT", "Món", "Giá", "Số lượng", "Thành tiền"
+                "Stt", "Mã HDCT", "Món", "Giá", "Số lượng", "Thành tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -686,17 +706,17 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblLichSuHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblLichSuHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
+                "Stt", "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -707,8 +727,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblLichSuHoaDon.getTableHeader().setResizingAllowed(false);
         tblLichSuHoaDon.getTableHeader().setReorderingAllowed(false);
         tblLichSuHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblLichSuHoaDonMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblLichSuHoaDonMousePressed(evt);
             }
         });
         jScrollPane4.setViewportView(tblLichSuHoaDon);
@@ -874,17 +894,17 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblCTHD.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblCTHD.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Mã HDCT", "Món", "Giá", "Số lượng", "Thành tiền"
+                "Stt", "Mã HDCT", "Món", "Giá", "Số lượng", "Thành tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -971,7 +991,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tabThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
+                .addComponent(tabThongKe))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -989,12 +1009,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLineChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineChartActionPerformed
-        showLineChart();
+        this.showLineChart();
         tabThongKe.setSelectedIndex(2);
     }//GEN-LAST:event_btnLineChartActionPerformed
 
     private void btnBarChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarChartActionPerformed
-        showBarChart();
+        this.showBarChart();
         tabThongKe.setSelectedIndex(2);
     }//GEN-LAST:event_btnBarChartActionPerformed
 
@@ -1003,7 +1023,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cboSortActionPerformed
 
     private void btnLocTheoNgayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocTheoNgayActionPerformed
-        findNgayThangNamHD();
+        this.findNgayThangNamHD();
     }//GEN-LAST:event_btnLocTheoNgayActionPerformed
 
     private void cboSoTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSoTienActionPerformed
@@ -1015,12 +1035,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cboNhanVienActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-        showHDCT();
+        this.showHDCT();
     }//GEN-LAST:event_tblHoaDonMouseClicked
 
-    private void tblLichSuHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichSuHoaDonMouseClicked
-        showLichSuHDCT();
-    }//GEN-LAST:event_tblLichSuHoaDonMouseClicked
+    private void tblLichSuHoaDonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLichSuHoaDonMousePressed
+        this.showLichSuHDCT();
+    }//GEN-LAST:event_tblLichSuHoaDonMousePressed
 
     /**
      * @param args the command line arguments

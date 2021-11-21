@@ -113,11 +113,13 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void fillTableNV() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             String keyWord = txtTimKiemDS.getText();
             List<NhanVien> list = daonv.selectByKeyword(keyWord, keyWord);
             for (NhanVien nv : list) {
                 Object[] row = {
+                    i,
                     nv.getMaNV(),
                     nv.getTenNV(),
                     nv.getCmnd(),
@@ -131,6 +133,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                     nv.getHinhNV()
                 };
                 model.addRow(row);
+                i++;
             }
 
         } catch (Exception e) {
@@ -245,7 +248,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void editNV() {
         try {
-            String manv = (String) tblNhanVien.getValueAt(this.rownv, 0);
+            String manv = (String) tblNhanVien.getValueAt(this.rownv, 1);
             NhanVien nv = daonv.selectById(manv);
             if (nv != null) {
                 this.setFormNV(nv);
@@ -363,16 +366,19 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void fillTableAcc() {
         DefaultTableModel model = (DefaultTableModel) tblAccount.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<Account> list = daoac.selectAll();
             for (Account acc : list) {
                 Object[] row = {
+                    i,
                     acc.getMaNV(),
                     acc.getUserName(),
                     "********",
                     acc.isVaiTro() ? "Quản Lý" : "Nhân Viên"
                 };
                 model.addRow(row);
+                i++;
             }
 
         } catch (Exception e) {
@@ -405,8 +411,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void editAcc() {
         try {
-            String manv = (String) tblAccount.getValueAt(this.rowacc, 1);
-            Account acc = daoac.selectById(manv);
+            String username = (String) tblAccount.getValueAt(this.rowacc, 2);
+            Account acc = daoac.selectById(username);
             if (acc != null) {
                 cboMaNV.setEditable(true);
                 this.setFormAcc(acc);
@@ -492,6 +498,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void sort() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<NhanVien> list = daonv.selectAll();
             switch (cboSort.getSelectedIndex()) {
@@ -510,6 +517,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
             for (NhanVien nv : list) {
                 Object[] row = {
+                    i,
                     nv.getMaNV(),
                     nv.getTenNV(),
                     nv.getCmnd(),
@@ -523,6 +531,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                     nv.getHinhNV()
                 };
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
             new ThongBaoJDialog(null, true).alert(2, "Thông báo lỗi truy vấn");
@@ -1087,17 +1096,17 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         tblNhanVien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblNhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã NV", "Tên NV", "CMND", "Địa Chỉ", "Giới Tính", "Email", "Điện Thoại", "Ngày Sinh", "Ngày Vào Làm", "Vị Trí", "Hình"
+                "Stt", "Mã NV", "Tên NV", "CMND", "Địa Chỉ", "Giới Tính", "Email", "Điện Thoại", "Ngày Sinh", "Ngày Vào Làm", "Vị Trí", "Hình"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1185,14 +1194,14 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         tblAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblAccount.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null}
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã nhân viên", "Username", "Password", "Vai  trò"
+                "Stt", "Mã nhân viên", "Username", "Password", "Vai  trò"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                true, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

@@ -46,11 +46,13 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     private void fillToTableBan() {
         DefaultTableModel model = (DefaultTableModel) tblQuanLyKhuVucBan.getModel();
         model.setRowCount(0);
+        int i=1;
         try {
             List<Ban> list = daoban.selectAll();
             for (Ban ban : list) {
                 KhuVuc listkv = daokv.selectById(ban.getMaKV());
                 Object[] row = {
+                    i,
                     ban.getMaBan(),
                     ban.getTenBan(),
                     listkv.getTenKV(),
@@ -60,8 +62,8 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                 banla.setTenBan(ban.getTenBan());
                 banla.setMaKV(ban.getMaKV());
                 listBan.add(banla);
-
                 model.addRow(row);
+                i++;
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -117,7 +119,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     void editBan() {
         try {
-            String kvb = (String) tblQuanLyKhuVucBan.getValueAt(this.index, 0);
+            String kvb = (String) tblQuanLyKhuVucBan.getValueAt(this.index, 1);
             Ban model = daoban.selectById(kvb);
             if (model != null) {
                 this.setModelBan(model);
@@ -148,7 +150,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         String[] key = makv.split("-");
         DefaultTableModel modelbang = (DefaultTableModel) tblQuanLyKhuVucBan.getModel();
         modelbang.setRowCount(0);
-
+        
         try {
             KhuVuc model = daokv.selectById(key[1]);
             if (model != null) {
@@ -157,19 +159,21 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
         }
-
+        int i = 1;
         try {
 
             List<Ban> list = daoban.findByIdKhuVuc(key[1]);
             for (Ban b : list) {
                 KhuVuc listkv = daokv.selectById(b.getMaKV());
                 Object[] row = {
+                    i,
                     b.getMaBan(),
                     b.getTenBan(),
                     listkv.getTenKV(),
                     listkv.getTienIch()
                 };
                 modelbang.addRow(row);
+                i++;
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
@@ -407,8 +411,8 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         lstKhuVucBan.setAlignmentX(1.0F);
         lstKhuVucBan.setAlignmentY(1.0F);
         lstKhuVucBan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lstKhuVucBanMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lstKhuVucBanMousePressed(evt);
             }
         });
         jScrollPane1.setViewportView(lstKhuVucBan);
@@ -447,17 +451,17 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         tblQuanLyKhuVucBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblQuanLyKhuVucBan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Mã bàn", "Tên bàn", "Khu vực", "Tiện ích khu vực"
+                "Stt", "Mã bàn", "Tên bàn", "Khu vực", "Tiện ích khu vực"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -768,10 +772,6 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lstKhuVucBanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstKhuVucBanMouseClicked
-        this.clickEvtListKhuVuc();
-    }//GEN-LAST:event_lstKhuVucBanMouseClicked
-
     private void tblQuanLyKhuVucBanKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblQuanLyKhuVucBanKeyReleased
         this.index = tblQuanLyKhuVucBan.getSelectedRow();
         this.editBan();
@@ -818,6 +818,10 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     private void tblQuanLyKhuVucBanMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQuanLyKhuVucBanMousePressed
         this.clickTableKVB(evt);
     }//GEN-LAST:event_tblQuanLyKhuVucBanMousePressed
+
+    private void lstKhuVucBanMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstKhuVucBanMousePressed
+        this.clickEvtListKhuVuc();
+    }//GEN-LAST:event_lstKhuVucBanMousePressed
 
     /**
      * @param args the command line arguments
