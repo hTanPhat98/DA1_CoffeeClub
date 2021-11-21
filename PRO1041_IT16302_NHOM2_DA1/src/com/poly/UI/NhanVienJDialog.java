@@ -615,7 +615,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         btnTimKiemDS = new javax.swing.JButton();
         TableJScrollPane = new javax.swing.JScrollPane();
         tblNhanVien = new javax.swing.JTable();
-        cboSort = new javax.swing.JComboBox<String>();
+        cboSort = new javax.swing.JComboBox<>();
         TaiKhoanjPanel = new javax.swing.JPanel();
         lblMaNV_TK = new javax.swing.JLabel();
         lblUsername = new javax.swing.JLabel();
@@ -1083,6 +1083,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         btnTimKiemDS.setText("Search");
         btnTimKiemDS.setFocusable(false);
 
+        tblNhanVien.setAutoCreateRowSorter(true);
         tblNhanVien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblNhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1112,7 +1113,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         TableJScrollPane.setViewportView(tblNhanVien);
 
         cboSort.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboSort.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Theo mã nhân viên", "Theo họ tên", "Theo ngày sinh", "Ngày vào làm" }));
+        cboSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Theo mã nhân viên", "Theo họ tên", "Theo ngày sinh", "Ngày vào làm" }));
         cboSort.setFocusable(false);
         cboSort.setPreferredSize(new java.awt.Dimension(122, 30));
         cboSort.addActionListener(new java.awt.event.ActionListener() {
@@ -1178,6 +1179,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
         txtPassword.setText("jPasswordField1");
 
+        tblAccount.setAutoCreateRowSorter(true);
         tblAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblAccount.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

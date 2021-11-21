@@ -445,6 +445,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                 .addGap(6, 6, 6))
         );
 
+        tblQuanLyKhuVucBan.setAutoCreateRowSorter(true);
         tblQuanLyKhuVucBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblQuanLyKhuVucBan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

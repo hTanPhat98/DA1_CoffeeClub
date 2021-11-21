@@ -32,6 +32,7 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
             + "	JOIN MENU mon on mon.MaMon =hdct.MaMon"
             + "	WHERE hdct.MaHDCT=?";
     String UPDATE_SL = "UPDATE HOADONCT SET SoLuong=? WHERE MaHDCT=?";
+    String SELECT_ID_HD = "SELECT * FROM HOADONCT WHERE MaHD=?";
 
     @Override
     public void insert(HoaDonCT entity) {
@@ -131,6 +132,10 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
             return null;
         }
         return list.get(0);
+    }
+
+    public List<HoaDonCT> selectByHDCT(Integer key) {
+        return this.selectBySql(SELECT_ID_HD, key);
     }
 
 }

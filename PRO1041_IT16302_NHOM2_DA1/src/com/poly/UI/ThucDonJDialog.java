@@ -549,6 +549,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         });
         jScrollPane3.setViewportView(lstLoaiMon);
 
+        tblLoaiMon.setAutoCreateRowSorter(true);
         tblLoaiMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblLoaiMon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

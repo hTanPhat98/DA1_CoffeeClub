@@ -533,6 +533,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             }
         });
 
+        tblHoaDonGoc.setAutoCreateRowSorter(true);
         tblHoaDonGoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -559,6 +560,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tblHoaDonGoc);
 
+        tblHoaDonDaChuyen.setAutoCreateRowSorter(true);
         tblHoaDonDaChuyen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},

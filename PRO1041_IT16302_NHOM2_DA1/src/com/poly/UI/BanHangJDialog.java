@@ -340,20 +340,23 @@ public class BanHangJDialog extends javax.swing.JDialog {
         model.setRowCount(0);
         float TT = 0;
         float ttmon;
+        int i = 1;
         try {
             List<HoaDonShow> list = daohdct.selectHDShow(Integer.valueOf(txtMaHoaDon.getText()));
             for (HoaDonShow hdct : list) {
                 ttmon = hdct.getDonGia() * hdct.getSoLuong();
                 Object[] row = {
+                    i,
                     hdct.getMaHDCT(),
                     hdct.getMaMon(),
                     hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),
                     currencyVN.format(ttmon)
-                };
+                };  
                 model.addRow(row);
                 TT = TT + ttmon;
+                i++;
             }
             txtThanhTien.setText(currencyVN.format(TT));
             TTHD = TT;
@@ -424,7 +427,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void xuatBill(int mahd) {
         try {
             Hashtable map = new Hashtable();
-            JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\report1.jrxml");
+            JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\reportHoaDon.jrxml");
             map.put("MaHD", mahd);
             new JdbcHelper();
             JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
@@ -740,6 +743,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
+        tblSanPham.setAutoCreateRowSorter(true);
         tblSanPham.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -889,20 +893,21 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
 
+        tblHoaDon.setAutoCreateRowSorter(true);
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã HDCT", "Mã món", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
+                "STT", "Mã HDCT", "Mã món", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
