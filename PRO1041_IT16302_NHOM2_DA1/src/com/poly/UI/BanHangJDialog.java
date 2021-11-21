@@ -374,6 +374,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     public void fillTbHDdc(Integer Mahd) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
+        int i=1;
         float TT = 0;
         float ttmon;
         try {
@@ -381,6 +382,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             for (HoaDonShow hdct : list) {
                 ttmon = hdct.getDonGia() * hdct.getSoLuong();
                 Object[] row = {
+                    i,
                     hdct.getMaHDCT(),
                     hdct.getMaMon(),
                     hdct.getTenMon(),
@@ -390,6 +392,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 };
                 model.addRow(row);
                 TT = TT + ttmon;
+                i++;
             }
             txtThanhTien.setText(currencyVN.format(TT));
             TTHD = TT;

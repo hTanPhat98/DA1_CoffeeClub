@@ -23,7 +23,6 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     public CapNhatSanPhamJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
     }
     private HoaDonShow hds;
     BanHangJDialog athis;
@@ -34,7 +33,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
     public CapNhatSanPhamJDialog(java.awt.Frame parent, boolean modal, BanHangJDialog bhjd, HoaDonShow HDCT) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);
         this.setHDCT(HDCT);
         athis = bhjd;
 
@@ -57,10 +56,12 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
 
     private void deleteHDCT() {
         try {
-            daohdct.delete(hds.getMaHDCT());
             HoaDonCT hdct = daohdct.selectById(hds.getMaHDCT());
-            athis.fillTbHDdc(hdct.getMaHD());
+            int mahd=hdct.getMaHD();
+            daohdct.delete(hds.getMaHDCT());
             new ThongBaoJDialog(null, true).alert(1, "Xóa món thành công!");
+            this.dispose();
+             athis.fillTbHDdc(mahd);
         } catch (Exception e) {
             new ThongBaoJDialog(null, true).alert(2, "Xóa món thất bại!");
         }
