@@ -562,6 +562,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 "Mã món", "Tên", "Đơn giá", "Mã loại món"
             }
         ));
+        tblLoaiMon.setRowHeight(20);
         tblLoaiMon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLoaiMonMouseClicked(evt);

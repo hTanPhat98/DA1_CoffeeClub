@@ -34,7 +34,7 @@ public class ThongKeDAO {
     }
 
     public List<HoaDon> selectLichSuHD() {
-        String SELECT_LICHSU_HD = "SELECT * FROM HOADON WHERE TONGTIEN != 0";
+        String SELECT_LICHSU_HD = "SELECT * FROM HOADON WHERE Trangthai = 1";
         return selectBySql(SELECT_LICHSU_HD);
     }
 

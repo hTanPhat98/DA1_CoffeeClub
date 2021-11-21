@@ -511,6 +511,7 @@
                         <Column editable="true" title="M&#xe3; lo&#x1ea1;i m&#xf3;n" type="java.lang.Object"/>
                       </Table>
                     </Property>
+                    <Property name="rowHeight" type="int" value="20"/>
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblLoaiMonMouseClicked"/>

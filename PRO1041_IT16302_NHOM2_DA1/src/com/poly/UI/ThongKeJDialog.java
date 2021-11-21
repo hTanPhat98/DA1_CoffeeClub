@@ -15,6 +15,7 @@ import com.poly.Model.HoaDon;
 import com.poly.Model.HoaDonCT;
 import com.poly.Model.Menu;
 import com.poly.Model.NhanVien;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
@@ -43,10 +45,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     public ThongKeJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
-        LoadHDhomnay();
-        LoadLichSuHD();
-        showTenNV();
+        this.init();
     }
 
     //BIEN
@@ -66,7 +65,15 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     HoaDonCTDAO hdctdao = new HoaDonCTDAO();
 
     List<HoaDon> list = new ArrayList<HoaDon>();
-
+    
+    private void init(){
+        this.setLocationRelativeTo(null);
+        this.LoadHDhomnay();
+        this.LoadLichSuHD();
+        this.showTenNV();
+        this.showLineChart();
+    }
+    
     //TABLE
     private void LoadHDhomnay() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
@@ -203,8 +210,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
             model.setRowCount(0);
             try {
-                List<HDTHONGKE> list = tkdao.selectListByTenNV(TenNV);
-                for (HDTHONGKE hd : list) {
+                List<HDTHONGKE> listTK = tkdao.selectListByTenNV(TenNV);
+                for (HDTHONGKE hd : listTK) {
 
                     Object[] row = {
                         hd.getMaHD(),
@@ -234,7 +241,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 Object[] row = {
                     list.getMaHDCT(),
                     mon.getTenMon(),
-                    list.getDonGia(),
+                    currencyVN.format(list.getDonGia()),
                     list.getSoLuong(),
                     currencyVN.format(ttmon)
                 };
@@ -278,7 +285,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 Object[] row = {
                     list.getMaHD(),
                     dateformat.format(list.getNgayHD()),
-                    list.getTongTien(),
+                    currencyVN.format(list.getTongTien()),
                     nv.getTenNV()
 
                 };
@@ -289,7 +296,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }
 
     //CHART
-    public void showLineChart() {
+    private void showLineChart() {
         //create dataset for the graph
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -320,11 +327,23 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         lineRenderer.setSeriesPaint(0, lineChartColor);
 
         //CHART FRAME
-        ChartFrame frame = new ChartFrame("Line chart", linechart, true);
-        frame.setSize(1600, 900);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setResizable(false);
+//        ChartFrame frame = new ChartFrame("Line chart", linechart, true);
+//        frame.setSize(1600, 900);
+//        frame.setLocationRelativeTo(null);
+//        frame.setVisible(true);
+//        frame.setResizable(false);
+//
+//        JDialog jdl = new JDialog(this);
+//        jdl.setContentPane(frame.getChartPanel());
+//        jdl.setSize(frame.getSize());
+//        jdl.setTitle("Xem Hóa Đơn");
+//        jdl.setLocationRelativeTo(null);
+//        jdl.setVisible(true);
+        jpnBieuDo.removeAll();
+        jpnBieuDo.setLayout(new java.awt.BorderLayout());
+        ChartPanel CP = new ChartPanel(linechart);
+        jpnBieuDo.add(CP, BorderLayout.CENTER);
+        jpnBieuDo.validate();
 
     }
 
@@ -358,11 +377,16 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         barRender.setSeriesPaint(0, barColor);
 
         //Tạo khung chart
-        ChartFrame frame = new ChartFrame("Line chart", barChart, true);
-        frame.setVisible(true);
-        frame.setSize(1600, 900);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+//        ChartFrame frame = new ChartFrame("Line chart", barChart, true);
+//        frame.setVisible(true);
+//        frame.setSize(1600, 900);
+//        frame.setLocationRelativeTo(null);
+//        frame.setResizable(false);
+        jpnBieuDo.removeAll();
+        jpnBieuDo.setLayout(new java.awt.BorderLayout());
+        ChartPanel CP = new ChartPanel(barChart);
+        jpnBieuDo.add(CP, BorderLayout.CENTER);
+        jpnBieuDo.validate();
     }
 
     /**
@@ -418,6 +442,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlCTHD = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblCTHD = new javax.swing.JTable();
+        jpnBieuDo = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("THỐNG KÊ");
@@ -491,6 +516,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblHoaDon.setRowHeight(20);
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblHoaDonMouseClicked(evt);
@@ -577,6 +603,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblChiTietHoaDon.setRowHeight(20);
         jScrollPane1.setViewportView(tblChiTietHoaDon);
 
         javax.swing.GroupLayout pnlChiTietLayout = new javax.swing.GroupLayout(pnlChiTiet);
@@ -667,6 +694,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblLichSuHoaDon.setRowHeight(20);
         tblLichSuHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLichSuHoaDonMouseClicked(evt);
@@ -852,6 +880,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblCTHD.setRowHeight(20);
         jScrollPane5.setViewportView(tblCTHD);
 
         javax.swing.GroupLayout pnlCTHDLayout = new javax.swing.GroupLayout(pnlCTHD);
@@ -903,6 +932,19 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         );
 
         tabThongKe.addTab("LỊCH SỬ HÓA ĐƠN", pnlLichSu);
+
+        javax.swing.GroupLayout jpnBieuDoLayout = new javax.swing.GroupLayout(jpnBieuDo);
+        jpnBieuDo.setLayout(jpnBieuDoLayout);
+        jpnBieuDoLayout.setHorizontalGroup(
+            jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1597, Short.MAX_VALUE)
+        );
+        jpnBieuDoLayout.setVerticalGroup(
+            jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+
+        tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnBieuDo);
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
@@ -1030,6 +1072,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPanel jpnBieuDo;
     private javax.swing.JLabel lblDenNgay;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblNhanVien;

@@ -553,6 +553,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblHoaDonGoc.setRowHeight(20);
         tblHoaDonGoc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tblHoaDonGocMousePressed(evt);
@@ -580,6 +581,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        tblHoaDonDaChuyen.setRowHeight(20);
         tblHoaDonDaChuyen.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tblHoaDonDaChuyenMousePressed(evt);
