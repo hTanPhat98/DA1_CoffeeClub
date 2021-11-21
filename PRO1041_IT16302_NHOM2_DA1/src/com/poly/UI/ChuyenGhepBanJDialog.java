@@ -97,6 +97,18 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         model.removeAllElements();
         List<HoaDon> listHD = daohd.selectAllcTT(maHD);
         List<Ban> listB = daoban.selectAll();
+        boolean kt = false, kt1 = false;
+        Ban bc = null;
+        for (Ban b : listB) {
+            if (b.getMaBan().equals(txtMaBan.getText())) {
+                kt = true;
+                bc = b;
+                break;
+            }
+        }
+        if (kt) {
+            listB.remove(bc);
+        }
         for (Ban b : listB) {
             if (listHD.isEmpty()) {
                 if (!b.getMaBan().equals(txtMaBan.getText())) {
@@ -104,12 +116,17 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 }
             } else {
                 for (HoaDon hd : listHD) {
-                    if (hd.getMaBan().equals(b.getMaBan())) {
-                        b.setTenBan(b.getTenBan() + "-" + hd.getMaHD());
-                        model.addElement(b.toString());
+                    if (b.getMaBan().equals(hd.getMaBan())) {
+                        kt1 = true;
+                        break;
                     } else {
-                        model.addElement(b.toString());
+                        kt1 = false;
                     }
+                }
+                if (kt1) {
+                    model.addElement(b.toString() + "-(Có HD)");
+                } else {
+                    model.addElement(b.toString());
                 }
             }
         }
@@ -118,25 +135,19 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
     private void loadMahdC(String ttb) {
         String[] TTB = ttb.split("-");
+        System.out.println(TTB.length);
         if (TTB.length == 3) {
-            int mahd = Integer.valueOf(TTB[1]);
-            HoaDon hd = daohd.selectById(mahd);
+            String maHD = TTB[1];
+            HoaDon hd = daohd.selectByMahd(maHD);
             hd2 = hd;
             txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
             fillTable2(hd.getMaHD());
-        }
-        if (TTB.length == 2) {
-            String maHD = TTB[1];
-            HoaDon hd = daohd.selectByMahd(maHD);
-            if (hd != null) {
-                hd2 = hd;
-                txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
-                fillTable2(hd.getMaHD());
-            } else {
-                txtMaHoaDonBanChuyen.setText("Bàn Mới");
-                DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
-                model.setRowCount(0);
-            }
+            btnTaoHDMoi.setEnabled(false);
+        } else {
+            txtMaHoaDonBanChuyen.setText("Bàn Mới");
+            DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
+            model.setRowCount(0);
+            btnTaoHDMoi.setEnabled(true);
         }
     }
 
@@ -177,7 +188,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         String[] ttBSplit = ttb.split("-");
         HoaDon hdm = new HoaDon(ttBSplit[1], Auth.user.getMaNV(), new Date(), 0, false);
         daohd.insert(hdm);
-        txtMaHoaDonBanChuyen.setText(hdm.getMaHD() + "");
+        HoaDon hdmt = daohd.selectByMahd(ttBSplit[1]);
+        txtMaHoaDonBanChuyen.setText(hdmt.getMaHD() + "");
+        btnTaoHDMoi.setEnabled(false);
+        loadDSBan(Integer.valueOf(txtMaBan.getText()));
     }
 
     private void chuyenR() {
@@ -185,22 +199,27 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             new ThongBaoJDialog(null, true).alert(2, "Bàn mới chưa có hóa đơn không thể chuyên món!!!");
         } else {
             int rows = tblHoaDonGoc.getSelectedRow();
-            int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
-            int slc = (int) spnSoLuongChuyen.getValue();
-            if (slc < sld) {
-                int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
-                HoaDonCT hdct = daohdct.selectById(mahdct);
-                sls = sld - slc;
-                hdct.setSoLuong(sls);
-                daohdct.update(hdct);
-                hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
-                hdct.setSoLuong(slc);
-                daohdct.insert(hdct);
+            if (rows == -1) {
+                new ThongBaoJDialog(null, true).alert(2, "Chưa chọn món!!!");
             } else {
-                chuyenHdctR(rows);
+                int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
+                int slc = (int) spnSoLuongChuyen.getValue();
+                if (slc < sld) {
+                    int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+                    HoaDonCT hdct = daohdct.selectById(mahdct);
+                    sls = sld - slc;
+                    hdct.setSoLuong(sls);
+                    daohdct.update(hdct);
+                    hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+                    hdct.setSoLuong(slc);
+                    daohdct.insert(hdct);
+                } else {
+                    chuyenHdctR(rows);
+                }
+                fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+                fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
             }
-            fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
-            fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+
         }
     }
 
@@ -280,24 +299,36 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }
 
     private void chuyenDoiBan() {
-        if (tblHoaDonGoc.getRowCount() == 0) {
+        if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
+            new ThongBaoJDialog(null, true).alert(2, "Chưa có hóa đơn trên bàn mới!!!");
+        } else if (tblHoaDonGoc.getRowCount() == 0) {
             daohd.delete(Integer.valueOf(txtMaHoaDon.getText()));
             athis.resetForm();
             this.dispose();
         } else {
-            new ThongBaoJDialog(null, true).alert(2, "Danh sách của hóa đơn cần chuyển còn sản phẩm!");
+            new ThongBaoJDialog(null, true).alert(2, "Danh sách của hóa đơn cần chuyển còn sản phẩm!!!");
         }
+
     }
 
     private void gopGhepBan() {
-        if (tblHoaDonGoc.getRowCount() == 0 || tblHoaDonDaChuyen.getRowCount() == 0) {
+        if (tblHoaDonGoc.getRowCount() == 0 && tblHoaDonDaChuyen.getRowCount() == 0) {
+            new ThongBaoJDialog(null, true).alert(2, "Không được phép ghép 2 hóa đơn trống!!!");
+        } else if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
+            new ThongBaoJDialog(null, true).alert(2, "Chưa có hóa đơn trên bàn mới!!!");
+        } else if (tblHoaDonGoc.getRowCount() == 0 || tblHoaDonDaChuyen.getRowCount() == 0) {
             daoban.updateGB(hd2.getMaBan(), hd1.getMaBan());
             daoban.updateGB(hd1.getMaBan(), hd2.getMaBan());
             athis.resetForm();
             this.dispose();
         } else {
-            new ThongBaoJDialog(null, true).alert(2, "1 trong 2 danh sách sản phẩm phải để trống!");
+            new ThongBaoJDialog(null, true).alert(2, "1 trong 2 danh sách sản phẩm phải để trống!!!");
         }
+    }
+
+    private void chuyenMon() {
+        athis.resetForm();
+        this.dispose();
     }
 
     /**
@@ -330,7 +361,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         txtMaHoaDon = new javax.swing.JTextField();
         txtMaHoaDonBanChuyen = new javax.swing.JTextField();
         txtMon = new javax.swing.JTextField();
-        cboChuyenGhep = new javax.swing.JComboBox<String>();
+        cboChuyenGhep = new javax.swing.JComboBox<>();
         spnSoLuongChuyen = new javax.swing.JSpinner();
         btnGopBan = new javax.swing.JButton();
         btnChuyenBan = new javax.swing.JButton();
@@ -339,6 +370,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHoaDonDaChuyen = new javax.swing.JTable();
         btnTaoHDMoi = new javax.swing.JButton();
+        btnChuyenMon = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Chuyển bàn - ghép bàn");
@@ -473,7 +505,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         txtMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         cboChuyenGhep.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboChuyenGhep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboChuyenGhepActionPerformed(evt);
@@ -481,7 +513,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         });
 
         spnSoLuongChuyen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuongChuyen.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnSoLuongChuyen.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         spnSoLuongChuyen.setValue(1);
 
         btnGopBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -560,6 +592,14 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnChuyenMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnChuyenMon.setText("Chuyển Món");
+        btnChuyenMon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChuyenMonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
         pnlWallLayout.setHorizontalGroup(
@@ -591,21 +631,25 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                                             .addComponent(txtBanDangChon)
                                             .addComponent(txtMaBan))
                                         .addGap(123, 123, 123)))
-                                .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(pnlWallLayout.createSequentialGroup()
+                                            .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lblMaHoaDonBanChuyen)
+                                                .addComponent(lblChuyenGhep))
+                                            .addGap(20, 20, 20)
+                                            .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(cboChuyenGhep, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtMaHoaDonBanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnTaoHDMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(pnlWallLayout.createSequentialGroup()
+                                            .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane2))
                                     .addGroup(pnlWallLayout.createSequentialGroup()
-                                        .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblMaHoaDonBanChuyen)
-                                            .addComponent(lblChuyenGhep))
-                                        .addGap(20, 20, 20)
-                                        .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(cboChuyenGhep, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtMaHoaDonBanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnTaoHDMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(pnlWallLayout.createSequentialGroup()
-                                        .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane2))
+                                        .addGap(158, 158, 158)
+                                        .addComponent(btnChuyenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(50, 50, 50))
                             .addGroup(pnlWallLayout.createSequentialGroup()
                                 .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -655,11 +699,12 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                     .addComponent(txtMon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(24, 24, 24)
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spnSoLuongChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSoLuongChuyen))
-                .addContainerGap(80, Short.MAX_VALUE))
+                    .addComponent(lblSoLuongChuyen)
+                    .addComponent(btnChuyenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -716,6 +761,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         this.taoHDMoi();
     }//GEN-LAST:event_btnTaoHDMoiActionPerformed
 
+    private void btnChuyenMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChuyenMonActionPerformed
+        this.chuyenMon();
+    }//GEN-LAST:event_btnChuyenMonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -760,6 +809,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChuyenBan;
+    private javax.swing.JButton btnChuyenMon;
     private javax.swing.JButton btnGopBan;
     private javax.swing.JButton btnMoveAllLeft;
     private javax.swing.JButton btnMoveAllRight;

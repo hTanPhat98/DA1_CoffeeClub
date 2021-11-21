@@ -58,6 +58,22 @@ public class XImage {
         }
     }
 
+    public static ImageIcon read(String fileName, int w, int h) {
+        File defaut = new File("image", "add-photo.png");
+        File path = new File("image", fileName);
+        Image img = null;
+        Image dfimg = null;
+        try {
+            BufferedImage dfimage = ImageIO.read(defaut);
+            dfimg =dfimage.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+            BufferedImage image = ImageIO.read(path);
+            img = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (IOException ex) {
+            return new ImageIcon(dfimg);
+        }
+    }
+    
     public static ImageIcon readMess(String fileName) {
         File path = new File("src\\com\\poly\\Icons\\message", fileName);
         Image img = null;
@@ -70,5 +86,7 @@ public class XImage {
         }
         return null;
     }
+    
+    
 
 }

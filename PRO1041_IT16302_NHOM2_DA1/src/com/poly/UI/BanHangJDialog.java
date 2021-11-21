@@ -429,14 +429,16 @@ public class BanHangJDialog extends javax.swing.JDialog {
             new JdbcHelper();
             JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
             JasperViewer jasperViewer = new JasperViewer(p, false);
+            
             JDialog jdl = new JDialog(this);
             jdl.setContentPane(jasperViewer.getContentPane());
             jdl.setSize(jasperViewer.getSize());
             jdl.setTitle("Xem Hóa Đơn");
             jdl.setLocationRelativeTo(null);
             jdl.setVisible(true);
-            JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
-            JasperExportManager.exportReportToHtmlFile(p, "bill.html");
+            
+//            JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
+//            JasperExportManager.exportReportToHtmlFile(p, "bill.html");
         } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
@@ -683,7 +685,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         jLabel1.setText("Số lượng:");
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         javax.swing.GroupLayout pnlMoTaLayout = new javax.swing.GroupLayout(pnlMoTa);
         pnlMoTa.setLayout(pnlMoTaLayout);
@@ -878,7 +880,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         });
 
         btnGopBanGhepBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnGopBanGhepBan.setText("GỘP BÀN - GHÉP BÀN");
+        btnGopBanGhepBan.setText("CHUYỂN BÀN - GHÉP BÀN");
         btnGopBanGhepBan.setEnabled(false);
         btnGopBanGhepBan.setFocusable(false);
         btnGopBanGhepBan.addActionListener(new java.awt.event.ActionListener() {

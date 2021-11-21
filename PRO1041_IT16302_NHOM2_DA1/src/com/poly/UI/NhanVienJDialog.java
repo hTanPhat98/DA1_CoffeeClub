@@ -13,6 +13,7 @@ import com.poly.Model.Account;
 import com.poly.Model.NhanVien;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     NhanVienDAO daonv = new NhanVienDAO();
     AccountDAO daoac = new AccountDAO();
     JFileChooser fileChooser = new JFileChooser();
+    SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
 
     private void init() {
         setLocationRelativeTo(null);
@@ -123,8 +125,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                     nv.getGioiTinh(),
                     nv.getEmail(),
                     nv.getDienThoai(),
-                    nv.getNgaySinh(),
-                    nv.getNgayVaoLam(),
+                    format.format(nv.getNgaySinh()),
+                    format.format(nv.getNgayVaoLam()),
                     nv.getViTri(),
                     nv.getHinhNV()
                 };
@@ -188,7 +190,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         dtcNgayVaoLam.setDate(nv.getNgayVaoLam());
         if (nv.getHinhNV() != null) {
             lblAnhNhanVien.setToolTipText(nv.getHinhNV());
-            lblAnhNhanVien.setIcon(XImage.read(nv.getHinhNV()));
+            lblAnhNhanVien.setIcon(XImage.read(nv.getHinhNV(),lblAnhNhanVien.getWidth(),lblAnhNhanVien.getHeight()));
         }
     }
 
