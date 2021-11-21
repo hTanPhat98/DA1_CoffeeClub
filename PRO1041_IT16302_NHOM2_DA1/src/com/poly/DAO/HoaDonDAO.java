@@ -48,15 +48,15 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
                 entity.getMaHD()
         );
     }
-    
-    public void updateTT(float tien,int mhd,boolean tt) {
+
+    public void updateTT(float tien, int mhd, boolean tt) {
         JdbcHelper.update(UPDATE_TT_SQL,
                 tien,
                 tt,
                 mhd
         );
     }
-    
+
     @Override
     public void delete(Integer key) {
         JdbcHelper.update(DELETE_SQL, key);
@@ -105,10 +105,9 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
         }
         return list.get(0);
     }
-    
-    public List<HoaDon> selectANY(Integer MaHD) {
-        return this.selectBySql(SELECT_ANY_SQL,MaHD);
+
+    public List<HoaDon> selectAllcTT(Integer mahd) {
+        return this.selectBySql(SELECT_ANY_SQL, mahd);
     }
-    
-    
+
 }

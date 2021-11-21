@@ -8,11 +8,13 @@ package com.poly.UI;
 import com.poly.DAO.BanDAO;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.DAO.HoaDonDAO;
+import com.poly.Helper.Auth;
 import com.poly.Model.Ban;
 import com.poly.Model.HoaDon;
 import com.poly.Model.HoaDonCT;
 import com.poly.Model.HoaDonShow;
 import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
@@ -90,24 +92,52 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         spnSoLuongChuyen.setValue(1);
     }
 
-    private void loadDSBan(Integer MaHD) {
+    private void loadDSBan(Integer maHD) {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboChuyenGhep.getModel();
         model.removeAllElements();
-        List<HoaDon> list = daohd.selectANY(MaHD);
-        for (HoaDon hd : list) {
-            Ban b = daoban.selectById(hd.getMaBan());
-            model.addElement(b.toString());
+        List<HoaDon> listHD = daohd.selectAllcTT(maHD);
+        List<Ban> listB = daoban.selectAll();
+        for (Ban b : listB) {
+            if (listHD.isEmpty()) {
+                if (!b.getMaBan().equals(txtMaBan.getText())) {
+                    model.addElement(b.toString());
+                }
+            } else {
+                for (HoaDon hd : listHD) {
+                    if (hd.getMaBan().equals(b.getMaBan())) {
+                        b.setTenBan(b.getTenBan() + "-" + hd.getMaHD());
+                        model.addElement(b.toString());
+                    } else {
+                        model.addElement(b.toString());
+                    }
+                }
+            }
         }
         loadMahdC(model.getElementAt(0).toString());
     }
 
     private void loadMahdC(String ttb) {
         String[] TTB = ttb.split("-");
-        String maHD = TTB[1];
-        HoaDon hd = daohd.selectByMahd(maHD);
-        hd2=hd;
-        txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
-        fillTable2(hd.getMaHD());
+        if (TTB.length == 3) {
+            int mahd = Integer.valueOf(TTB[1]);
+            HoaDon hd = daohd.selectById(mahd);
+            hd2 = hd;
+            txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
+            fillTable2(hd.getMaHD());
+        }
+        if (TTB.length == 2) {
+            String maHD = TTB[1];
+            HoaDon hd = daohd.selectByMahd(maHD);
+            if (hd != null) {
+                hd2 = hd;
+                txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
+                fillTable2(hd.getMaHD());
+            } else {
+                txtMaHoaDonBanChuyen.setText("Bàn Mới");
+                DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
+                model.setRowCount(0);
+            }
+        }
     }
 
     private void chuyenBan() {
@@ -142,32 +172,48 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         daohdct.update(hdct);
     }
 
+    private void taoHDMoi() {
+        String ttb = cboChuyenGhep.getSelectedItem().toString();
+        String[] ttBSplit = ttb.split("-");
+        HoaDon hdm = new HoaDon(ttBSplit[1], Auth.user.getMaNV(), new Date(), 0, false);
+        daohd.insert(hdm);
+        txtMaHoaDonBanChuyen.setText(hdm.getMaHD() + "");
+    }
+
     private void chuyenR() {
-        int rows = tblHoaDonGoc.getSelectedRow();
-        int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
-        int slc = (int) spnSoLuongChuyen.getValue();
-        if (slc < sld) {
-            int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
-            HoaDonCT hdct = daohdct.selectById(mahdct);
-            sls = sld - slc;
-            hdct.setSoLuong(sls);
-            daohdct.update(hdct);
-            hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
-            hdct.setSoLuong(slc);
-            daohdct.insert(hdct);
+        if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
+            new ThongBaoJDialog(null, true).alert(2, "Bàn mới chưa có hóa đơn không thể chuyên món!!!");
         } else {
-            chuyenHdctR(rows);
+            int rows = tblHoaDonGoc.getSelectedRow();
+            int sld = (int) tblHoaDonGoc.getValueAt(rows, 4), sls;
+            int slc = (int) spnSoLuongChuyen.getValue();
+            if (slc < sld) {
+                int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
+                HoaDonCT hdct = daohdct.selectById(mahdct);
+                sls = sld - slc;
+                hdct.setSoLuong(sls);
+                daohdct.update(hdct);
+                hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+                hdct.setSoLuong(slc);
+                daohdct.insert(hdct);
+            } else {
+                chuyenHdctR(rows);
+            }
+            fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+            fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
         }
-        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
-        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
     }
 
     private void chuyenAllR() {
-        for (int i = 0; i < tblHoaDonGoc.getRowCount(); i++) {
-            this.chuyenHdctR(i);
+        if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
+            new ThongBaoJDialog(null, true).alert(2, "Bàn mới chưa có hóa đơn không thể chuyên món!!!");
+        } else {
+            for (int i = 0; i < tblHoaDonGoc.getRowCount(); i++) {
+                this.chuyenHdctR(i);
+            }
+            fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+            fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
         }
-        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
-        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
     }
 
     private void chuyenHdctL(int rows) {
@@ -178,31 +224,39 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }
 
     private void chuyenL() {
-        int rows = tblHoaDonDaChuyen.getSelectedRow();
-        int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 4), sls;
-        int slc = (int) spnSoLuongChuyen.getValue();
-        if (slc < sld) {
-            int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
-            HoaDonCT hdct = daohdct.selectById(mahdct);
-            sls = sld - slc;
-            hdct.setSoLuong(sls);
-            daohdct.update(hdct);
-            hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
-            hdct.setSoLuong(slc);
-            daohdct.insert(hdct);
+        if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
+            new ThongBaoJDialog(null, true).alert(2, "Bàn mới chưa có hóa đơn không thể chuyên món!!!");
         } else {
-            chuyenHdctL(rows);
+            int rows = tblHoaDonDaChuyen.getSelectedRow();
+            int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 4), sls;
+            int slc = (int) spnSoLuongChuyen.getValue();
+            if (slc < sld) {
+                int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 0);
+                HoaDonCT hdct = daohdct.selectById(mahdct);
+                sls = sld - slc;
+                hdct.setSoLuong(sls);
+                daohdct.update(hdct);
+                hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
+                hdct.setSoLuong(slc);
+                daohdct.insert(hdct);
+            } else {
+                chuyenHdctL(rows);
+            }
+            fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+            fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
         }
-        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
-        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
     }
 
     private void chuyenAllL() {
-        for (int i = 0; i < tblHoaDonDaChuyen.getRowCount(); i++) {
-            this.chuyenHdctL(i);
+        if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
+            new ThongBaoJDialog(null, true).alert(2, "Bàn mới chưa có hóa đơn không thể chuyên món!!!");
+        } else {
+            for (int i = 0; i < tblHoaDonDaChuyen.getRowCount(); i++) {
+                this.chuyenHdctL(i);
+            }
+            fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+            fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
         }
-        fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
-        fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
     }
 
     private void clickTblLeft() {
@@ -284,6 +338,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         tblHoaDonGoc = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHoaDonDaChuyen = new javax.swing.JTable();
+        btnTaoHDMoi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Chuyển bàn - ghép bàn");
@@ -309,6 +364,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_next_x32.png"))); // NOI18N
         btnMoveRight.setBorderPainted(false);
         btnMoveRight.setContentAreaFilled(false);
+        btnMoveRight.setEnabled(false);
         btnMoveRight.setFocusable(false);
         btnMoveRight.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_next_x32blue.png"))); // NOI18N
         btnMoveRight.addActionListener(new java.awt.event.ActionListener() {
@@ -320,6 +376,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveAllRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_last_x32.png"))); // NOI18N
         btnMoveAllRight.setBorderPainted(false);
         btnMoveAllRight.setContentAreaFilled(false);
+        btnMoveAllRight.setEnabled(false);
         btnMoveAllRight.setFocusable(false);
         btnMoveAllRight.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_last_x32blue.png"))); // NOI18N
         btnMoveAllRight.addActionListener(new java.awt.event.ActionListener() {
@@ -331,6 +388,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_prev_x32.png"))); // NOI18N
         btnMoveLeft.setBorderPainted(false);
         btnMoveLeft.setContentAreaFilled(false);
+        btnMoveLeft.setEnabled(false);
         btnMoveLeft.setFocusable(false);
         btnMoveLeft.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_prev_x32blue.png"))); // NOI18N
         btnMoveLeft.addActionListener(new java.awt.event.ActionListener() {
@@ -342,6 +400,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         btnMoveAllLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32.png"))); // NOI18N
         btnMoveAllLeft.setBorderPainted(false);
         btnMoveAllLeft.setContentAreaFilled(false);
+        btnMoveAllLeft.setEnabled(false);
         btnMoveAllLeft.setFocusable(false);
         btnMoveAllLeft.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32blue.png"))); // NOI18N
         btnMoveAllLeft.addActionListener(new java.awt.event.ActionListener() {
@@ -493,6 +552,14 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tblHoaDonDaChuyen);
 
+        btnTaoHDMoi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnTaoHDMoi.setText("TẠO HÓA ĐƠN MỚI");
+        btnTaoHDMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTaoHDMoiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
         pnlWallLayout.setHorizontalGroup(
@@ -532,7 +599,8 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                                         .addGap(20, 20, 20)
                                         .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cboChuyenGhep, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtMaHoaDonBanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(txtMaHoaDonBanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnTaoHDMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(pnlWallLayout.createSequentialGroup()
                                         .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -571,11 +639,12 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                         .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblMaHoaDonBanChuyen)
                             .addComponent(txtMaHoaDonBanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(30, 30, 30)
+                .addGap(24, 24, 24)
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMaHoaDon)
-                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addComponent(txtMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTaoHDMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlButtonBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -643,6 +712,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         this.gopGhepBan();
     }//GEN-LAST:event_btnGopBanActionPerformed
 
+    private void btnTaoHDMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoHDMoiActionPerformed
+        this.taoHDMoi();
+    }//GEN-LAST:event_btnTaoHDMoiActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -692,6 +765,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnMoveAllRight;
     private javax.swing.JButton btnMoveLeft;
     private javax.swing.JButton btnMoveRight;
+    private javax.swing.JButton btnTaoHDMoi;
     private javax.swing.JComboBox<String> cboChuyenGhep;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
