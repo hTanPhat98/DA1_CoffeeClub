@@ -1105,6 +1105,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
         tblNhanVien.setRowHeight(20);
+        tblNhanVien.getTableHeader().setResizingAllowed(false);
+        tblNhanVien.getTableHeader().setReorderingAllowed(false);
         tblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblNhanVienMouseClicked(evt);

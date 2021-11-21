@@ -222,11 +222,9 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }
     
     private void clickTableMenu(MouseEvent evt) {
-        if (evt.getClickCount() == 1) {
             this.indexM = tblLoaiMon.getSelectedRow();
             this.editMon();
             this.updateStatusMon();
-        }
     }
 
     //CONTROL
@@ -563,9 +561,11 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             }
         ));
         tblLoaiMon.setRowHeight(20);
+        tblLoaiMon.getTableHeader().setResizingAllowed(false);
+        tblLoaiMon.getTableHeader().setReorderingAllowed(false);
         tblLoaiMon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblLoaiMonMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblLoaiMonMousePressed(evt);
             }
         });
         jScrollPane1.setViewportView(tblLoaiMon);
@@ -750,10 +750,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         this.clickListLM(evt);
     }//GEN-LAST:event_lstLoaiMonMouseClicked
 
-    private void tblLoaiMonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiMonMouseClicked
-        this.clickTableMenu(evt);
-    }//GEN-LAST:event_tblLoaiMonMouseClicked
-
     private void btnNewLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewLMActionPerformed
         this.clearLoaiMon();
     }//GEN-LAST:event_btnNewLMActionPerformed
@@ -769,6 +765,10 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     private void btnDeleteLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLMActionPerformed
         this.deleteLoaiMon();
     }//GEN-LAST:event_btnDeleteLMActionPerformed
+
+    private void tblLoaiMonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiMonMousePressed
+        this.clickTableMenu(evt);
+    }//GEN-LAST:event_tblLoaiMonMousePressed
 
     /**
      * @param args the command line arguments

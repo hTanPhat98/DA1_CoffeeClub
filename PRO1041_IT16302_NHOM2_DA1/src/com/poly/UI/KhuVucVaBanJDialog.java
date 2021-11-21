@@ -180,11 +180,9 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     private void clickTableKVB(MouseEvent evt) {
-        if (evt.getClickCount() == 1) {
             this.index = tblQuanLyKhuVucBan.getSelectedRow();
             this.editBan();
             updateStatutTable();
-        }
     }
 
     // CONTROL
@@ -467,9 +465,11 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             }
         });
         tblQuanLyKhuVucBan.setRowHeight(20);
+        tblQuanLyKhuVucBan.getTableHeader().setResizingAllowed(false);
+        tblQuanLyKhuVucBan.getTableHeader().setReorderingAllowed(false);
         tblQuanLyKhuVucBan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblQuanLyKhuVucBanMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tblQuanLyKhuVucBanMousePressed(evt);
             }
         });
         tblQuanLyKhuVucBan.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -768,12 +768,8 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblQuanLyKhuVucBanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQuanLyKhuVucBanMouseClicked
-        clickTableKVB(evt);
-    }//GEN-LAST:event_tblQuanLyKhuVucBanMouseClicked
-
     private void lstKhuVucBanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstKhuVucBanMouseClicked
-        clickEvtListKhuVuc();
+        this.clickEvtListKhuVuc();
     }//GEN-LAST:event_lstKhuVucBanMouseClicked
 
     private void tblQuanLyKhuVucBanKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblQuanLyKhuVucBanKeyReleased
@@ -783,19 +779,19 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     //Control KV
     private void btnNewKVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewKVActionPerformed
-        clearFormKV();
+        this.clearFormKV();
     }//GEN-LAST:event_btnNewKVActionPerformed
 
     private void btnSaveKVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveKVActionPerformed
-        insertKhuvuc();
+        this.insertKhuvuc();
     }//GEN-LAST:event_btnSaveKVActionPerformed
 
     private void btnUpdateKVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateKVActionPerformed
-        updateKhuvuc();
+        this.updateKhuvuc();
     }//GEN-LAST:event_btnUpdateKVActionPerformed
 
     private void btnDeleteKVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteKVActionPerformed
-        deleteKhuVuc();
+        this.deleteKhuVuc();
     }//GEN-LAST:event_btnDeleteKVActionPerformed
 
     private void btnAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAllActionPerformed
@@ -804,20 +800,24 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     //Control ban
     private void btnNewTblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewTblActionPerformed
-        clearFormBan();
+        this.clearFormBan();
     }//GEN-LAST:event_btnNewTblActionPerformed
 
     private void btnSaveTblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTblActionPerformed
-        insertBan();
+        this.insertBan();
     }//GEN-LAST:event_btnSaveTblActionPerformed
 
     private void btnUpdateTblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateTblActionPerformed
-        updateBan();
+        this.updateBan();
     }//GEN-LAST:event_btnUpdateTblActionPerformed
 
     private void btnDeleteTblActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteTblActionPerformed
-        deleteban();
+        this.deleteban();
     }//GEN-LAST:event_btnDeleteTblActionPerformed
+
+    private void tblQuanLyKhuVucBanMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQuanLyKhuVucBanMousePressed
+        this.clickTableKVB(evt);
+    }//GEN-LAST:event_tblQuanLyKhuVucBanMousePressed
 
     /**
      * @param args the command line arguments

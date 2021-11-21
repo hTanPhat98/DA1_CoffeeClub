@@ -522,6 +522,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
         tblHoaDon.setRowHeight(20);
+        tblHoaDon.getTableHeader().setResizingAllowed(false);
+        tblHoaDon.getTableHeader().setReorderingAllowed(false);
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblHoaDonMouseClicked(evt);
@@ -560,7 +562,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                                 .addComponent(lblSort)
                                 .addGap(18, 18, 18)
                                 .addComponent(cboSort, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 35, Short.MAX_VALUE)))
+                        .addGap(0, 15, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlHomNayLayout.setVerticalGroup(
@@ -581,7 +583,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                     .addComponent(txtTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
         pnlChiTiet.setBackground(new java.awt.Color(255, 255, 255));
@@ -609,6 +611,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
         tblChiTietHoaDon.setRowHeight(20);
+        tblChiTietHoaDon.getTableHeader().setResizingAllowed(false);
+        tblChiTietHoaDon.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblChiTietHoaDon);
 
         javax.swing.GroupLayout pnlChiTietLayout = new javax.swing.GroupLayout(pnlChiTiet);
@@ -701,6 +705,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         });
         tblLichSuHoaDon.setRowHeight(20);
         tblLichSuHoaDon.getTableHeader().setResizingAllowed(false);
+        tblLichSuHoaDon.getTableHeader().setReorderingAllowed(false);
         tblLichSuHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLichSuHoaDonMouseClicked(evt);
@@ -838,7 +843,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pblLichSuHoaDonLayout = new javax.swing.GroupLayout(pblLichSuHoaDon);
@@ -888,6 +893,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         });
         tblCTHD.setRowHeight(20);
         tblCTHD.getTableHeader().setResizingAllowed(false);
+        tblCTHD.getTableHeader().setReorderingAllowed(false);
         jScrollPane5.setViewportView(tblCTHD);
 
         javax.swing.GroupLayout pnlCTHDLayout = new javax.swing.GroupLayout(pnlCTHD);
@@ -896,7 +902,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             pnlCTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCTHDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 903, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlCTHDLayout.setVerticalGroup(
@@ -944,11 +950,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         jpnBieuDo.setLayout(jpnBieuDoLayout);
         jpnBieuDoLayout.setHorizontalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1607, Short.MAX_VALUE)
+            .addGap(0, 1595, Short.MAX_VALUE)
         );
         jpnBieuDoLayout.setVerticalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 811, Short.MAX_VALUE)
+            .addGap(0, 809, Short.MAX_VALUE)
         );
 
         tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnBieuDo);
@@ -958,14 +964,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlWallLayout.setHorizontalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(tabThongKe)
+            .addComponent(tabThongKe, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
         pnlWallLayout.setVerticalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tabThongKe))
+                .addComponent(tabThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
