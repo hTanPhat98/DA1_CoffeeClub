@@ -87,7 +87,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void fillTableSP() {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<Menu> list = daomn.selectByKeyword(keyWorld);
             for (Menu mon : list) {
@@ -358,7 +358,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),
                     currencyVN.format(ttmon)
-                };  
+                };
                 model.addRow(row);
                 TT = TT + ttmon;
                 i++;
@@ -400,7 +400,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void insertHDCT() {
         if (txtMaHoaDon.getText() != null) {
-            String maMon = (String) tblSanPham.getValueAt(this.rowsp, 0);
+            String maMon = (String) tblSanPham.getValueAt(this.rowsp, 1);
             Menu mon = daomn.selectById(maMon);
             int sl = (int) spnSoLuong.getValue();
             daohdct.insert(new HoaDonCT(Integer.valueOf(txtMaHoaDon.getText()), mon.getMaMon(), sl, mon.getGia()));
@@ -437,14 +437,14 @@ public class BanHangJDialog extends javax.swing.JDialog {
             new JdbcHelper();
             JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
             JasperViewer jasperViewer = new JasperViewer(p, false);
-            
+
             JDialog jdl = new JDialog(this);
             jdl.setContentPane(jasperViewer.getContentPane());
             jdl.setSize(jasperViewer.getSize());
             jdl.setTitle("Xem Hóa Đơn");
             jdl.setLocationRelativeTo(null);
             jdl.setVisible(true);
-            
+
 //            JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
 //            JasperExportManager.exportReportToHtmlFile(p, "bill.html");
         } catch (JRException ex) {
@@ -481,8 +481,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
         if (evt.getKeyCode() == 10) {
             int rowsl = tblHoaDon.getSelectedRow();
             try {
-                int sl = (int) tblHoaDon.getValueAt(rowsl, 4);
-                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+                int sl = (int) tblHoaDon.getValueAt(rowsl, 5);
+                HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 1));
                 hdct.setSoLuong(sl);
                 daohdct.updateSl(hdct);
                 fillTbHD();
@@ -500,7 +500,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
     private void capNhatSoLuong(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
             int rowsl = tblHoaDon.getSelectedRow();
-            HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 0));
+            HoaDonShow hdct = daohdct.selecthdctShow((Integer) tblHoaDon.getValueAt(rowsl, 1));
             new CapNhatSanPhamJDialog(null, true, this, hdct).setVisible(true);
         }
 
