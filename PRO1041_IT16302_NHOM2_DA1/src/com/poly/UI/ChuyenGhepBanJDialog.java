@@ -54,7 +54,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.loadTTBan(MaHD);
         this.fillTable1(MaHD);
-        this.loadDSBan(MaHD);
+        this.loadDSBan(MaHD,0);
         this.athis = bhjd;
     }
 
@@ -92,7 +92,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         spnSoLuongChuyen.setValue(1);
     }
 
-    private void loadDSBan(Integer maHD) {
+    private void loadDSBan(Integer maHD, int i) {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboChuyenGhep.getModel();
         model.removeAllElements();
         List<HoaDon> listHD = daohd.selectAllcTT(maHD);
@@ -130,18 +130,18 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 }
             }
         }
-        loadMahdC(model.getElementAt(0).toString());
+        cboChuyenGhep.setSelectedIndex(i);
+        this.loadMahdC(model.getElementAt(i).toString());
     }
 
     private void loadMahdC(String ttb) {
         String[] TTB = ttb.split("-");
-        System.out.println(TTB.length);
         if (TTB.length == 3) {
             String maHD = TTB[1];
             HoaDon hd = daohd.selectByMahd(maHD);
             hd2 = hd;
             txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
-            fillTable2(hd.getMaHD());
+            this.fillTable2(hd.getMaHD());
             btnTaoHDMoi.setEnabled(false);
         } else {
             txtMaHoaDonBanChuyen.setText("Bàn Mới");
@@ -154,7 +154,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private void chuyenBan() {
         if (cboChuyenGhep.getSelectedItem() != null) {
             String ttb = cboChuyenGhep.getSelectedItem().toString();
-            loadMahdC(ttb);
+            this.loadMahdC(ttb);
         }
     }
 
@@ -180,18 +180,19 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         int mahdct = (int) tblHoaDonGoc.getValueAt(rows, 0);
         HoaDonCT hdct = daohdct.selectById(mahdct);
         hdct.setMaHD(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
-        daohdct.update(hdct);
+        this.daohdct.update(hdct);
     }
 
     private void taoHDMoi() {
         String ttb = cboChuyenGhep.getSelectedItem().toString();
+        int i=cboChuyenGhep.getSelectedIndex();
         String[] ttBSplit = ttb.split("-");
         HoaDon hdm = new HoaDon(ttBSplit[1], Auth.user.getMaNV(), new Date(), 0, false);
         daohd.insert(hdm);
         HoaDon hdmt = daohd.selectByMahd(ttBSplit[1]);
         txtMaHoaDonBanChuyen.setText(hdmt.getMaHD() + "");
         btnTaoHDMoi.setEnabled(false);
-        loadDSBan(Integer.valueOf(txtMaBan.getText()));
+        this.loadDSBan(Integer.valueOf(txtMaHoaDon.getText()),i);
     }
 
     private void chuyenR() {
@@ -214,7 +215,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                     hdct.setSoLuong(slc);
                     daohdct.insert(hdct);
                 } else {
-                    chuyenHdctR(rows);
+                    this.chuyenHdctR(rows);
                 }
                 fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
                 fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
