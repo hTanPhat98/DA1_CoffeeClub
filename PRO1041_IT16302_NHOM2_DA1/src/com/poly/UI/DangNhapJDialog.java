@@ -54,7 +54,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         this.setDisplay();
         this.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e){
+            public void windowClosing(WindowEvent e) {
                 dispose();
                 new WaitingJFrame().setVisible(true);
             }
@@ -180,6 +180,19 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         }
     }
 
+    private void dangNhapQR() {
+        new DangNhapQRJDialog(null, true, this).setVisible(true);
+    }
+
+    public void dangNhap(String tttk) {
+        String[] tach = tttk.split("-");
+        if (tach.length == 3) {
+            txtUsername.setText(tach[0]);
+            txtPassword.setText(tach[1]);
+            this.login();
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -203,6 +216,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         btnLogin = new javax.swing.JButton();
         lblReset = new javax.swing.JLabel();
         lblForgotPassword = new javax.swing.JLabel();
+        btnLoginQRcode = new javax.swing.JButton();
         lbl_LogoResetPassword = new javax.swing.JLabel();
         pnlResetPassword = new javax.swing.JPanel();
         lbl_LogoLogin = new javax.swing.JLabel();
@@ -263,7 +277,6 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         lblIconPassword.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/login_icon_password_x32.png"))); // NOI18N
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtPassword.setText("huutai80");
         txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1)));
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -326,6 +339,28 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnLoginQRcode.setBackground(new java.awt.Color(51, 153, 255));
+        btnLoginQRcode.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnLoginQRcode.setForeground(new java.awt.Color(255, 255, 255));
+        btnLoginQRcode.setText("Login For QR Code");
+        btnLoginQRcode.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.lightGray, java.awt.Color.lightGray, new java.awt.Color(102, 102, 102), new java.awt.Color(102, 102, 102)));
+        btnLoginQRcode.setFocusable(false);
+        btnLoginQRcode.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnLoginQRcode.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/login_icon_button_24.png"))); // NOI18N
+        btnLoginQRcode.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnLoginQRcodeMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnLoginQRcodeMouseExited(evt);
+            }
+        });
+        btnLoginQRcode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginQRcodeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlLoginLayout = new javax.swing.GroupLayout(pnlLogin);
         pnlLogin.setLayout(pnlLoginLayout);
         pnlLoginLayout.setHorizontalGroup(
@@ -356,12 +391,14 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                                     .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(pnlLoginLayout.createSequentialGroup()
                                     .addGap(58, 58, 58)
-                                    .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlLoginLayout.createSequentialGroup()
-                                            .addComponent(lblReset, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(lblForgotPassword))
-                                        .addComponent(btnLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnLoginQRcode, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlLoginLayout.createSequentialGroup()
+                                                .addComponent(lblReset, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(lblForgotPassword))
+                                            .addComponent(btnLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
                 .addContainerGap(102, Short.MAX_VALUE))
         );
         pnlLoginLayout.setVerticalGroup(
@@ -388,7 +425,9 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblReset)
                     .addComponent(lblForgotPassword))
-                .addGap(0, 148, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnLoginQRcode, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 90, Short.MAX_VALUE))
         );
 
         pnlLoginForm.add(pnlLogin);
@@ -724,6 +763,18 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         this.dangNhapkey(evt);
     }//GEN-LAST:event_txtPasswordKeyReleased
 
+    private void btnLoginQRcodeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginQRcodeMouseEntered
+        this.setEntered(btnLoginQRcode);
+    }//GEN-LAST:event_btnLoginQRcodeMouseEntered
+
+    private void btnLoginQRcodeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginQRcodeMouseExited
+        this.setDefaultButton(btnLoginQRcode);
+    }//GEN-LAST:event_btnLoginQRcodeMouseExited
+
+    private void btnLoginQRcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginQRcodeActionPerformed
+        this.dangNhapQR();
+    }//GEN-LAST:event_btnLoginQRcodeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -771,6 +822,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGetOTP;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnLoginQRcode;
     private javax.swing.JButton btnResetPassword;
     private javax.swing.JCheckBox cboShowPassword;
     private javax.swing.JPanel jPanel_ResetPasswordForm;

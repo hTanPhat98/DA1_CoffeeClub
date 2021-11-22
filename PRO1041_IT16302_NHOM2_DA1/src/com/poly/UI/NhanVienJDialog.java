@@ -560,7 +560,13 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             btnDeleteAcc.setEnabled(kt);
         }
     }
-
+    
+    
+    private void taoQRcode(){
+        NhanVien nv=daonv.selectById(String.valueOf(cboMaNV.getSelectedItem()));
+        Account acc=daoac.selectByManv(String.valueOf(cboMaNV.getSelectedItem()));
+        new MaQRcodeJDialog(null, true, acc.getUserName(),acc.getPassworld(),nv.getEmail()).setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -640,6 +646,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         rdoQuanLy = new javax.swing.JRadioButton();
         rdoNhanVien = new javax.swing.JRadioButton();
         cboMaNV = new javax.swing.JComboBox();
+        btnTaoQRCode = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Employee");
@@ -1306,45 +1313,52 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnTaoQRCode.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnTaoQRCode.setText("Tạo QR Code");
+        btnTaoQRCode.setFocusable(false);
+        btnTaoQRCode.setIconTextGap(6);
+        btnTaoQRCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTaoQRCodeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout TaiKhoanjPanelLayout = new javax.swing.GroupLayout(TaiKhoanjPanel);
         TaiKhoanjPanel.setLayout(TaiKhoanjPanelLayout);
         TaiKhoanjPanelLayout.setHorizontalGroup(
             TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
                 .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                        .addContainerGap(223, Short.MAX_VALUE)
-                        .addComponent(btnChiTietThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(166, 166, 166))
-                    .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
                         .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblMaNV_TK)
-                                    .addComponent(lblPassword)
-                                    .addComponent(lblUsername))
-                                .addGap(24, 24, 24)
-                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtUsername)
-                                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
-                                    .addComponent(cboMaNV, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                                .addComponent(lblVaiTro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rdoQuanLy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(rdoNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                                .addGap(9, 9, 9)
-                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnUpdateAcc, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                                    .addComponent(btnNewAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(20, 20, 20)
-                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnDeleteAcc, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                                    .addComponent(btnSaveAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)))
+                            .addComponent(lblMaNV_TK)
+                            .addComponent(lblPassword)
+                            .addComponent(lblUsername))
+                        .addGap(24, 24, 24)
+                        .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtUsername)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                            .addComponent(cboMaNV, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
+                        .addComponent(lblVaiTro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rdoQuanLy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(rdoNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnUpdateAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnNewAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnChiTietThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnDeleteAcc, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                                .addComponent(btnSaveAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnTaoQRCode, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 710, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1376,12 +1390,14 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUpdateAcc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteAcc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addComponent(btnChiTietThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnChiTietThongTin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTaoQRCode, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1504,6 +1520,10 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.clickTableAcc(evt);
     }//GEN-LAST:event_tblAccountMousePressed
 
+    private void btnTaoQRCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoQRCodeActionPerformed
+        this.taoQRcode();
+    }//GEN-LAST:event_btnTaoQRCodeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1582,6 +1602,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnPrev;
     private javax.swing.JButton btnSaveAcc;
     private javax.swing.JButton btnSaveNV;
+    private javax.swing.JButton btnTaoQRCode;
     private javax.swing.JButton btnTaoTK;
     private javax.swing.JButton btnUpdateAcc;
     private javax.swing.JButton btnUpdateNV;

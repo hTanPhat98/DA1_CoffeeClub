@@ -25,6 +25,7 @@ public class AccountDAO extends CoffeShopSysDAO<Account, String> {
     String SELECT_BY_ID_SQL = "SELECT * FROM ACCOUNT WHERE UserName=?";
     String SELECT_BY_EMAIL_ACC = "SELECT Email, acc.UserName, acc.VaiTro, acc.MaNV FROM NHANVIEN nv JOIN ACCOUNT acc ON nv.MaNV=acc.MaNV";
     String SELECT_NAME = "SELECT TenNV FROM NHANVIEN WHERE MaNV=?";
+    String SELECT_BY_MaNV_SQL = "SELECT * FROM ACCOUNT WHERE MaNV=?";
 
     @Override
     public void insert(Account entity) {
@@ -59,6 +60,14 @@ public class AccountDAO extends CoffeShopSysDAO<Account, String> {
     @Override
     public Account selectById(String key) {
         List<Account> list = this.selectBySql(SELECT_BY_ID_SQL, key);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+    
+    public Account selectByManv(String key) {
+        List<Account> list = this.selectBySql(SELECT_BY_MaNV_SQL, key);
         if (list.isEmpty()) {
             return null;
         }
