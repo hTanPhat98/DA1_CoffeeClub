@@ -517,6 +517,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
         cboChuyenGhep.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboChuyenGhep.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboChuyenGhep.setFocusable(false);
         cboChuyenGhep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboChuyenGhepActionPerformed(evt);
@@ -527,16 +528,24 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         spnSoLuongChuyen.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         spnSoLuongChuyen.setValue(1);
 
-        btnGopBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnGopBan.setBackground(new java.awt.Color(255, 255, 255));
+        btnGopBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnGopBan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/table_combine_blue_x32.png"))); // NOI18N
         btnGopBan.setText("GỘP BÀN");
+        btnGopBan.setFocusable(false);
+        btnGopBan.setIconTextGap(10);
         btnGopBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGopBanActionPerformed(evt);
             }
         });
 
-        btnChuyenBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnChuyenBan.setBackground(new java.awt.Color(255, 255, 255));
+        btnChuyenBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnChuyenBan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/table_move_blue_x32.png"))); // NOI18N
         btnChuyenBan.setText("CHUYỂN BÀN");
+        btnChuyenBan.setFocusable(false);
+        btnChuyenBan.setIconTextGap(10);
         btnChuyenBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChuyenBanActionPerformed(evt);
@@ -603,16 +612,24 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tblHoaDonDaChuyen);
 
-        btnTaoHDMoi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnTaoHDMoi.setBackground(new java.awt.Color(255, 255, 255));
+        btnTaoHDMoi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnTaoHDMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnTaoHDMoi.setText("TẠO HÓA ĐƠN MỚI");
+        btnTaoHDMoi.setFocusable(false);
+        btnTaoHDMoi.setIconTextGap(10);
         btnTaoHDMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTaoHDMoiActionPerformed(evt);
             }
         });
 
-        btnChuyenMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnChuyenMon.setText("Chuyển Món");
+        btnChuyenMon.setBackground(new java.awt.Color(255, 255, 255));
+        btnChuyenMon.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnChuyenMon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/table_move_hdct_blue_x32.png"))); // NOI18N
+        btnChuyenMon.setText("CHUYỂN MÓN");
+        btnChuyenMon.setFocusable(false);
+        btnChuyenMon.setIconTextGap(10);
         btnChuyenMon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChuyenMonActionPerformed(evt);
@@ -716,14 +733,14 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMon)
                     .addComponent(txtMon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnChuyenBan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGopBan, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spnSoLuongChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblSoLuongChuyen)
-                    .addComponent(btnChuyenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(76, Short.MAX_VALUE))
+                    .addComponent(btnChuyenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

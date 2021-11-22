@@ -471,6 +471,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("THỐNG KÊ");
+        setFocusable(false);
         setResizable(false);
 
         pnlWall.setBackground(new java.awt.Color(255, 255, 255));
@@ -514,6 +515,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         cboSort.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã Hóa Đơn", "Theo Họ Tên", "Tổng Tiền" }));
+        cboSort.setFocusable(false);
         cboSort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboSortActionPerformed(evt);
@@ -741,6 +743,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         cboSoTien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboSoTien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "100000", "200000", "500000", "1000000", "2000000" }));
+        cboSoTien.setFocusable(false);
         cboSoTien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboSoTienActionPerformed(evt);
@@ -752,6 +755,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         cboNhanVien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboNhanVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+        cboNhanVien.setFocusable(false);
         cboNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboNhanVienActionPerformed(evt);
@@ -774,8 +778,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlBoxBtn.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
 
         btnLocTheoNgay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnLocTheoNgay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_filter_blue_x32.png"))); // NOI18N
         btnLocTheoNgay.setText("LỌC");
-        btnLocTheoNgay.setPreferredSize(new java.awt.Dimension(100, 40));
+        btnLocTheoNgay.setFocusable(false);
+        btnLocTheoNgay.setPreferredSize(new java.awt.Dimension(100, 50));
+        btnLocTheoNgay.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_filter_blue2_x32.png"))); // NOI18N
         btnLocTheoNgay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLocTheoNgayActionPerformed(evt);
@@ -785,6 +792,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         btnLineChart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLineChart.setText("Biểu đồ đường (Doanh thu từng tháng)");
+        btnLineChart.setFocusable(false);
         btnLineChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLineChartActionPerformed(evt);
@@ -793,6 +801,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         btnBarChart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBarChart.setText("Biểu đồ cột (Doanh thu từng tháng)");
+        btnBarChart.setFocusable(false);
         btnBarChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBarChartActionPerformed(evt);

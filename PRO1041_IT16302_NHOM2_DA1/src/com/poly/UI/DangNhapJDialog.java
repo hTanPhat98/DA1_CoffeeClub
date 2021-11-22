@@ -223,6 +223,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Login");
+        setFocusable(false);
         setResizable(false);
         setSize(new java.awt.Dimension(1280, 720));
 

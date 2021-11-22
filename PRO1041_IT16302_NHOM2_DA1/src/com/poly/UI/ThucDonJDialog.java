@@ -372,6 +372,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         btnDeleteLM = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setFocusable(false);
         setResizable(false);
         setSize(new java.awt.Dimension(1280, 720));
 
@@ -420,6 +421,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         txtTenMon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         cboDanhMuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "PHIN Coffee", "Espresso Coffee", "Trà", "Bánh mì", "Bánh ngọt", "Thức uống" }));
+        cboDanhMuc.setFocusable(false);
 
         lblMaMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblMaMon.setText("Mã món:");
@@ -428,9 +430,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 30, 20));
 
         btnNewM.setBackground(new java.awt.Color(255, 255, 255));
-        btnNewM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnNewM.setText("Tạo mới");
+        btnNewM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnNewM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
+        btnNewM.setText("Tạo mới món");
+        btnNewM.setFocusable(false);
+        btnNewM.setIconTextGap(10);
         btnNewM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnNewM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue2_x32.png"))); // NOI18N
         btnNewM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewMActionPerformed(evt);
@@ -439,9 +445,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl1.add(btnNewM);
 
         btnSaveM.setBackground(new java.awt.Color(255, 255, 255));
-        btnSaveM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSaveM.setText("Thêm");
+        btnSaveM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSaveM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue_x32.png"))); // NOI18N
+        btnSaveM.setText("Thêm món");
+        btnSaveM.setFocusable(false);
+        btnSaveM.setIconTextGap(10);
         btnSaveM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnSaveM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue2_x32.png"))); // NOI18N
         btnSaveM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveMActionPerformed(evt);
@@ -450,9 +460,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl1.add(btnSaveM);
 
         btnUpdateM.setBackground(new java.awt.Color(255, 255, 255));
-        btnUpdateM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnUpdateM.setText("Sửa");
+        btnUpdateM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUpdateM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue_x32.png"))); // NOI18N
+        btnUpdateM.setText("Sửa món");
+        btnUpdateM.setFocusable(false);
+        btnUpdateM.setIconTextGap(10);
         btnUpdateM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnUpdateM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue2_x32.png"))); // NOI18N
         btnUpdateM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateMActionPerformed(evt);
@@ -461,9 +475,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl1.add(btnUpdateM);
 
         btnDeleteM.setBackground(new java.awt.Color(255, 255, 255));
-        btnDeleteM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDeleteM.setText("Xóa");
+        btnDeleteM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue_x32.png"))); // NOI18N
+        btnDeleteM.setText("Xóa món");
+        btnDeleteM.setFocusable(false);
+        btnDeleteM.setIconTextGap(10);
         btnDeleteM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnDeleteM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue2_x32.png"))); // NOI18N
         btnDeleteM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteMActionPerformed(evt);
@@ -624,9 +642,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 30, 20));
 
         btnNewLM.setBackground(new java.awt.Color(255, 255, 255));
-        btnNewLM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnNewLM.setText("Tạo mới");
+        btnNewLM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnNewLM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
+        btnNewLM.setText("Tạo mới loại món");
+        btnNewLM.setFocusable(false);
+        btnNewLM.setIconTextGap(10);
         btnNewLM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnNewLM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue2_x32.png"))); // NOI18N
         btnNewLM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewLMActionPerformed(evt);
@@ -635,9 +657,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl2.add(btnNewLM);
 
         btnSaveLM.setBackground(new java.awt.Color(255, 255, 255));
-        btnSaveLM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSaveLM.setText("Thêm");
+        btnSaveLM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSaveLM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue_x32.png"))); // NOI18N
+        btnSaveLM.setText("Thêm loại món");
+        btnSaveLM.setFocusable(false);
+        btnSaveLM.setIconTextGap(10);
         btnSaveLM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnSaveLM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue2_x32.png"))); // NOI18N
         btnSaveLM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveLMActionPerformed(evt);
@@ -646,9 +672,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl2.add(btnSaveLM);
 
         btnUpdateLM.setBackground(new java.awt.Color(255, 255, 255));
-        btnUpdateLM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnUpdateLM.setText("Sửa");
+        btnUpdateLM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUpdateLM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue_x32.png"))); // NOI18N
+        btnUpdateLM.setText("Sửa loại món");
+        btnUpdateLM.setFocusable(false);
+        btnUpdateLM.setIconTextGap(10);
         btnUpdateLM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnUpdateLM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue2_x32.png"))); // NOI18N
         btnUpdateLM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateLMActionPerformed(evt);
@@ -657,9 +687,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlControl2.add(btnUpdateLM);
 
         btnDeleteLM.setBackground(new java.awt.Color(255, 255, 255));
-        btnDeleteLM.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDeleteLM.setText("Xóa");
+        btnDeleteLM.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteLM.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue_x32.png"))); // NOI18N
+        btnDeleteLM.setText("Xóa loại món");
+        btnDeleteLM.setFocusable(false);
+        btnDeleteLM.setIconTextGap(10);
         btnDeleteLM.setPreferredSize(new java.awt.Dimension(200, 40));
+        btnDeleteLM.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue2_x32.png"))); // NOI18N
         btnDeleteLM.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteLMActionPerformed(evt);

@@ -128,11 +128,13 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         txtGiaTienSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spnSoLuong.setFocusable(false);
 
         btnDone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnDone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_done_x32.png"))); // NOI18N
         btnDone.setText("DONE");
+        btnDone.setFocusable(false);
         btnDone.setIconTextGap(10);
         btnDone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,6 +145,7 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         btnClose.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/CNSP_close_x32.png"))); // NOI18N
         btnClose.setText("CLOSE");
+        btnClose.setFocusable(false);
         btnClose.setIconTextGap(10);
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,8 +154,9 @@ public class CapNhatSanPhamJDialog extends javax.swing.JDialog {
         });
 
         btnDelete.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/close_red_x32.png"))); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/remove_icon_x32.png"))); // NOI18N
         btnDelete.setText("DELETE");
+        btnDelete.setFocusable(false);
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteActionPerformed(evt);

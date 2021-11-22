@@ -604,7 +604,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         rdoKhac = new javax.swing.JRadioButton();
         DiaChiJScrollPane = new javax.swing.JScrollPane();
         txtDiaChi = new javax.swing.JTextArea();
-        btnTimKiem = new javax.swing.JButton();
         InfoImageJPanel = new javax.swing.JPanel();
         lblTenAnh = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -621,7 +620,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         lblTimKiemDS = new javax.swing.JLabel();
         lblSort = new javax.swing.JLabel();
         txtTimKiemDS = new javax.swing.JTextField();
-        btnTimKiemDS = new javax.swing.JButton();
         TableJScrollPane = new javax.swing.JScrollPane();
         tblNhanVien = new javax.swing.JTable();
         cboSort = new javax.swing.JComboBox<>();
@@ -771,10 +769,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtDiaChi.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         DiaChiJScrollPane.setViewportView(txtDiaChi);
 
-        btnTimKiem.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnTimKiem.setText("Search");
-        btnTimKiem.setFocusable(false);
-
         InfoImageJPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         lblTenAnh.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -799,45 +793,64 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        btnNewNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnNewNV.setBackground(new java.awt.Color(255, 255, 255));
+        btnNewNV.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnNewNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnNewNV.setText("Tạo mới");
         btnNewNV.setFocusable(false);
+        btnNewNV.setIconTextGap(6);
+        btnNewNV.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue2_x32.png"))); // NOI18N
         btnNewNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewNVActionPerformed(evt);
             }
         });
 
-        btnSaveNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSaveNV.setText("Lưu");
+        btnSaveNV.setBackground(new java.awt.Color(255, 255, 255));
+        btnSaveNV.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSaveNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue_x32.png"))); // NOI18N
+        btnSaveNV.setText("Lưu  thông tin");
         btnSaveNV.setFocusable(false);
+        btnSaveNV.setIconTextGap(6);
+        btnSaveNV.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue2_x32.png"))); // NOI18N
         btnSaveNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveNVActionPerformed(evt);
             }
         });
 
-        btnUpdateNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnUpdateNV.setBackground(new java.awt.Color(255, 255, 255));
+        btnUpdateNV.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUpdateNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue_x32.png"))); // NOI18N
         btnUpdateNV.setText("Cập nhật");
         btnUpdateNV.setFocusable(false);
+        btnUpdateNV.setIconTextGap(6);
+        btnUpdateNV.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue2_x32.png"))); // NOI18N
         btnUpdateNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateNVActionPerformed(evt);
             }
         });
 
-        btnDeleteNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDeleteNV.setText("Xóa");
+        btnDeleteNV.setBackground(new java.awt.Color(255, 255, 255));
+        btnDeleteNV.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteNV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue_x32.png"))); // NOI18N
+        btnDeleteNV.setText("Xóa thông tin");
         btnDeleteNV.setFocusable(false);
+        btnDeleteNV.setIconTextGap(6);
+        btnDeleteNV.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue2_x32.png"))); // NOI18N
         btnDeleteNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteNVActionPerformed(evt);
             }
         });
 
-        btnTaoTK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnTaoTK.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnTaoTK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnTaoTK.setText("Tạo tài khoản");
         btnTaoTK.setFocusable(false);
+        btnTaoTK.setIconTextGap(6);
+        btnTaoTK.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue2_x32.png"))); // NOI18N
         btnTaoTK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTaoTKActionPerformed(evt);
@@ -941,7 +954,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                             .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout CapNhatJPanelLayout = new javax.swing.GroupLayout(CapNhatJPanel);
@@ -950,14 +963,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CapNhatJPanelLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CapNhatJPanelLayout.createSequentialGroup()
-                        .addComponent(lblTimKiemCN, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTiemKiemCN, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnTimKiem, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, CapNhatJPanelLayout.createSequentialGroup()
+                .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(CapNhatJPanelLayout.createSequentialGroup()
                         .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblAnhNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(InfoImageJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1001,18 +1008,20 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                                     .addComponent(txtViTri, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                     .addComponent(txtCMND, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                     .addComponent(dtcNgayVaoLam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)))
-                .addGap(89, 89, 89))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(CapNhatJPanelLayout.createSequentialGroup()
+                        .addComponent(lblTimKiemCN, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtTiemKiemCN)))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         CapNhatJPanelLayout.setVerticalGroup(
             CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CapNhatJPanelLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(31, 31, 31)
                 .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTimKiemCN)
-                    .addComponent(txtTiemKiemCN, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTiemKiemCN, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(CapNhatJPanelLayout.createSequentialGroup()
@@ -1064,9 +1073,9 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                         .addComponent(lblAnhNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(InfoImageJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(20, 20, 20)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(21, 21, 21))
         );
 
         tabs.addTab("CẬP NHẬT", CapNhatJPanel);
@@ -1087,10 +1096,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 txtTimKiemDSKeyReleased(evt);
             }
         });
-
-        btnTimKiemDS.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnTimKiemDS.setText("Search");
-        btnTimKiemDS.setFocusable(false);
 
         tblNhanVien.setAutoCreateRowSorter(true);
         tblNhanVien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1140,13 +1145,11 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             .addGroup(DanhSachjPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(DanhSachjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TableJScrollPane)
+                    .addComponent(TableJScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1255, Short.MAX_VALUE)
                     .addGroup(DanhSachjPanelLayout.createSequentialGroup()
                         .addComponent(lblTimKiemDS)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtTimKiemDS, javax.swing.GroupLayout.PREFERRED_SIZE, 1025, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnTimKiemDS, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE))
+                        .addComponent(txtTimKiemDS))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DanhSachjPanelLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblSort)
@@ -1161,9 +1164,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 .addGap(10, 10, 10)
                 .addGroup(DanhSachjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTimKiemDS, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTimKiemDS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiemDS, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblTimKiemDS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addComponent(TableJScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(DanhSachjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1188,6 +1190,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtUsername.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtUsername.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
 
+        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtPassword.setText("jPasswordField1");
 
         tblAccount.setAutoCreateRowSorter(true);
@@ -1216,44 +1219,55 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tblAccount);
 
-        btnNewAcc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnNewAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnNewAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnNewAcc.setText("Tạo mới");
         btnNewAcc.setFocusable(false);
+        btnNewAcc.setIconTextGap(6);
         btnNewAcc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewAccActionPerformed(evt);
             }
         });
 
-        btnSaveAcc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnSaveAcc.setText("Lưu");
+        btnSaveAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSaveAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue_x32.png"))); // NOI18N
+        btnSaveAcc.setText("Lưu thông tin");
         btnSaveAcc.setFocusable(false);
+        btnSaveAcc.setIconTextGap(6);
         btnSaveAcc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveAccActionPerformed(evt);
             }
         });
 
-        btnUpdateAcc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnUpdateAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnUpdateAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue_x32.png"))); // NOI18N
         btnUpdateAcc.setText("Cập nhật");
         btnUpdateAcc.setFocusable(false);
+        btnUpdateAcc.setIconTextGap(6);
         btnUpdateAcc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateAccActionPerformed(evt);
             }
         });
 
-        btnDeleteAcc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnDeleteAcc.setText("Xóa");
+        btnDeleteAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue_x32.png"))); // NOI18N
+        btnDeleteAcc.setText("Xóa tài khoản");
         btnDeleteAcc.setFocusable(false);
+        btnDeleteAcc.setIconTextGap(6);
         btnDeleteAcc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteAccActionPerformed(evt);
             }
         });
 
-        btnChiTietThongTin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnChiTietThongTin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnChiTietThongTin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_info_yellow_x32.png"))); // NOI18N
         btnChiTietThongTin.setText("Chi tiết thông tin");
+        btnChiTietThongTin.setFocusable(false);
+        btnChiTietThongTin.setIconTextGap(6);
         btnChiTietThongTin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChiTietThongTinActionPerformed(evt);
@@ -1279,6 +1293,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         rdoNhanVien.setPreferredSize(new java.awt.Dimension(93, 30));
 
         cboMaNV.setEditable(true);
+        cboMaNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboMaNV.setToolTipText("");
         cboMaNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1321,17 +1336,15 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(rdoNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                                        .addComponent(btnNewAcc, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(20, 20, 20)
-                                        .addComponent(btnSaveAcc, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
-                                        .addComponent(btnUpdateAcc, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnDeleteAcc, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(9, 9, 9)
+                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnUpdateAcc, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                                    .addComponent(btnNewAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(20, 20, 20)
+                                .addGroup(TaiKhoanjPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnDeleteAcc, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                                    .addComponent(btnSaveAcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)))
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 710, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1570,8 +1583,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnSaveAcc;
     private javax.swing.JButton btnSaveNV;
     private javax.swing.JButton btnTaoTK;
-    private javax.swing.JButton btnTimKiem;
-    private javax.swing.JButton btnTimKiemDS;
     private javax.swing.JButton btnUpdateAcc;
     private javax.swing.JButton btnUpdateNV;
     private javax.swing.JComboBox cboMaNV;

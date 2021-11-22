@@ -122,13 +122,14 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIcon.setText("Icon");
         lblIcon.setMaximumSize(new java.awt.Dimension(32, 32));
-        lblIcon.setPreferredSize(new java.awt.Dimension(32, 32));
+        lblIcon.setPreferredSize(new java.awt.Dimension(40, 34));
 
         lblMess.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblMess.setText("Mess");
 
         btnOK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnOK.setText("OK");
+        btnOK.setFocusable(false);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -174,13 +175,14 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         lblIconConfirm.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIconConfirm.setText("Icon");
         lblIconConfirm.setMaximumSize(new java.awt.Dimension(32, 32));
-        lblIconConfirm.setPreferredSize(new java.awt.Dimension(32, 32));
+        lblIconConfirm.setPreferredSize(new java.awt.Dimension(40, 34));
 
         lblMessConfim.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblMessConfim.setText("Mess");
 
         btnYES.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnYES.setText("YES");
+        btnYES.setFocusable(false);
         btnYES.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnYESActionPerformed(evt);
@@ -189,6 +191,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
 
         btnNo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNo.setText("NO");
+        btnNo.setFocusable(false);
         btnNo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNoActionPerformed(evt);
@@ -204,16 +207,16 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
                 .addGroup(pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlConfirmLayout.createSequentialGroup()
                         .addComponent(lblIconConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblMessConfim)
-                        .addGap(0, 369, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator1)
                     .addGroup(pnlConfirmLayout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(btnYES, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnNo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlConfirmLayout.setVerticalGroup(
@@ -222,7 +225,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
                 .addGroup(pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblIconConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblMessConfim))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -238,13 +241,13 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         pnlWallLayout.setHorizontalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlBody, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+            .addComponent(pnlBody, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlWallLayout.setVerticalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE)
+                .addGap(0, 12, Short.MAX_VALUE)
                 .addComponent(pnlBody, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );

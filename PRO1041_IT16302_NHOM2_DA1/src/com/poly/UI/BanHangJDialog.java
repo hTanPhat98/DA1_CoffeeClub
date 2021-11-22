@@ -567,6 +567,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
         tblHoaDon = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("BÁN HÀNG");
+        setFocusable(false);
         setResizable(false);
 
         pnlHeader.setPreferredSize(new java.awt.Dimension(1600, 50));
@@ -590,7 +592,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
         pnlThongTinBan.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "THÔNG TIN BÀN", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
         pnlThongTinBan.setFocusable(false);
 
-        btnDatBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnDatBan.setBackground(new java.awt.Color(255, 255, 255));
+        btnDatBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnDatBan.setText("ĐẶT BÀN");
         btnDatBan.setEnabled(false);
         btnDatBan.setFocusable(false);
@@ -600,7 +603,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
 
-        btnLamMoi.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnLamMoi.setBackground(new java.awt.Color(255, 255, 255));
+        btnLamMoi.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnLamMoi.setText("LÀM MỚI");
         btnLamMoi.setFocusable(false);
         btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
@@ -621,12 +625,12 @@ public class BanHangJDialog extends javax.swing.JDialog {
             pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlThongTinBanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(tabBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlThongTinBanLayout.createSequentialGroup()
-                        .addComponent(btnDatBan, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61)
-                        .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlThongTinBanLayout.createSequentialGroup()
+                        .addComponent(btnDatBan, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnLamMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         pnlThongTinBanLayout.setVerticalGroup(
@@ -672,9 +676,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblLoaiMota.setText("Loại:");
 
         btnOrder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/order_icon_x32.png"))); // NOI18N
         btnOrder.setText("ORDER");
         btnOrder.setEnabled(false);
         btnOrder.setFocusable(false);
+        btnOrder.setIconTextGap(6);
         btnOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOrderActionPerformed(evt);
@@ -699,6 +705,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         spnSoLuong.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         spnSoLuong.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
         spnSoLuong.setEnabled(false);
+        spnSoLuong.setFocusable(false);
 
         javax.swing.GroupLayout pnlMoTaLayout = new javax.swing.GroupLayout(pnlMoTa);
         pnlMoTa.setLayout(pnlMoTaLayout);
@@ -789,6 +796,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblLoaiSP.setText("Loại sản phẩm:");
 
         cboLoaiSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboLoaiSP.setFocusable(false);
         cboLoaiSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboLoaiSPActionPerformed(evt);
@@ -876,9 +884,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         txtThanhTien.setBorder(null);
 
         btnXemBill.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnXemBill.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/bill_view_x32.png"))); // NOI18N
         btnXemBill.setText("XEM BILL");
         btnXemBill.setEnabled(false);
         btnXemBill.setFocusable(false);
+        btnXemBill.setIconTextGap(6);
         btnXemBill.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXemBillActionPerformed(evt);
@@ -886,9 +896,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         });
 
         btnThanhToan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnThanhToan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/bill_pos_x32.png"))); // NOI18N
         btnThanhToan.setText("THANH TOÁN");
         btnThanhToan.setEnabled(false);
         btnThanhToan.setFocusable(false);
+        btnThanhToan.setIconTextGap(6);
         btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnThanhToanActionPerformed(evt);
@@ -896,9 +908,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
         });
 
         btnGopBanGhepBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnGopBanGhepBan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/move_table_x32.png"))); // NOI18N
         btnGopBanGhepBan.setText("CHUYỂN BÀN - GHÉP BÀN");
         btnGopBanGhepBan.setEnabled(false);
         btnGopBanGhepBan.setFocusable(false);
+        btnGopBanGhepBan.setIconTextGap(6);
         btnGopBanGhepBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGopBanGhepBanActionPerformed(evt);
