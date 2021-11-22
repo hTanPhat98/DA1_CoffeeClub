@@ -573,7 +573,6 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             }
         });
         tblHoaDonGoc.setRowHeight(20);
-        tblHoaDonGoc.getTableHeader().setResizingAllowed(false);
         tblHoaDonGoc.getTableHeader().setReorderingAllowed(false);
         tblHoaDonGoc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -603,7 +602,6 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             }
         });
         tblHoaDonDaChuyen.setRowHeight(20);
-        tblHoaDonDaChuyen.getTableHeader().setResizingAllowed(false);
         tblHoaDonDaChuyen.getTableHeader().setReorderingAllowed(false);
         tblHoaDonDaChuyen.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {

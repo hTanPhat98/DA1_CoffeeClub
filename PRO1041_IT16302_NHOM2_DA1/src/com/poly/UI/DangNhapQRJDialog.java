@@ -85,6 +85,8 @@ public class DangNhapQRJDialog extends javax.swing.JDialog implements Runnable, 
                 if (result != null) {
                     athis.dangNhap(result.getText());
                     this.dispose();
+                    webcam.close();
+                    break;
                 }
             }
         } while (true);
@@ -160,12 +162,6 @@ public class DangNhapQRJDialog extends javax.swing.JDialog implements Runnable, 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 DangNhapQRJDialog dialog = new DangNhapQRJDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
                 dialog.setVisible(true);
             }
         });

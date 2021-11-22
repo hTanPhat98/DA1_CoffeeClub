@@ -28,8 +28,8 @@ public class XImage {
         return new ImageIcon(url).getImage();
     }
 
-    public static void save(File src) {
-        File dst = new File("image", src.getName());
+    public static void savenv(File src) {
+        File dst = new File("image/nhanvien", src.getName());
         if (!dst.getParentFile().exists()) {
             dst.getParentFile().mkdirs();
         }
@@ -41,7 +41,21 @@ public class XImage {
             throw new RuntimeException(e);
         }
     }
-
+    
+    public static void savemenu(File src) {
+        File dst = new File("image/menu", src.getName());
+        if (!dst.getParentFile().exists()) {
+            dst.getParentFile().mkdirs();
+        }
+        try {
+            Path from = Paths.get(src.getAbsolutePath());
+            Path to = Paths.get(dst.getAbsolutePath());
+            Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     public static ImageIcon read(String fileName) {
         File defaut = new File("image", "add-photo.png");
         File path = new File("image", fileName);
@@ -59,8 +73,8 @@ public class XImage {
     }
 
     public static ImageIcon read(String fileName, int w, int h) {
-        File defaut = new File("image", "add-photo.png");
-        File path = new File("image", fileName);
+        File defaut = new File("image", "kocogi.jpg");
+        File path = new File("image/nhanvien", fileName);
         Image img = null;
         Image dfimg = null;
         try {
@@ -87,6 +101,20 @@ public class XImage {
         return null;
     }
     
-    
+    public static ImageIcon readmon(String fileName, int w, int h) {
+        File defaut = new File("image", "add-photo.png");
+        File path = new File("image/menu", fileName);
+        Image img = null;
+        Image dfimg = null;
+        try {
+            BufferedImage dfimage = ImageIO.read(defaut);
+            dfimg =dfimage.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+            BufferedImage image = ImageIO.read(path);
+            img = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (IOException ex) {
+            return new ImageIcon(dfimg);
+        }
+    }
 
 }

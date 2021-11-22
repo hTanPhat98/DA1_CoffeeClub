@@ -544,7 +544,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
         tblHoaDon.setRowHeight(20);
-        tblHoaDon.getTableHeader().setResizingAllowed(false);
         tblHoaDon.getTableHeader().setReorderingAllowed(false);
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -633,7 +632,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
         tblChiTietHoaDon.setRowHeight(20);
-        tblChiTietHoaDon.getTableHeader().setResizingAllowed(false);
         tblChiTietHoaDon.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblChiTietHoaDon);
 

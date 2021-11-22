@@ -783,7 +783,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
         });
         tblSanPham.setToolTipText("");
         tblSanPham.setRowHeight(20);
-        tblSanPham.getTableHeader().setResizingAllowed(false);
         tblSanPham.getTableHeader().setReorderingAllowed(false);
         tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -945,7 +944,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
         tblHoaDon.setRowHeight(20);
-        tblHoaDon.getTableHeader().setResizingAllowed(false);
         tblHoaDon.getTableHeader().setReorderingAllowed(false);
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {

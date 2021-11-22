@@ -593,7 +593,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             }
         });
         tblLoaiMon.setRowHeight(20);
-        tblLoaiMon.getTableHeader().setResizingAllowed(false);
         tblLoaiMon.getTableHeader().setReorderingAllowed(false);
         tblLoaiMon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {

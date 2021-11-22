@@ -101,13 +101,14 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void clearFormNV() {
         NhanVien nv = new NhanVien();
-        nv.setHinhNV("add-photo.png");
+        nv.setHinhNV("kocogi.jpg");
         nv.setGioiTinh("");
         nv.setNgaySinh(new Date());
         nv.setNgayVaoLam(new Date());
         this.setFormNV(nv);
         this.rownv = -1;
         this.updateStatusNV();
+        lblTenAnh.setText("Image name:");
     }
 
     private void fillTableNV() {
@@ -166,7 +167,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void setFormNV(NhanVien nv) {
         if (nv == null) {
             nv = new NhanVien();
-            nv.setHinhNV("add-photo.png");
+            nv.setHinhNV("kocogi.jpg");
             nv.setGioiTinh("");
             nv.setNgaySinh(new Date());
             nv.setNgayVaoLam(new Date());
@@ -239,7 +240,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         fileChooser.setDialogTitle("Chọn hình nhân viên");
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            XImage.save(file);
+            XImage.savenv(file);
             ImageIcon icon = XImage.read(file.getName());
             lblAnhNhanVien.setIcon(icon);
             lblAnhNhanVien.setToolTipText(file.getName());
@@ -297,29 +298,33 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void insertAcc() {
-        try {
-            Account acc = getFormAcc();
-            List<NhanVien> list = daonv.selectAll();
-            boolean kt = false;
-            for (NhanVien nv : list) {
-                if (acc.getMaNV().equals(nv.getMaNV())) {
-                    kt = true;
-                    break;
-                } else {
-                    kt = false;
+        if (!txtUsername.getText().equals("")) {
+            try {
+                Account acc = getFormAcc();
+                List<NhanVien> list = daonv.selectAll();
+                boolean kt = false;
+                for (NhanVien nv : list) {
+                    if (acc.getMaNV().equals(nv.getMaNV())) {
+                        kt = true;
+                        break;
+                    } else {
+                        kt = false;
+                    }
                 }
+                if (kt) {
+                    daoac.insert(acc);
+                    this.fillTableAcc();
+                    this.clearFormNV();
+                    new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
+                    btnTaoQRCode.setEnabled(true);
+                } else {
+                    new ThongBaoJDialog(null, true).alert(2, "Mã nhân viên chưa có KHÔNG thể tạo tài khoản!!!");
+                }
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại");
             }
-            if (kt) {
-                daoac.insert(acc);
-                this.fillTableAcc();
-                this.clearFormNV();
-                new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
-            } else {
-                new ThongBaoJDialog(null, true).alert(2, "Mã nhân viên chưa có KHÔNG thể tạo tài khoản!!!");
-            }
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại");
         }
+        
     }
 
     private void updateAcc() {
@@ -407,6 +412,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.setFormAcc(new Account());
         this.rowacc = -1;
         this.updateStatusAcc();
+        btnTaoQRCode.setEnabled(false);
     }
 
     private void editAcc() {
@@ -493,6 +499,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void clickTableAcc(MouseEvent evt) {
             this.rowacc = tblAccount.getSelectedRow();
             this.editAcc();
+            btnTaoQRCode.setEnabled(true);
     }
 
     private void sort() {
@@ -1126,7 +1133,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
         tblNhanVien.setRowHeight(20);
-        tblNhanVien.getTableHeader().setResizingAllowed(false);
         tblNhanVien.getTableHeader().setReorderingAllowed(false);
         tblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1219,6 +1225,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
         tblAccount.setRowHeight(22);
+        tblAccount.getTableHeader().setReorderingAllowed(false);
         tblAccount.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 tblAccountMousePressed(evt);
@@ -1315,6 +1322,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
         btnTaoQRCode.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnTaoQRCode.setText("Tạo QR Code");
+        btnTaoQRCode.setEnabled(false);
         btnTaoQRCode.setFocusable(false);
         btnTaoQRCode.setIconTextGap(6);
         btnTaoQRCode.addActionListener(new java.awt.event.ActionListener() {

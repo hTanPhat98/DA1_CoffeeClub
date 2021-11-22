@@ -441,7 +441,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         pnlListLayout.setVerticalGroup(
             pnlListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlListLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6))
@@ -469,7 +469,6 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             }
         });
         tblQuanLyKhuVucBan.setRowHeight(20);
-        tblQuanLyKhuVucBan.getTableHeader().setResizingAllowed(false);
         tblQuanLyKhuVucBan.getTableHeader().setReorderingAllowed(false);
         tblQuanLyKhuVucBan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
