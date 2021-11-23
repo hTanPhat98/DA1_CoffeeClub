@@ -11,6 +11,7 @@ import com.poly.Helper.Auth;
 import com.poly.Helper.XImage;
 import com.poly.Model.Account;
 import com.poly.Model.NhanVien;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -21,6 +22,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -55,6 +57,11 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.updateStatusAcc();
         w = lblAnhNhanVien.getWidth();
         h = lblAnhNhanVien.getHeight();
+    }
+    
+    private void setHeaderTable(JTableHeader a) {
+        JTableHeader header = a;
+        header.setFont(new Font("Dialog", Font.BOLD, 14));
     }
 
     private void insertNV() {
@@ -1128,7 +1135,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        tblNhanVien.setRowHeight(20);
+        tblNhanVien.setRowHeight(22);
         tblNhanVien.getTableHeader().setReorderingAllowed(false);
         tblNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1136,6 +1143,38 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
         TableJScrollPane.setViewportView(tblNhanVien);
+        if (tblNhanVien.getColumnModel().getColumnCount() > 0) {
+            tblNhanVien.getColumnModel().getColumn(0).setMinWidth(50);
+            tblNhanVien.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblNhanVien.getColumnModel().getColumn(0).setMaxWidth(50);
+            tblNhanVien.getColumnModel().getColumn(1).setMinWidth(60);
+            tblNhanVien.getColumnModel().getColumn(1).setPreferredWidth(60);
+            tblNhanVien.getColumnModel().getColumn(1).setMaxWidth(60);
+            tblNhanVien.getColumnModel().getColumn(2).setMinWidth(150);
+            tblNhanVien.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblNhanVien.getColumnModel().getColumn(2).setMaxWidth(150);
+            tblNhanVien.getColumnModel().getColumn(3).setMinWidth(110);
+            tblNhanVien.getColumnModel().getColumn(3).setPreferredWidth(110);
+            tblNhanVien.getColumnModel().getColumn(3).setMaxWidth(110);
+            tblNhanVien.getColumnModel().getColumn(5).setMinWidth(70);
+            tblNhanVien.getColumnModel().getColumn(5).setPreferredWidth(70);
+            tblNhanVien.getColumnModel().getColumn(5).setMaxWidth(70);
+            tblNhanVien.getColumnModel().getColumn(7).setMinWidth(100);
+            tblNhanVien.getColumnModel().getColumn(7).setPreferredWidth(100);
+            tblNhanVien.getColumnModel().getColumn(7).setMaxWidth(100);
+            tblNhanVien.getColumnModel().getColumn(8).setMinWidth(90);
+            tblNhanVien.getColumnModel().getColumn(8).setPreferredWidth(90);
+            tblNhanVien.getColumnModel().getColumn(8).setMaxWidth(90);
+            tblNhanVien.getColumnModel().getColumn(9).setMinWidth(90);
+            tblNhanVien.getColumnModel().getColumn(9).setPreferredWidth(90);
+            tblNhanVien.getColumnModel().getColumn(9).setMaxWidth(90);
+            tblNhanVien.getColumnModel().getColumn(10).setMinWidth(75);
+            tblNhanVien.getColumnModel().getColumn(10).setPreferredWidth(75);
+            tblNhanVien.getColumnModel().getColumn(10).setMaxWidth(75);
+            tblNhanVien.getColumnModel().getColumn(11).setMinWidth(70);
+            tblNhanVien.getColumnModel().getColumn(11).setPreferredWidth(70);
+            tblNhanVien.getColumnModel().getColumn(11).setMaxWidth(70);
+        }
 
         cboSort.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Theo mã nhân viên", "Theo họ tên", "Theo ngày sinh", "Ngày vào làm" }));
@@ -1227,6 +1266,11 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
         jScrollPane2.setViewportView(tblAccount);
+        if (tblAccount.getColumnModel().getColumnCount() > 0) {
+            tblAccount.getColumnModel().getColumn(0).setMinWidth(50);
+            tblAccount.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblAccount.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         btnNewAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNewAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N

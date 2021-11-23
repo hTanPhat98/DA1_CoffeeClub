@@ -484,6 +484,11 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             }
         });
         jScrollPane2.setViewportView(tblQuanLyKhuVucBan);
+        if (tblQuanLyKhuVucBan.getColumnModel().getColumnCount() > 0) {
+            tblQuanLyKhuVucBan.getColumnModel().getColumn(0).setMinWidth(50);
+            tblQuanLyKhuVucBan.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblQuanLyKhuVucBan.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout pnlTableLayout = new javax.swing.GroupLayout(pnlTable);
         pnlTable.setLayout(pnlTableLayout);
