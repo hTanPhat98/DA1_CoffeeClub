@@ -415,8 +415,9 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         lblDanhMuc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDanhMuc.setText("Danh mục:");
 
+        lblAnhMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblAnhMon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblAnhMon.setText("Ảnh");
+        lblAnhMon.setText("Chọn ảnh :))");
         lblAnhMon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtMaMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

@@ -52,7 +52,7 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
             email.setSmtpPort(465);
             email.setSSLOnConnect(true);
             email.setAuthenticator(new DefaultAuthenticator(usernamem, passwordm));
-            email.setFrom(usernamem, "TheCoffeeShop1");
+            email.setFrom(usernamem, "TheCoffeeClub");
             email.addTo(this.email);
             email.setSubject("Cập nhật mã QR code cho nhân viên!");
             email.setMsg("Mã QR của bạn là: ");

@@ -112,7 +112,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         String[] keys = key.split("-");
         model.setMaBan(txtMaBan.getText());
         model.setTenBan(txtTenBan.getText());
-
+        model.setGhepBan("");
         model.setMaKV(keys[1]);
         System.out.println(keys[1]);
         return model;
