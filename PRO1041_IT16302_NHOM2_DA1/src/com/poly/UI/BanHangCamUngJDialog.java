@@ -806,7 +806,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
             }
         });
         tblSanPham.setToolTipText("");
-        tblSanPham.setRowHeight(40);
+        tblSanPham.setRowHeight(60);
         tblSanPham.getTableHeader().setReorderingAllowed(false);
         tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -927,7 +927,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        tblHoaDon.setRowHeight(30);
+        tblHoaDon.setRowHeight(50);
         tblHoaDon.getTableHeader().setReorderingAllowed(false);
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {

@@ -5,6 +5,7 @@
  */
 package com.poly.UI;
 
+import com.lowagie.text.Cell;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.DAO.HoaDonDAO;
 import com.poly.DAO.MenuDAO;
@@ -18,6 +19,8 @@ import com.poly.Model.Menu;
 import com.poly.Model.NhanVien;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -27,6 +30,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -79,7 +87,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private void LoadHDhomnay() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
 
             LocalDateTime now = LocalDateTime.now();
@@ -113,7 +121,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private void Sort() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             LocalDateTime now = LocalDateTime.now();
             int year = now.getYear();
@@ -151,7 +159,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         Integer mahd = (Integer) tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 1);
         DefaultTableModel model = (DefaultTableModel) tblChiTietHoaDon.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         List<HoaDonCT> listHDCT = (List<HoaDonCT>) hdctdao.selectByHDCT(mahd);
 
         for (HoaDonCT hdct : listHDCT) {
@@ -177,7 +185,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         int tongHD = 0;
         model.setRowCount(0);
         model2.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<HoaDon> list = tkdao.selectLichSuHD();
             for (HoaDon hd : list) {
@@ -221,7 +229,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         } else {
             DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
             model.setRowCount(0);
-            int i=1;
+            int i = 1;
             try {
                 List<HDTHONGKE> listTK = tkdao.selectListByTenNV(TenNV);
                 for (HDTHONGKE hd : listTK) {
@@ -246,7 +254,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         Integer MaHD = (Integer) tblLichSuHoaDon.getValueAt(tblLichSuHoaDon.getSelectedRow(), 1);
         DefaultTableModel model = (DefaultTableModel) tblCTHD.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<HoaDonCT> listCTHD = hdctdao.selectByHDCT(MaHD);
 
@@ -274,7 +282,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<HoaDon> listhd = tkdao.findNgayThangNam(formatter.format(dt1), formatter.format(dt2));
             for (HoaDon list : listhd) {
@@ -297,7 +305,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
         String money = "" + cboSoTien.getSelectedItem();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         if (money.equals("Tất cả")) {
             this.LoadLichSuHD();
         } else {
@@ -415,6 +423,69 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         jpnBieuDo.validate();
     }
 
+    private void exportExcelFile() {
+        try {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.createSheet("thongke");
+            XSSFRow rows = null;
+            XSSFCell cell = null;
+
+            rows = sheet.createRow(5);
+
+            cell = rows.createCell(0, CellType.STRING);
+            cell.setCellValue("Stt");
+
+            cell = rows.createCell(1, CellType.STRING);
+            cell.setCellValue("MaHD");
+
+            cell = rows.createCell(2, CellType.STRING);
+            cell.setCellValue("NgayThanhToan");
+
+            cell = rows.createCell(3, CellType.STRING);
+            cell.setCellValue("TongTien");
+
+            cell = rows.createCell(4, CellType.STRING);
+            cell.setCellValue("ThuNgan");
+
+            for (int i = 0; i < list.size(); i++) {
+                HoaDon hd = list.get(i);
+                rows = sheet.createRow(i);
+
+                cell = rows.createCell(0, CellType.NUMERIC);
+                cell.setCellValue(i);
+
+                cell = rows.createCell(1, CellType.STRING);
+                cell.setCellValue(list.get(i).getMaHD());
+
+                cell = rows.createCell(2, CellType.STRING);
+                cell.setCellValue(list.get(i).getNgayHD());
+
+                cell = rows.createCell(3, CellType.STRING);
+                cell.setCellValue(list.get(i).getTongTien());
+
+                cell = rows.createCell(4, CellType.STRING);
+                cell.setCellValue(list.get(i).getMaNV());
+
+            }
+
+            File file = new File("C:\\Users\\phong\\Documents\\thongke.xlsx");
+
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                wb.write(fos);
+                fos.close();
+
+            } catch (Exception e) {
+                System.out.println("Errorrrrrrrrrrrrrrrr.....!");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Errorrrrrrrrrrrrrrrr.....!");
+        }
+        
+          System.out.println("IN NGON LÀNH CÀNH ĐÀO!");
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -439,7 +510,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         cboSort = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
+        lblVnd = new javax.swing.JLabel();
+        btnXuatExcel1 = new javax.swing.JButton();
         pnlChiTiet = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblChiTietHoaDon = new javax.swing.JTable();
@@ -465,6 +537,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         btnLineChart = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         btnBarChart = new javax.swing.JButton();
+        pnlXuatExcel2 = new javax.swing.JButton();
         pnlCTHD = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblCTHD = new javax.swing.JTable();
@@ -553,9 +626,18 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tblHoaDon);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("VNĐ");
+        lblVnd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblVnd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblVnd.setText("VNĐ");
+
+        btnXuatExcel1.setBackground(new java.awt.Color(255, 255, 255));
+        btnXuatExcel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnXuatExcel1.setText("Xuất Excel");
+        btnXuatExcel1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatExcel1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlHomNayLayout = new javax.swing.GroupLayout(pnlHomNay);
         pnlHomNay.setLayout(pnlHomNayLayout);
@@ -570,6 +652,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                         .addGap(37, 37, 37)
                         .addGroup(pnlHomNayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(pnlHomNayLayout.createSequentialGroup()
+                                .addComponent(lblSort)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboSort, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlHomNayLayout.createSequentialGroup()
                                 .addGroup(pnlHomNayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblTongSoHoaDonHomNay)
                                     .addComponent(lblTongTienHomNay))
@@ -579,12 +665,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                                     .addGroup(pnlHomNayLayout.createSequentialGroup()
                                         .addComponent(txtTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addGroup(pnlHomNayLayout.createSequentialGroup()
-                                .addComponent(lblSort)
-                                .addGap(18, 18, 18)
-                                .addComponent(cboSort, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 15, Short.MAX_VALUE)))
+                                        .addComponent(lblVnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(pnlHomNayLayout.createSequentialGroup()
+                                        .addComponent(btnXuatExcel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addGap(0, 23, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlHomNayLayout.setVerticalGroup(
@@ -604,8 +689,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlHomNayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTongTienHomNay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(88, Short.MAX_VALUE))
+                    .addComponent(lblVnd, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(btnXuatExcel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         pnlChiTiet.setBackground(new java.awt.Color(255, 255, 255));
@@ -716,9 +803,16 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 "Stt", "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -776,6 +870,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlBoxBtn.setBackground(new java.awt.Color(255, 255, 255));
         pnlBoxBtn.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
 
+        btnLocTheoNgay.setBackground(new java.awt.Color(255, 255, 255));
         btnLocTheoNgay.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLocTheoNgay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_filter_blue_x32.png"))); // NOI18N
         btnLocTheoNgay.setText("LỌC");
@@ -855,9 +950,9 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                             .addComponent(dtcDenNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblDenNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(pnlBoxBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSoTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboSoTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -865,14 +960,23 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        pnlXuatExcel2.setBackground(new java.awt.Color(255, 255, 255));
+        pnlXuatExcel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        pnlXuatExcel2.setText("Xuất Excel");
+        pnlXuatExcel2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pnlXuatExcel2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pblLichSuHoaDonLayout = new javax.swing.GroupLayout(pblLichSuHoaDon);
         pblLichSuHoaDon.setLayout(pblLichSuHoaDonLayout);
@@ -882,7 +986,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(pblLichSuHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
-                    .addComponent(pnlLocDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlLocDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pblLichSuHoaDonLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(pnlXuatExcel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         pblLichSuHoaDonLayout.setVerticalGroup(
@@ -890,7 +997,9 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             .addGroup(pblLichSuHoaDonLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
+                .addComponent(pnlXuatExcel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlLocDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -930,14 +1039,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             pnlCTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCTHDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlCTHDLayout.setVerticalGroup(
             pnlCTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCTHDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -982,7 +1091,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         );
         jpnBieuDoLayout.setVerticalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+            .addGap(0, 808, Short.MAX_VALUE)
         );
 
         tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnBieuDo);
@@ -1050,6 +1159,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         this.showLichSuHDCT();
     }//GEN-LAST:event_tblLichSuHoaDonMousePressed
 
+    private void btnXuatExcel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatExcel1ActionPerformed
+       exportExcelFile();
+    }//GEN-LAST:event_btnXuatExcel1ActionPerformed
+
+    private void pnlXuatExcel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pnlXuatExcel2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlXuatExcel2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1099,12 +1216,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnBarChart;
     private javax.swing.JButton btnLineChart;
     private javax.swing.JButton btnLocTheoNgay;
+    private javax.swing.JButton btnXuatExcel1;
     private javax.swing.JComboBox<String> cboNhanVien;
     private javax.swing.JComboBox<String> cboSoTien;
     private javax.swing.JComboBox<String> cboSort;
     private com.toedter.calendar.JDateChooser dtcDenNgay;
     private com.toedter.calendar.JDateChooser dtcTuNgay;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1123,6 +1240,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JLabel lblTongSoHoaDonHomNay;
     private javax.swing.JLabel lblTongTienHomNay;
     private javax.swing.JLabel lblTuNgay;
+    private javax.swing.JLabel lblVnd;
     private javax.swing.JPanel pblLichSuHoaDon;
     private javax.swing.JPanel pnlBoxBtn;
     private javax.swing.JPanel pnlCTHD;
@@ -1133,6 +1251,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlLichSu;
     private javax.swing.JPanel pnlLocDoanhThu;
     private javax.swing.JPanel pnlWall;
+    private javax.swing.JButton pnlXuatExcel2;
     private javax.swing.JTabbedPane tabThongKe;
     private javax.swing.JTable tblCTHD;
     private javax.swing.JTable tblChiTietHoaDon;
