@@ -11,12 +11,12 @@ import com.poly.Helper.XImage;
  *
  * @author phong
  */
-public class ThongBaoJDialog extends javax.swing.JDialog {
+public class ThongBaoRegexJDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form ThongBaoJDialog
      */
-    public ThongBaoJDialog(java.awt.Frame parent, boolean modal) {
+    public ThongBaoRegexJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -25,8 +25,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         lblTagName.setText("Thông Báo");
         lblIcon.setText("");
-        lblMess.setText(message);
-        pnlConfirm.setVisible(false);
+        txtMess.setText(message);
         pnlMessInfo.setVisible(true);
         switch (i) {
             case 1:
@@ -44,16 +43,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         
     }
     
-    public boolean confirm(String message) {
-        this.setLocationRelativeTo(null);
-        lblTagName.setText("Thông Báo");
-        lblIconConfirm.setIcon(XImage.readMess("question_mess_x32.png"));
-        lblMessConfim.setText(message);
-        pnlConfirm.setVisible(true);
-        pnlMessInfo.setVisible(false);
-        this.setVisible(true);
-        return btnYES.isSelected();
-    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -69,18 +59,12 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         lblTagName = new javax.swing.JLabel();
         btnExit = new javax.swing.JButton();
         lblHeader = new javax.swing.JLabel();
-        pnlBody = new javax.swing.JPanel();
         pnlMessInfo = new javax.swing.JPanel();
         lblIcon = new javax.swing.JLabel();
-        lblMess = new javax.swing.JLabel();
         btnOK = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
-        pnlConfirm = new javax.swing.JPanel();
-        lblIconConfirm = new javax.swing.JLabel();
-        lblMessConfim = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        btnYES = new javax.swing.JButton();
-        btnNo = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtMess = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -116,17 +100,12 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         pnlHeader.add(lblHeader);
         lblHeader.setBounds(0, 0, 450, 50);
 
-        pnlBody.setLayout(new java.awt.CardLayout());
-
         pnlMessInfo.setBackground(new java.awt.Color(255, 255, 255));
 
         lblIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblIcon.setText("Icon");
         lblIcon.setMaximumSize(new java.awt.Dimension(32, 32));
         lblIcon.setPreferredSize(new java.awt.Dimension(40, 34));
-
-        lblMess.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblMess.setText("Mess");
 
         btnOK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnOK.setText("OK");
@@ -137,6 +116,14 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
             }
         });
 
+        jScrollPane1.setBorder(null);
+
+        txtMess.setEditable(false);
+        txtMess.setColumns(20);
+        txtMess.setRows(5);
+        txtMess.setBorder(null);
+        jScrollPane1.setViewportView(txtMess);
+
         javax.swing.GroupLayout pnlMessInfoLayout = new javax.swing.GroupLayout(pnlMessInfo);
         pnlMessInfo.setLayout(pnlMessInfoLayout);
         pnlMessInfoLayout.setHorizontalGroup(
@@ -146,122 +133,54 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
                 .addGroup(pnlMessInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMessInfoLayout.createSequentialGroup()
                         .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblMess)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
                     .addComponent(jSeparator3)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMessInfoLayout.createSequentialGroup()
-                        .addGap(0, 348, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         pnlMessInfoLayout.setVerticalGroup(
             pnlMessInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMessInfoLayout.createSequentialGroup()
-                .addGroup(pnlMessInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMess))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(pnlMessInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        pnlBody.add(pnlMessInfo, "card3");
-
-        pnlConfirm.setBackground(new java.awt.Color(255, 255, 255));
-        pnlConfirm.setPreferredSize(new java.awt.Dimension(450, 112));
-
-        lblIconConfirm.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblIconConfirm.setText("Icon");
-        lblIconConfirm.setMaximumSize(new java.awt.Dimension(32, 32));
-        lblIconConfirm.setPreferredSize(new java.awt.Dimension(40, 34));
-
-        lblMessConfim.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblMessConfim.setText("Mess");
-
-        btnYES.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnYES.setText("YES");
-        btnYES.setFocusable(false);
-        btnYES.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnYESActionPerformed(evt);
-            }
-        });
-
-        btnNo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnNo.setText("NO");
-        btnNo.setFocusable(false);
-        btnNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNoActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlConfirmLayout = new javax.swing.GroupLayout(pnlConfirm);
-        pnlConfirm.setLayout(pnlConfirmLayout);
-        pnlConfirmLayout.setHorizontalGroup(
-            pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlConfirmLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlConfirmLayout.createSequentialGroup()
-                        .addComponent(lblIconConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblMessConfim)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator1)
-                    .addGroup(pnlConfirmLayout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(btnYES, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnNo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        pnlConfirmLayout.setVerticalGroup(
-            pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlConfirmLayout.createSequentialGroup()
-                .addGroup(pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblIconConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblMessConfim))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlConfirmLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnYES, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        pnlBody.add(pnlConfirm, "card3");
-
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
         pnlWallLayout.setHorizontalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlBody, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMessInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         pnlWallLayout.setVerticalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE)
-                .addComponent(pnlBody, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlMessInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlWall, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlWall, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlWall, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(pnlWall, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -274,15 +193,6 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnOKActionPerformed
-
-    private void btnYESActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnYESActionPerformed
-        btnYES.setSelected(true);
-        this.dispose();
-    }//GEN-LAST:event_btnYESActionPerformed
-
-    private void btnNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnNoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,14 +211,38 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ThongBaoJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThongBaoRegexJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ThongBaoJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThongBaoRegexJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ThongBaoJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThongBaoRegexJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ThongBaoJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ThongBaoRegexJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -321,7 +255,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ThongBaoJDialog dialog = new ThongBaoJDialog(new javax.swing.JFrame(), true);
+                ThongBaoRegexJDialog dialog = new ThongBaoRegexJDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -335,21 +269,15 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
-    private javax.swing.JButton btnNo;
     private javax.swing.JButton btnOK;
-    private javax.swing.JButton btnYES;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblIcon;
-    private javax.swing.JLabel lblIconConfirm;
-    private javax.swing.JLabel lblMess;
-    private javax.swing.JLabel lblMessConfim;
     private javax.swing.JLabel lblTagName;
-    private javax.swing.JPanel pnlBody;
-    private javax.swing.JPanel pnlConfirm;
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlMessInfo;
     private javax.swing.JPanel pnlWall;
+    private javax.swing.JTextArea txtMess;
     // End of variables declaration//GEN-END:variables
 }

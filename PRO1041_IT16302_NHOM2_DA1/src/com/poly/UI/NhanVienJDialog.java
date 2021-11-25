@@ -8,19 +8,28 @@ package com.poly.UI;
 import com.poly.DAO.AccountDAO;
 import com.poly.DAO.NhanVienDAO;
 import com.poly.Helper.Auth;
+import com.poly.Helper.Regex;
 import com.poly.Helper.XImage;
 import com.poly.Model.Account;
 import com.poly.Model.NhanVien;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -43,7 +52,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     NhanVienDAO daonv = new NhanVienDAO();
     AccountDAO daoac = new AccountDAO();
     JFileChooser fileChooser = new JFileChooser();
-    SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+    List<JTextField> listTF = new ArrayList<>();
 
     private void init() {
         this.setIconImage(XImage.getAppIcon());
@@ -51,40 +61,61 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.fillTableNV();
         this.fillTableAcc();
         this.fillComboBoxMaNV();
-        rownv = -1;
-        rowacc = -1;
+        this.rownv = -1;
+        this.rowacc = -1;
         this.updateStatusNV();
         this.updateStatusAcc();
-        w = lblAnhNhanVien.getWidth();
-        h = lblAnhNhanVien.getHeight();
+        this.w = lblAnhNhanVien.getWidth();
+        this.h = lblAnhNhanVien.getHeight();
+        this.addTFtoList();
+        this.setTextFieldEvent();
+
     }
-    
+
+    private void addTFtoList() {
+        listTF.add(txtMaNV);
+        listTF.add(txtTenNV);
+        listTF.add(txtSDT);
+        listTF.add(txtEmail);
+        listTF.add(txtCMND);
+    }
+
     private void setHeaderTable(JTableHeader a) {
         JTableHeader header = a;
         header.setFont(new Font("Dialog", Font.BOLD, 14));
     }
 
     private void insertNV() {
-        try {
-            NhanVien nv = getFormNV();
-            daonv.insert(nv);
-            this.fillTableNV();
-            this.clearFormNV();
-            new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
+        Regex r = new Regex();
+        if (r.checkMaNV(txtMaNV) || r.checkNameNV(txtTenNV) || r.checkSDT(txtSDT) || r.checkEmail(txtEmail) || r.checkCMND(txtCMND)) {
+            try {
+                NhanVien nv = getFormNV();
+                daonv.insert(nv);
+                this.fillTableNV();
+                this.clearFormNV();
+                new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
+            }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
+
     }
 
     private void updateNV() {
-        try {
-            NhanVien nv = getFormNV();
-            daonv.update(nv);
-            this.fillTableNV();
-            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+        Regex r = new Regex();
+        if (r.checkMaNV(txtMaNV) || r.checkNameNV(txtTenNV) || r.checkSDT(txtSDT) || r.checkEmail(txtEmail) || r.checkCMND(txtCMND)) {
+            try {
+                NhanVien nv = getFormNV();
+                daonv.update(nv);
+                this.fillTableNV();
+                new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+            }
         }
+
     }
 
     private void deleteNV() {
@@ -108,11 +139,13 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void clearFormNV() {
+        this.resetBorderTF();
         NhanVien nv = new NhanVien();
         nv.setHinhNV("kocogi.jpg");
         nv.setGioiTinh("");
         nv.setNgaySinh(new Date());
         nv.setNgayVaoLam(new Date());
+        nv.setViTri("Phục vụ");
         this.setFormNV(nv);
         this.rownv = -1;
         this.updateStatusNV();
@@ -121,7 +154,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void fillTableNV() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             String keyWord = txtTimKiemDS.getText();
             List<NhanVien> list = daonv.selectByKeyword(keyWord, keyWord);
@@ -157,6 +190,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void timKiemCT() {
+        this.resetBorderTF();
         if (!txtTiemKiemCN.getText().equals("")) {
             try {
                 NhanVien nv = daonv.selectFindNV(txtTiemKiemCN.getText());
@@ -185,7 +219,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtDiaChi.setText(nv.getDiaChi());
         txtEmail.setText(nv.getEmail());
         txtSDT.setText(nv.getDienThoai());
-        txtViTri.setText(nv.getViTri());
+        cboVitri.setSelectedItem(nv.getViTri());
         switch (nv.getGioiTinh()) {
             case "Nam":
                 rdoNam.setSelected(true);
@@ -201,7 +235,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         dtcNgayVaoLam.setDate(nv.getNgayVaoLam());
         if (nv.getHinhNV() != null) {
             lblAnhNhanVien.setToolTipText(nv.getHinhNV());
-            lblAnhNhanVien.setIcon(XImage.read(nv.getHinhNV(),lblAnhNhanVien.getWidth(),lblAnhNhanVien.getHeight()));
+            lblAnhNhanVien.setIcon(XImage.readnv(nv.getHinhNV(), lblAnhNhanVien.getWidth(), lblAnhNhanVien.getHeight()));
         }
     }
 
@@ -213,7 +247,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         nv.setDiaChi(txtDiaChi.getText());
         nv.setEmail(txtEmail.getText());
         nv.setDienThoai(txtSDT.getText());
-        nv.setViTri(txtViTri.getText());
+        nv.setViTri(cboVitri.getSelectedItem().toString());
         if (rdoNam.isSelected()) {
             nv.setGioiTinh(rdoNam.getText());
         } else if (rdoNu.isSelected()) {
@@ -247,10 +281,12 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         fileChooser.setDialogTitle("Chọn hình nhân viên");
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            XImage.savenv(file);
-            ImageIcon icon = XImage.read(file.getName());
-            lblAnhNhanVien.setIcon(icon);
-            lblAnhNhanVien.setToolTipText(file.getName());
+            if (file != null) {
+                XImage.savenv(file);
+                ImageIcon icon = XImage.readnv(file.getName(), lblAnhNhanVien.getWidth(), lblAnhNhanVien.getHeight());
+                lblAnhNhanVien.setIcon(icon);
+                lblAnhNhanVien.setToolTipText(file.getName());
+            }
         }
     }
 
@@ -259,11 +295,13 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             String manv = (String) tblNhanVien.getValueAt(this.rownv, 1);
             NhanVien nv = daonv.selectById(manv);
             if (nv != null) {
+                if (nv.getHinhNV()==null) {
+                    nv.setHinhNV("");
+                }
                 this.setFormNV(nv);
                 tabs.setSelectedIndex(0);
                 this.updateStatusNV();
             }
-            String tenAnh = nv.getHinhNV().equals("") ? "Not Image" : nv.getHinhNV();
             List<Account> list = daoac.selectAll();
             for (Account acc : list) {
                 if (nv.getMaNV().equals(acc.getMaNV())) {
@@ -304,7 +342,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void insertAcc() {
-        if (!txtUsername.getText().equals("")&&!txtPassword.getText().equals("")) {
+        if (!txtUsername.getText().equals("") && !txtPassword.getText().equals("")) {
             try {
                 Account acc = getFormAcc();
                 List<NhanVien> list = daonv.selectAll();
@@ -330,7 +368,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại");
             }
         }
-        
+
     }
 
     private void updateAcc() {
@@ -377,7 +415,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void fillTableAcc() {
         DefaultTableModel model = (DefaultTableModel) tblAccount.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<Account> list = daoac.selectAll();
             for (Account acc : list) {
@@ -453,7 +491,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 tabs.setSelectedIndex(0);
                 this.updateStatusNV();
             }
-            String tenAnh = nv.getHinhNV().equals("") ? "Not Image" : nv.getHinhNV();
             List<Account> list = daoac.selectAll();
             for (Account acc : list) {
                 if (nv.getMaNV().equals(acc.getMaNV())) {
@@ -495,22 +532,23 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void clickTableNV(MouseEvent evt) {
         if (evt.getClickCount() == 2) {
+            this.resetBorderTF();
             this.rownv = tblNhanVien.getSelectedRow();
             this.editNV();
             tabs.setSelectedIndex(0);
         }
     }
 
-    private void clickTableAcc(MouseEvent evt) {
-            this.rowacc = tblAccount.getSelectedRow();
-            this.editAcc();
-            btnTaoQRCode.setEnabled(true);
+    private void clickTableAcc() {
+        this.rowacc = tblAccount.getSelectedRow();
+        this.editAcc();
+        btnTaoQRCode.setEnabled(true);
     }
 
     private void sort() {
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<NhanVien> list = daonv.selectAll();
             switch (cboSort.getSelectedIndex()) {
@@ -572,13 +610,44 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             btnDeleteAcc.setEnabled(kt);
         }
     }
-    
-    
-    private void taoQRcode(){
-        NhanVien nv=daonv.selectById(String.valueOf(cboMaNV.getSelectedItem()));
-        Account acc=daoac.selectByManv(String.valueOf(cboMaNV.getSelectedItem()));
-        new MaQRcodeJDialog(null, true, acc.getUserName(),acc.getPassworld(),nv.getEmail()).setVisible(true);
+
+    private void taoQRcode() {
+        NhanVien nv = daonv.selectById(String.valueOf(cboMaNV.getSelectedItem()));
+        Account acc = daoac.selectByManv(String.valueOf(cboMaNV.getSelectedItem()));
+        new MaQRcodeJDialog(null, true, acc.getUserName(), acc.getPassworld(), nv.getEmail()).setVisible(true);
     }
+
+    private void setTextFieldEvent() {
+        for (JTextField txt : listTF) {
+            eventClickTxt(txt);
+        }
+    }
+
+    private void resetBorderTF() {
+        for (JTextField txt : listTF) {
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.black, 1), new EmptyBorder(1, 4, 1, 1)));
+        }
+    }
+
+    private void eventClickTxt(JTextField txt) {
+        txt.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                txt.setBorder(new CompoundBorder(new LineBorder(Color.black, 1), new EmptyBorder(1, 4, 1, 1)));
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -614,7 +683,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtSDT = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         txtCMND = new javax.swing.JTextField();
-        txtViTri = new javax.swing.JTextField();
         dtcNgaySinh = new com.toedter.calendar.JDateChooser();
         dtcNgayVaoLam = new com.toedter.calendar.JDateChooser();
         rdoNam = new javax.swing.JRadioButton();
@@ -633,6 +701,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         btnNext = new javax.swing.JButton();
         btnFinal = new javax.swing.JButton();
         btnThemAnh = new javax.swing.JButton();
+        cboVitri = new javax.swing.JComboBox<>();
         DanhSachjPanel = new javax.swing.JPanel();
         lblTimKiemDS = new javax.swing.JLabel();
         lblSort = new javax.swing.JLabel();
@@ -762,9 +831,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtCMND.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtCMND.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
 
-        txtViTri.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtViTri.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
-
         dtcNgaySinh.setDateFormatString("dd/MM/yyyy");
         dtcNgaySinh.setFocusable(false);
 
@@ -774,6 +840,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         rdoNam.setBackground(new java.awt.Color(255, 255, 255));
         btgGioiTinh.add(rdoNam);
         rdoNam.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        rdoNam.setSelected(true);
         rdoNam.setText("Nam");
 
         rdoNu.setBackground(new java.awt.Color(255, 255, 255));
@@ -971,6 +1038,10 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        cboVitri.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        cboVitri.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pha chế", "Thu ngân", "Phục vụ", "Bảo vệ", "Quản lý" }));
+        cboVitri.setFocusable(false);
+
         javax.swing.GroupLayout CapNhatJPanelLayout = new javax.swing.GroupLayout(CapNhatJPanel);
         CapNhatJPanel.setLayout(CapNhatJPanelLayout);
         CapNhatJPanelLayout.setHorizontalGroup(
@@ -1021,9 +1092,9 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                                 .addGap(20, 20, 20)
                                 .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(DiaChiJScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                    .addComponent(txtViTri, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
                                     .addComponent(txtCMND, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                                    .addComponent(dtcNgayVaoLam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(dtcNgayVaoLam, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cboVitri, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(CapNhatJPanelLayout.createSequentialGroup()
                         .addComponent(lblTimKiemCN, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1055,10 +1126,10 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                                     .addComponent(lblCMND, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtCMND, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(31, 31, 31)
-                                .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtViTri, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblViTri, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(30, 30, 30)
+                                .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(lblViTri, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cboVitri))))
+                        .addGap(31, 31, 31)
                         .addGroup(CapNhatJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblNgayVaoLam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(CapNhatJPanelLayout.createSequentialGroup()
@@ -1564,7 +1635,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cboMaNVKeyReleased
 
     private void tblAccountMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountMousePressed
-        this.clickTableAcc(evt);
+        this.clickTableAcc();
     }//GEN-LAST:event_tblAccountMousePressed
 
     private void btnTaoQRCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoQRCodeActionPerformed
@@ -1663,6 +1734,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnUpdateNV;
     private javax.swing.JComboBox cboMaNV;
     private javax.swing.JComboBox<String> cboSort;
+    private javax.swing.JComboBox<String> cboVitri;
     private com.toedter.calendar.JDateChooser dtcNgaySinh;
     private com.toedter.calendar.JDateChooser dtcNgayVaoLam;
     private javax.swing.JPanel jPanel1;
@@ -1706,7 +1778,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private javax.swing.JTextField txtTiemKiemCN;
     private javax.swing.JTextField txtTimKiemDS;
     private javax.swing.JTextField txtUsername;
-    private javax.swing.JTextField txtViTri;
     // End of variables declaration//GEN-END:variables
 
 }

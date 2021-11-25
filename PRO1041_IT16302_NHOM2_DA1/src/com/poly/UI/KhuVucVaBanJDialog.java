@@ -7,7 +7,6 @@ package com.poly.UI;
 
 import com.poly.DAO.BanDAO;
 import com.poly.DAO.KhuVucDAO;
-import com.poly.Helper.MsgBox;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
 import com.poly.Model.KhuVuc;
@@ -48,7 +47,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     private void fillToTableBan() {
         DefaultTableModel model = (DefaultTableModel) tblQuanLyKhuVucBan.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<Ban> list = daoban.selectAll();
             for (Ban ban : list) {
@@ -69,11 +68,11 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             }
         } catch (Exception e) {
             System.out.println(e);
-            MsgBox.alert(this, "thông báo lỗi truy vấn");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
     }
 
-    void fillToListKV() {
+    private void fillToListKV() {
         fillToTableBan();
         DefaultListModel model = new DefaultListModel();
 
@@ -89,11 +88,11 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             lstKhuVucBan.setModel(model);
         } catch (Exception e) {
             System.out.println(e);
-            MsgBox.alert(this, "thông báo lỗi truy vấn");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
     }
 
-    void setModelBan(Ban model) {
+    private void setModelBan(Ban model) {
 
         txtMaBan.setText(model.getMaBan());
         txtTenBan.setText(model.getTenBan());
@@ -106,7 +105,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         }
     }
 
-    Ban getModelBan() {
+    private Ban getModelBan() {
         Ban model = new Ban();
         String key = (String) cboKhuVucBan.getSelectedItem();
         String[] keys = key.split("-");
@@ -119,7 +118,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     }
 
-    void editBan() {
+    private void editBan() {
         try {
             String kvb = (String) tblQuanLyKhuVucBan.getValueAt(this.index, 1);
             Ban model = daoban.selectById(kvb);
@@ -127,17 +126,17 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                 this.setModelBan(model);
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "thông báo lỗi truy vấn");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
     }
 
-    void setModelkhuvuc(KhuVuc kv) {
+    private void setModelkhuvuc(KhuVuc kv) {
         txtMaKV.setText(kv.getMaKV());
         txtTenKV.setText(kv.getTenKV());
         txtTienIch.setText(kv.getTienIch());
     }
 
-    KhuVuc getModelKhuvuc() {
+    private KhuVuc getModelKhuvuc() {
         KhuVuc model = new KhuVuc();
         model.setMaKV(txtMaKV.getText());
         model.setTenKV(txtTenKV.getText());
@@ -147,19 +146,19 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     //Click evt
-    void clickEvtListKhuVuc() {
+    private void clickEvtListKhuVuc() {
         String makv = (String) lstKhuVucBan.getSelectedValue();
         String[] key = makv.split("-");
         DefaultTableModel modelbang = (DefaultTableModel) tblQuanLyKhuVucBan.getModel();
         modelbang.setRowCount(0);
-        
+
         try {
             KhuVuc model = daokv.selectById(key[1]);
             if (model != null) {
                 this.setModelkhuvuc(model);
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
         int i = 1;
         try {
@@ -178,17 +177,17 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                 i++;
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
-        
-        this.index=lstKhuVucBan.getSelectedIndex();
+
+        this.index = lstKhuVucBan.getSelectedIndex();
         updateStatutKV();
     }
 
-    private void clickTableKVB(MouseEvent evt) {
-            this.index = tblQuanLyKhuVucBan.getSelectedRow();
-            this.editBan();
-            updateStatutTable();
+    private void clickTableKVB() {
+        this.index = tblQuanLyKhuVucBan.getSelectedRow();
+        this.editBan();
+        updateStatutTable();
     }
 
     // CONTROL
@@ -214,59 +213,51 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         updateStatutTable();
     }
 
-    void insertKhuvuc() {
+    private void insertKhuvuc() {
         KhuVuc kv = getModelKhuvuc();
-
         try {
             daokv.insert(kv);
             this.fillToListKV();
-
-            System.out.println("Saved");
-
+            new ThongBaoJDialog(null, true).alert(1, "Lưu thành công!");
         } catch (Exception e) {
-            System.out.println("Save failed");
+            new ThongBaoJDialog(null, true).alert(2, "Lưu thất bại!");
 
         }
     }
 
-    void deleteKhuVuc() {
-        int confirm = JOptionPane.showConfirmDialog(null, "Thao tác sẽ xóa mọi dữ liệu về khu vực, xác nhận xóa hoặc không?");
-
-        if (confirm == JOptionPane.YES_OPTION) {
+    private void deleteKhuVuc() {
+        if (new ThongBaoJDialog(null, true).confirm("Thao tác sẽ xóa mọi dữ liệu về khu vực, xác nhận xóa hoặc không?")) {
             String makv = txtMaKV.getText();
             try {
                 daokv.delete(makv);
                 this.fillToListKV();
-                System.out.println("Deleted");
                 clearFormKV();
-
+                new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
             } catch (Exception e) {
-                System.out.println("Delete failed!");
+                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
             }
         }
     }
 
-    void updateKhuvuc() {
+    private void updateKhuvuc() {
         KhuVuc kv = getModelKhuvuc();
 
         try {
             daokv.update(kv);
             this.fillToListKV();
-            System.out.println("Updated");
-
+            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
         } catch (Exception e) {
-            System.out.println("Udapte failed!");
-
+            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
         }
     }
 
-    void insertBan() {
+    private void insertBan() {
         String cbo = (String) cboKhuVucBan.getSelectedItem();
         String[] makhuvuc = cbo.split("-"); //xử cắt chuỗi lấy makv tại cboKhuVucBan
         List<Ban> list = daoban.findByIdKhuVuc(makhuvuc[1]);
 
         if (list.size() == 12) {
-            System.out.println("Khu vực này đã đạt số bàn tối đa!");
+            new ThongBaoJDialog(null, true).alert(2, "Khu vực này đã đạt số bàn tối đa!");
         } else if (list.size() < 12) {
 
             Ban model = getModelBan();
@@ -274,53 +265,46 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             try {
                 daoban.insert(model);
                 fillToTableBan();
-                System.out.println("Saved");
+                new ThongBaoJDialog(null, true).alert(1, "Thêm thành công!");
             } catch (Exception e) {
-                System.out.println("Save failed");
+                new ThongBaoJDialog(null, true).alert(2, "Thêm thất bại!");
             }
         }
     }
 
-    void updateBan() {
+    private void updateBan() {
         String cbo = (String) cboKhuVucBan.getSelectedItem();
         String[] makhuvuc = cbo.split("-"); //xử cắt chuỗi lấy makv tại cboKhuVucBan
         List<Ban> list = daoban.findByIdKhuVuc(makhuvuc[1]);
 
-        if (list.size() == 12) {
-            System.out.println("Khu vực này đã đạt số bàn tối đa!");
-        } else if (list.size() < 12) {
+        Ban ban = getModelBan();
 
-            Ban ban = getModelBan();
-
-            try {
-                daoban.update(ban);
-                fillToTableBan();
-                System.out.println("Updated");
-            } catch (Exception e) {
-                System.out.println("Update failed");
-            }
+        try {
+            daoban.update(ban);
+            fillToTableBan();
+            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+        } catch (Exception e) {
+            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
         }
+
     }
 
-    void deleteban() {
-        int confirm = JOptionPane.showConfirmDialog(null, "Thao tác sẽ xóa mọi dữ liệu của bàn, xác nhận xóa hoặc không?");
-
-        if (confirm == JOptionPane.YES_OPTION) {
+    private void deleteban() {
+        if (new ThongBaoJDialog(null, true).confirm("Thao tác sẽ xóa mọi dữ liệu của bàn, xác nhận xóa hoặc không?")) {
             String maban = txtMaBan.getText();
             try {
                 daoban.delete(maban);
                 this.fillToListKV();
-                System.out.println("Deleted");
                 clearFormBan();
-
+                new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
             } catch (Exception e) {
-                System.out.println("Delete failed!");
+                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
             }
         }
     }
 
     //STATUT
-    void updateStatutTable() {
+    private void updateStatutTable() {
         boolean edit = (this.index >= 0);
         txtMaBan.setEditable(!edit);
         btnSaveTbl.setEnabled(!edit);
@@ -328,7 +312,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         btnDeleteTbl.setEnabled(edit);
     }
 
-    void updateStatutKV() {
+    private void updateStatutKV() {
         boolean edit = (this.index >= 0);
 
         txtMaKV.setEditable(!edit);
@@ -862,7 +846,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDeleteTblActionPerformed
 
     private void tblQuanLyKhuVucBanMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblQuanLyKhuVucBanMousePressed
-        this.clickTableKVB(evt);
+        this.clickTableKVB();
     }//GEN-LAST:event_tblQuanLyKhuVucBanMousePressed
 
     private void lstKhuVucBanMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstKhuVucBanMousePressed

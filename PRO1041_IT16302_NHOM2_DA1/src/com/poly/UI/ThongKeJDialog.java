@@ -5,12 +5,12 @@
  */
 package com.poly.UI;
 
-import com.lowagie.text.Cell;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.DAO.HoaDonDAO;
 import com.poly.DAO.MenuDAO;
 import com.poly.DAO.NhanVienDAO;
 import com.poly.DAO.ThongKeDAO;
+import com.poly.Helper.EpExcel;
 import com.poly.Helper.XImage;
 import com.poly.Model.HDTHONGKE;
 import com.poly.Model.HoaDon;
@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -423,67 +425,13 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         jpnBieuDo.validate();
     }
 
-    private void exportExcelFile() {
+    private void exportExcelFile(JTable tbl, String tenfile) {
         try {
-            XSSFWorkbook wb = new XSSFWorkbook();
-            XSSFSheet sheet = wb.createSheet("thongke");
-            XSSFRow rows = null;
-            XSSFCell cell = null;
-
-            rows = sheet.createRow(5);
-
-            cell = rows.createCell(0, CellType.STRING);
-            cell.setCellValue("Stt");
-
-            cell = rows.createCell(1, CellType.STRING);
-            cell.setCellValue("MaHD");
-
-            cell = rows.createCell(2, CellType.STRING);
-            cell.setCellValue("NgayThanhToan");
-
-            cell = rows.createCell(3, CellType.STRING);
-            cell.setCellValue("TongTien");
-
-            cell = rows.createCell(4, CellType.STRING);
-            cell.setCellValue("ThuNgan");
-
-            for (int i = 0; i < list.size(); i++) {
-                HoaDon hd = list.get(i);
-                rows = sheet.createRow(i);
-
-                cell = rows.createCell(0, CellType.NUMERIC);
-                cell.setCellValue(i);
-
-                cell = rows.createCell(1, CellType.STRING);
-                cell.setCellValue(list.get(i).getMaHD());
-
-                cell = rows.createCell(2, CellType.STRING);
-                cell.setCellValue(list.get(i).getNgayHD());
-
-                cell = rows.createCell(3, CellType.STRING);
-                cell.setCellValue(list.get(i).getTongTien());
-
-                cell = rows.createCell(4, CellType.STRING);
-                cell.setCellValue(list.get(i).getMaNV());
-
-            }
-
-            File file = new File("C:\\Users\\phong\\Documents\\thongke.xlsx");
-
-            try {
-                FileOutputStream fos = new FileOutputStream(file);
-                wb.write(fos);
-                fos.close();
-
-            } catch (Exception e) {
-                System.out.println("Errorrrrrrrrrrrrrrrr.....!");
-            }
-
-        } catch (Exception e) {
-            System.out.println("Errorrrrrrrrrrrrrrrr.....!");
+            EpExcel excel = new EpExcel();
+            excel.exportTable(tbl, new File(tenfile + ".xls"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
-        
-          System.out.println("IN NGON LÀNH CÀNH ĐÀO!");
     }
 
     /**
@@ -1160,11 +1108,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_tblLichSuHoaDonMousePressed
 
     private void btnXuatExcel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatExcel1ActionPerformed
-       exportExcelFile();
+        this.exportExcelFile(tblHoaDon, "Thông kê hóa đơn ngày " + tblHoaDon.getValueAt(0, 2));
     }//GEN-LAST:event_btnXuatExcel1ActionPerformed
 
     private void pnlXuatExcel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pnlXuatExcel2ActionPerformed
-        // TODO add your handling code here:
+        this.exportExcelFile(tblLichSuHoaDon, "Thông kê lịch sử hóa đơn");
     }//GEN-LAST:event_pnlXuatExcel2ActionPerformed
 
     /**

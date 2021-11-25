@@ -8,14 +8,16 @@ package com.poly.UI;
 import com.poly.DAO.LoaiMonDAO;
 import com.poly.DAO.MenuDAO;
 import com.poly.Helper.Auth;
-import com.poly.Helper.MsgBox;
 import com.poly.Helper.XImage;
 import com.poly.Model.LoaiMon;
 import com.poly.Model.Menu;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -26,6 +28,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form ThucDonJDialog
+     *
      * @param parent
      * @param modal
      */
@@ -50,12 +53,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     List<Menu> listmn = new ArrayList();
     LoaiMonDAO daoloaimon = new LoaiMonDAO();
     String itermlistloai = "";
+    JFileChooser fileChooser = new JFileChooser();
 
     // TABLE AND LIST
     private void fillToTableMenu() {
         DefaultTableModel model = (DefaultTableModel) tblLoaiMon.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
             List<Menu> list = daomenu.selectAll();
             for (Menu mon : list) {
@@ -104,6 +108,8 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         txtMaMon.setText(model.getMaMon());
         txtTenMon.setText(model.getTenMon());
         txtDonGia.setText(String.valueOf(model.getGia()));
+        lblAnhMon.setText("");
+        lblAnhMon.setIcon(XImage.readmon(model.getHinhAnh(), lblAnhMon.getWidth(), lblAnhMon.getHeight()));
         String[] key = itermlistloai.split("chiakey");
         for (int i = 0; i < key.length; i++) {
             if (key[i].indexOf(String.valueOf(model.getMaLoai())) != -1) {
@@ -131,16 +137,21 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             String mnu = (String) tblLoaiMon.getValueAt(this.indexM, 1);
             Menu model = daomenu.selectById(mnu);
             if (model != null) {
+                if (model.getHinhAnh()==null) {
+                    model.setHinhAnh("");
+                }
                 this.setmodelMon(model);
                 updateStatusMon();
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "thông báo lỗi truy vấn");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
     }
 
     private void clearMon() {
-        this.setmodelMon(new Menu());
+        Menu m=new Menu();
+        m.setHinhAnh("");
+        this.setmodelMon(m);
         this.indexM = -1;
         this.updateStatusMon();
     }
@@ -187,7 +198,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 this.setmodelLoai(model);
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "thông báo lỗi truy vấn");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
     }
 
@@ -203,7 +214,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 this.setmodelLoai(model);
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
         try {
             List<Menu> list = (List<Menu>) daomenu.SelectByIDmaloai(key[1]);
@@ -219,7 +230,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 i++;
             }
         } catch (Exception e) {
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
     }
 
@@ -231,7 +242,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         }
     }
 
-    private void clickTableMenu(MouseEvent evt) {
+    private void clickTableMenu() {
         this.indexM = tblLoaiMon.getSelectedRow();
         this.editMon();
         this.updateStatusMon();
@@ -239,9 +250,9 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     //CONTROL
     private void insertMon() {
-        String cbo = (String) cboDanhMuc.getSelectedItem();
-        String[] maLoai = cbo.split("-");
-        List<Menu> list = daomenu.SelectByIDmaloai(maLoai[1]);
+//        String cbo = (String) cboDanhMuc.getSelectedItem();
+//        String[] maLoai = cbo.split("-");
+//        List<Menu> list = daomenu.SelectByIDmaloai(maLoai[1]);
         Menu menu = getmodelMon();
         try {
             daomenu.insert(menu);
@@ -324,6 +335,19 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 } catch (Exception e) {
                     new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
                 }
+            }
+        }
+    }
+
+    private void chonAnh() {
+        fileChooser.setDialogTitle("Chọn hình nhân viên");
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            if (file!=null) {
+                XImage.savemenu(file);
+                ImageIcon icon = XImage.readmon(file.getName(),lblAnhMon.getWidth(), lblAnhMon.getHeight());
+                lblAnhMon.setIcon(icon);
+                lblAnhMon.setToolTipText(file.getName()); 
             }
         }
     }
@@ -419,6 +443,11 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         lblAnhMon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblAnhMon.setText("Chọn ảnh :))");
         lblAnhMon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblAnhMon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblAnhMonMousePressed(evt);
+            }
+        });
 
         txtMaMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaMon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -820,8 +849,12 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnDeleteLMActionPerformed
 
     private void tblLoaiMonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiMonMousePressed
-        this.clickTableMenu(evt);
+        this.clickTableMenu();
     }//GEN-LAST:event_tblLoaiMonMousePressed
+
+    private void lblAnhMonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAnhMonMousePressed
+        this.chonAnh();
+    }//GEN-LAST:event_lblAnhMonMousePressed
 
     /**
      * @param args the command line arguments

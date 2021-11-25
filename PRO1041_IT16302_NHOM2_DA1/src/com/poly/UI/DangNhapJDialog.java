@@ -7,7 +7,6 @@ package com.poly.UI;
 
 import com.poly.DAO.AccountDAO;
 import com.poly.Helper.Auth;
-import com.poly.Helper.MsgBox;
 import com.poly.Helper.XImage;
 import com.poly.Model.Account;
 import com.poly.Model.TKQMK;
@@ -82,9 +81,9 @@ public class DangNhapJDialog extends javax.swing.JDialog {
         String password = String.valueOf(txtPassword.getPassword());
         Account acc = dao.selectById(username);
         if (acc == null) {
-            MsgBox.alert(this, "Sai tên đăng nhập!");
+            new ThongBaoJDialog(null, true).alert(2, "Sai tên đăng nhập!");
         } else if (!password.equals(acc.getPassworld())) {
-            MsgBox.alert(this, "Sai mật khẩu!");
+            new ThongBaoJDialog(null, true).alert(2, "Sai mật khẩu!");
         } else {
             Auth.user = acc;
             this.dispose();
@@ -104,12 +103,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                 otp = 0;
                 qmk = null;
             } else {
-                //thông báo 2 mk nhap vào không giống nhau
-                System.out.println("2 mk nhập vào không giống nhau");
+                new ThongBaoJDialog(null, true).alert(2, "Mật khẩu xác thực không khớp!");
             }
         } else {
-            //thông báo mã OTP không khớp
-            System.out.println("mã OTP không khớp");
+            new ThongBaoJDialog(null, true).alert(2, "OTP xác thực không khớp!");
         }
     }
 
@@ -152,12 +149,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
             }
         }
         if (OTPTC) {
-            //Thông báo lấy OTP thành công
-            System.out.println("lấy OTP thành công");
+            new ThongBaoJDialog(null, true).alert(1, "Lấy OTP thành công!");
             btnGetOTP.setEnabled(false);
         } else {
-            //Thông báo lấy OTP thất bại
-            System.out.println("lấy OTP thất bại");
+            new ThongBaoJDialog(null, true).alert(2, "Lấy OTP thất bại!");
             otp = 0;
         }
 
