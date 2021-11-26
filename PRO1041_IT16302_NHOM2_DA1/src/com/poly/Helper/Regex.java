@@ -31,7 +31,7 @@ public class Regex {
         if (text.matches(rgx)) {
             return true;
         } else {
-            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1),new EmptyBorder(1, 4, 1, 1)));
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
             kq = kq + "Mã NV gồm chữ in hoa, số, tối đa 5 ký tự!\n";
             return false;
         }
@@ -43,7 +43,7 @@ public class Regex {
         if (text.matches(rgx)) {
             return true;
         } else {
-            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1),new EmptyBorder(1, 4, 1, 1)));
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
             kq = kq + "Tên NV gồm chữ in hoa, chữ thường, giới hạn 5-30 ký tự!\n";
             return false;
         }
@@ -55,7 +55,7 @@ public class Regex {
         if (text.matches(rgx)) {
             return true;
         } else {
-            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1),new EmptyBorder(1, 4, 1, 1)));
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
             kq = kq + "SDT NV phải là đầu số ở Việt Nam, và không chứa ký tự chữ cái!\n";
             return false;
         }
@@ -67,7 +67,7 @@ public class Regex {
         if (text.matches(rgx)) {
             return true;
         } else {
-            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1),new EmptyBorder(1, 4, 1, 1)));
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
             kq = kq + "Email không đúng định dạng!\n";
             return false;
         }
@@ -87,11 +87,34 @@ public class Regex {
         if (kt) {
             return kt;
         } else {
-            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1),new EmptyBorder(1, 4, 1, 1)));
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
             kq = kq + "CMND-CCCD không đúng định dạng!\n";
             return kt;
         }
     }
-    
-    
+
+    public boolean checkAccount(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[a-zA-Z0-9]{6,15}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
+            kq = kq + "Acc không đúng định dạng!\n";
+            return false;
+        }
+    }
+
+    public boolean checkPassword(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,15}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
+            kq = kq + "Password gồm ít nhất (1 số, 1 chữ IN HOA,1 ký tự ) tối thiểu 8-15 kí tự!\n";
+            return false;
+        }
+    }
+
 }

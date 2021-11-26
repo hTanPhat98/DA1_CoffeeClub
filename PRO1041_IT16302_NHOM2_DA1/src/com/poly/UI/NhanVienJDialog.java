@@ -78,6 +78,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         listTF.add(txtSDT);
         listTF.add(txtEmail);
         listTF.add(txtCMND);
+        listTF.add(txtUsername);
+        listTF.add(txtPassword);
     }
 
     private void setHeaderTable(JTableHeader a) {
@@ -87,7 +89,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void insertNV() {
         Regex r = new Regex();
-        if (r.checkMaNV(txtMaNV) || r.checkNameNV(txtTenNV) || r.checkSDT(txtSDT) || r.checkEmail(txtEmail) || r.checkCMND(txtCMND)) {
+        if (r.checkMaNV(txtMaNV) && r.checkNameNV(txtTenNV) && r.checkSDT(txtSDT) && r.checkEmail(txtEmail) && r.checkCMND(txtCMND)) {
             try {
                 NhanVien nv = getFormNV();
                 daonv.insert(nv);
@@ -105,7 +107,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void updateNV() {
         Regex r = new Regex();
-        if (r.checkMaNV(txtMaNV) || r.checkNameNV(txtTenNV) || r.checkSDT(txtSDT) || r.checkEmail(txtEmail) || r.checkCMND(txtCMND)) {
+        if (r.checkMaNV(txtMaNV) && r.checkNameNV(txtTenNV) && r.checkSDT(txtSDT) && r.checkEmail(txtEmail) && r.checkCMND(txtCMND)) {
             try {
                 NhanVien nv = getFormNV();
                 daonv.update(nv);
@@ -114,6 +116,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
             }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
 
     }
@@ -295,7 +299,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             String manv = (String) tblNhanVien.getValueAt(this.rownv, 1);
             NhanVien nv = daonv.selectById(manv);
             if (nv != null) {
-                if (nv.getHinhNV()==null) {
+                if (nv.getHinhNV() == null) {
                     nv.setHinhNV("");
                 }
                 this.setFormNV(nv);
@@ -342,7 +346,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void insertAcc() {
-        if (!txtUsername.getText().equals("") && !txtPassword.getText().equals("")) {
+        Regex r = new Regex();
+        if (r.checkAccount(txtUsername) && r.checkPassword(txtPassword)) {
             try {
                 Account acc = getFormAcc();
                 List<NhanVien> list = daonv.selectAll();
@@ -367,27 +372,25 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại");
             }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
 
     }
 
     private void updateAcc() {
-        try {
-            Account acc = getFormAcc();
-            daoac.update(acc);
-            this.fillTableAcc();
-            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại");
-        }
-    }
-
-    private void fillComboBoxMaNV() {
-        DefaultComboBoxModel model = (DefaultComboBoxModel) cboMaNV.getModel();
-        model.removeAllElements();
-        List<NhanVien> list = daonv.selectAll();
-        for (NhanVien nv : list) {
-            model.addElement(nv);
+        Regex r = new Regex();
+        if (r.checkAccount(txtUsername) && r.checkPassword(txtPassword)) {
+            try {
+                Account acc = getFormAcc();
+                daoac.update(acc);
+                this.fillTableAcc();
+                new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại");
+            }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
     }
 
@@ -409,6 +412,15 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                     new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
                 }
             }
+        }
+    }
+
+    private void fillComboBoxMaNV() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboMaNV.getModel();
+        model.removeAllElements();
+        List<NhanVien> list = daonv.selectAll();
+        for (NhanVien nv : list) {
+            model.addElement(nv);
         }
     }
 
@@ -1310,6 +1322,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtUsername.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
 
         tblAccount.setAutoCreateRowSorter(true);
         tblAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -1412,6 +1425,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         rdoNhanVien.setBackground(new java.awt.Color(255, 255, 255));
         btgVaiTro.add(rdoNhanVien);
         rdoNhanVien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        rdoNhanVien.setSelected(true);
         rdoNhanVien.setText("Nhân viên");
         rdoNhanVien.setContentAreaFilled(false);
         rdoNhanVien.setPreferredSize(new java.awt.Dimension(93, 30));
