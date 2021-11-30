@@ -6,12 +6,15 @@ package com.poly.Helper;
 
 import java.awt.Color;
 import static java.awt.Color.pink;
+import static java.awt.Color.red;
 import static java.awt.Color.white;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 /**
  *
@@ -25,6 +28,7 @@ public class Regex {
         return kq;
     }
 
+    //NHAN VIEN VA TAI KHOAN
     public boolean checkMaNV(JTextField txt) {
         String text = txt.getText();
         String rgx = "^[A-Z0-9]{5}$";
@@ -100,7 +104,7 @@ public class Regex {
             return true;
         } else {
             txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
-            kq = kq + "Acc không đúng định dạng!\n";
+            kq = kq + "Tên tài khoản không chúa dấu và kí tự đặc biệt, tối thiểu 6-15 kí tự!\n";
             return false;
         }
     }
@@ -112,7 +116,68 @@ public class Regex {
             return true;
         } else {
             txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
-            kq = kq + "Password gồm ít nhất (1 số, 1 chữ IN HOA,1 ký tự ) tối thiểu 8-15 kí tự!\n";
+            kq = kq + "Mật khẩu gồm ít nhất (1 số, 1 chữ IN HOA,1 ký tự ) tối thiểu 8-15 kí tự!\n";
+            return false;
+        }
+    }
+    
+    //KHU VUC VA BAN
+    public boolean checkMaKV(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[A-Z0-9 ]{3,5}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Mã khu vực chỉ bao gồm kí tự in hoa không dấu và số, tối tiểu 3-5 kí tự!\n";
+            return false;
+        }
+    }
+
+    public boolean checkTenKV(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{3,20}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Tên khu vực không chứa kí tự đặc biệt và tối thiểu 3-20 kí tự!\n";
+            return false;
+        }
+    }
+
+    public boolean checkTienIchKV(JTextArea txt) {
+        String text = txt.getText();
+        String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{0,50}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Tên tiện ích không chứa kí tự đặc biệt và tối đa 50 kí tự!\n";
+            return false;
+        }
+    }
+
+    public boolean checkMaBan(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[A-Z0-9]{4,10}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Mã Bàn bao gồm kí tự in hoa và số, tối thiểu 4-10 kí tự!\n";
+            return false;
+        }
+    }
+
+    public boolean checkTenBan(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{6,8}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Tên Bàn không chứa kí tự đặc biệt, giới hạn 6-8 kí tự!\n";
             return false;
         }
     }

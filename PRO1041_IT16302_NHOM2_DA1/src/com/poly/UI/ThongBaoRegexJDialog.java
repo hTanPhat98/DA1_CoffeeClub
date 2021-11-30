@@ -63,8 +63,8 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
         lblIcon = new javax.swing.JLabel();
         btnOK = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtMess = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtMess = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -116,13 +116,13 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
             }
         });
 
-        jScrollPane1.setBorder(null);
+        jScrollPane2.setBorder(null);
 
         txtMess.setEditable(false);
-        txtMess.setColumns(20);
-        txtMess.setRows(5);
         txtMess.setBorder(null);
-        jScrollPane1.setViewportView(txtMess);
+        txtMess.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtMess.setPreferredSize(new java.awt.Dimension(376, 70));
+        jScrollPane2.setViewportView(txtMess);
 
         javax.swing.GroupLayout pnlMessInfoLayout = new javax.swing.GroupLayout(pnlMessInfo);
         pnlMessInfo.setLayout(pnlMessInfoLayout);
@@ -133,8 +133,8 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
                 .addGroup(pnlMessInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlMessInfoLayout.createSequentialGroup()
                         .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2))
                     .addComponent(jSeparator3)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMessInfoLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -146,9 +146,9 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
             .addGroup(pnlMessInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlMessInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,14 +159,14 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
         pnlWall.setLayout(pnlWallLayout);
         pnlWallLayout.setHorizontalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
             .addComponent(pnlMessInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         pnlWallLayout.setVerticalGroup(
             pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addComponent(pnlMessInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -251,6 +251,38 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -270,7 +302,7 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnOK;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblIcon;
@@ -278,6 +310,6 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
     private javax.swing.JPanel pnlHeader;
     private javax.swing.JPanel pnlMessInfo;
     private javax.swing.JPanel pnlWall;
-    private javax.swing.JTextArea txtMess;
+    private javax.swing.JTextPane txtMess;
     // End of variables declaration//GEN-END:variables
 }
