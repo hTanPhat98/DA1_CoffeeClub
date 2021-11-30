@@ -107,7 +107,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void updateNV() {
         Regex r = new Regex();
-        if (r.checkMaNV(txtMaNV) && r.checkNameNV(txtTenNV) && r.checkSDT(txtSDT) && r.checkEmail(txtEmail) && r.checkCMND(txtCMND)) {
+        if (r.checkNameNV(txtTenNV) && r.checkSDT(txtSDT) && r.checkEmail(txtEmail) && r.checkCMND(txtCMND)) {
             try {
                 NhanVien nv = getFormNV();
                 daonv.update(nv);
@@ -279,6 +279,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         btnPrev.setEnabled(edit && !first);
         btnNext.setEnabled(edit && !last);
         btnFinal.setEnabled(edit && !last);
+        tblNhanVien.clearSelection();
     }
 
     private void chonAnh() {
@@ -380,7 +381,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void updateAcc() {
         Regex r = new Regex();
-        if (r.checkAccount(txtUsername) && r.checkPassword(txtPassword)) {
+        if (r.checkPassword(txtPassword)) {
             try {
                 Account acc = getFormAcc();
                 daoac.update(acc);
@@ -395,18 +396,19 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void deleteAcc() {
-        NhanVien nvc = (NhanVien) cboMaNV.getSelectedItem();
+        String manv=cboMaNV.getSelectedItem().toString();
+        NhanVien nvc = daonv.selectById(manv);
         if (!Auth.isManager()) {
             new ThongBaoJDialog(null, true).alert(2, "Bạn không có quyền xóa!");
         } else {
             if (Auth.user.getMaNV().equalsIgnoreCase(nvc.getMaNV())) {
                 new ThongBaoJDialog(null, true).alert(2, "Bạn không thể xóa chính bạn!");
             } else if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa nhân viên này?")) {
-                String manv = nvc.getMaNV();
+                String manvx = nvc.getMaNV();
                 try {
-                    daonv.delete(manv);
+                    daonv.delete(manvx);
                     this.fillTableAcc();
-                    this.clearFormAcc();
+                    this.clearFormAcc("");
                     new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
                 } catch (Exception e) {
                     new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
@@ -448,7 +450,9 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void setFormAcc(Account acc) {
+        cboMaNV.setEditable(true);
         cboMaNV.setSelectedItem(acc.getMaNV());
+        cboMaNV.setEditable(false);
         txtUsername.setText(acc.getUserName());
         txtPassword.setText(acc.getPassworld());
         rdoQuanLy.setSelected(acc.isVaiTro());
@@ -464,8 +468,12 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         return acc;
     }
 
-    private void clearFormAcc() {
-        this.setFormAcc(new Account());
+    private void clearFormAcc(String maNV) {
+        Account tk = new Account();
+        if (!maNV.equals("")) {
+            tk.setMaNV(maNV);
+        }
+        this.setFormAcc(tk);
         this.rowacc = -1;
         this.updateStatusAcc();
         btnTaoQRCode.setEnabled(false);
@@ -487,12 +495,12 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void updateStatusAcc() {
         boolean edit = (this.rowacc >= 0);
-
+        
 //        cboMaNV.setEditable(!edit);
         btnSaveAcc.setEnabled(!edit);
         btnUpdateAcc.setEnabled(edit);
         btnDeleteAcc.setEnabled(edit);
-
+        tblAccount.clearSelection();
     }
 
     private void editNVacc(String manv) {
@@ -518,21 +526,14 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void taoTaiKhoan() {
-        boolean kt = false;
         List<NhanVien> list = daonv.selectAll();
         for (NhanVien nv : list) {
             if (txtMaNV.getText().equals(nv.getMaNV())) {
-                this.clearFormAcc();
+                this.clearFormAcc(nv.getMaNV());
                 cboMaNV.setSelectedItem(nv.getMaNV());
                 tabs.setSelectedIndex(2);
-                kt = true;
                 break;
             }
-        }
-        if (kt) {
-            new ThongBaoJDialog(null, true).alert(1, "Tạo tài khoản thành công!");
-        } else {
-            new ThongBaoJDialog(null, true).alert(2, "Tạo tài khoản thất bại!");
         }
         this.updateStatusAcc();
     }
@@ -603,20 +604,26 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void chonMaNV() {
         List<Account> list = daoac.selectAll();
         boolean kt = false;
+        Account a=new Account();
+        String maNV = "";
         for (Account acc : list) {
             if (cboMaNV.getSelectedItem() == null) {
             } else if (cboMaNV.getSelectedItem().toString().equals(acc.getMaNV())) {
                 kt = true;
+                a=acc;
                 break;
             } else {
+                maNV=cboMaNV.getSelectedItem().toString();
                 kt = false;
             }
         }
         if (kt) {
+            this.setFormAcc(a);
             btnSaveAcc.setEnabled(!kt);
             btnUpdateAcc.setEnabled(kt);
             btnDeleteAcc.setEnabled(kt);
         } else {
+            this.clearFormAcc(maNV);
             btnSaveAcc.setEnabled(!kt);
             btnUpdateAcc.setEnabled(kt);
             btnDeleteAcc.setEnabled(kt);
@@ -1335,7 +1342,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1430,17 +1437,11 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         rdoNhanVien.setContentAreaFilled(false);
         rdoNhanVien.setPreferredSize(new java.awt.Dimension(93, 30));
 
-        cboMaNV.setEditable(true);
         cboMaNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cboMaNV.setToolTipText("");
         cboMaNV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboMaNVActionPerformed(evt);
-            }
-        });
-        cboMaNV.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                cboMaNVKeyReleased(evt);
             }
         });
 
@@ -1551,7 +1552,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             .addGroup(jPanel_WallLayout.createSequentialGroup()
                 .addComponent(HeaderJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabs))
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1605,7 +1606,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_tblNhanVienMouseClicked
 
     private void btnNewAccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewAccActionPerformed
-        this.clearFormAcc();
+        this.clearFormAcc("");
     }//GEN-LAST:event_btnNewAccActionPerformed
 
     private void btnSaveAccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAccActionPerformed
@@ -1643,10 +1644,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void cboMaNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMaNVActionPerformed
         this.chonMaNV();
     }//GEN-LAST:event_cboMaNVActionPerformed
-
-    private void cboMaNVKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cboMaNVKeyReleased
-        this.chonMaNV();
-    }//GEN-LAST:event_cboMaNVKeyReleased
 
     private void tblAccountMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountMousePressed
         this.clickTableAcc();

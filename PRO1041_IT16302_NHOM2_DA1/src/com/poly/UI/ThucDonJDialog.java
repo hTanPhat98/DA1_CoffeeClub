@@ -17,8 +17,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -62,6 +64,8 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     LoaiMonDAO daoloaimon = new LoaiMonDAO();
     String itermlistloai = "";
     JFileChooser fileChooser = new JFileChooser();
+    private Locale localeVN = new Locale("vi", "VN");
+    private NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
 
     // TABLE AND LIST
     private void fillToTableMenu() {
@@ -76,7 +80,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                     i,
                     mon.getMaMon(),
                     mon.getTenMon(),
-                    mon.getGia(),
+                    currencyVN.format(mon.getGia()),
                     listlm.getMaLoai()};
                 Menu listmenu = new Menu();
                 listmenu.setMaMon(mon.getMaMon());
@@ -115,9 +119,10 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     private void setmodelMon(Menu model) {
         txtMaMon.setText(model.getMaMon());
         txtTenMon.setText(model.getTenMon());
-        txtDonGia.setText(String.valueOf(model.getGia()));
+        txtDonGia.setText(String.valueOf((int) model.getGia()));
         lblAnhMon.setText("");
         lblAnhMon.setIcon(XImage.readmon(model.getHinhAnh(), lblAnhMon.getWidth(), lblAnhMon.getHeight()));
+        lblAnhMon.setToolTipText(model.getHinhAnh());
         String[] key = itermlistloai.split("chiakey");
         for (int i = 0; i < key.length; i++) {
             if (key[i].indexOf(String.valueOf(model.getMaLoai())) != -1) {
@@ -166,7 +171,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void updateStatusMon() {
         boolean edit = (this.indexM >= 0);
-        //  txtMaMon.setEditable(!edit);
+        txtMaMon.setEditable(!edit);
         btnSaveM.setEnabled(!edit);
         btnUpdateM.setEnabled(edit);
         btnDeleteM.setEnabled(edit);
