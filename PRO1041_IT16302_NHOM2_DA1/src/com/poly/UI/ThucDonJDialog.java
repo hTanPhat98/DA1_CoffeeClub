@@ -8,9 +8,13 @@ package com.poly.UI;
 import com.poly.DAO.LoaiMonDAO;
 import com.poly.DAO.MenuDAO;
 import com.poly.Helper.Auth;
+import com.poly.Helper.Regex;
 import com.poly.Helper.XImage;
 import com.poly.Model.LoaiMon;
 import com.poly.Model.Menu;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +22,8 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -46,6 +52,8 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         this.loadToListLM();
         this.updateStatusMon();
         this.updateStatusLoaiMon();
+        addTFtoList();
+        setTextFieldEvent();
     }
 
     int indexM = -1, indexLM = -1;
@@ -137,7 +145,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             String mnu = (String) tblLoaiMon.getValueAt(this.indexM, 1);
             Menu model = daomenu.selectById(mnu);
             if (model != null) {
-                if (model.getHinhAnh()==null) {
+                if (model.getHinhAnh() == null) {
                     model.setHinhAnh("");
                 }
                 this.setmodelMon(model);
@@ -149,7 +157,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }
 
     private void clearMon() {
-        Menu m=new Menu();
+        Menu m = new Menu();
         m.setHinhAnh("");
         this.setmodelMon(m);
         this.indexM = -1;
@@ -250,32 +258,40 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     //CONTROL
     private void insertMon() {
-//        String cbo = (String) cboDanhMuc.getSelectedItem();
-//        String[] maLoai = cbo.split("-");
-//        List<Menu> list = daomenu.SelectByIDmaloai(maLoai[1]);
-        Menu menu = getmodelMon();
-        try {
-            daomenu.insert(menu);
-            this.fillToTableMenu();
-            this.clearMon();
-            new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
-            e.printStackTrace();
+        Regex r = new Regex();
+        if (r.checkMamon(txtMaMon) && r.checkTenmon(txtTenMon) && r.checkDongia(txtDonGia)) {
+            Menu menu = getmodelMon();
+            try {
+                daomenu.insert(menu);
+                this.fillToTableMenu();
+                this.clearMon();
+                new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
+                e.printStackTrace();
+            }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
+
     }
 
     private void updateMon() {
-        String cbo = (String) cboDanhMuc.getSelectedItem();
-        String[] maLoai = cbo.split("-");
-        List<Menu> list = daomenu.SelectByIDmaloai(maLoai[1]);
-        try {
-            Menu mn = getmodelMon();
-            daomenu.update(mn);
-            this.fillToTableMenu();
-            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+        Regex r = new Regex();
+        if (r.checkMamon(txtMaMon) && r.checkTenmon(txtTenMon) && r.checkDongia(txtDonGia)) {
+            String cbo = (String) cboDanhMuc.getSelectedItem();
+            String[] maLoai = cbo.split("-");
+            List<Menu> list = daomenu.SelectByIDmaloai(maLoai[1]);
+            try {
+                Menu mn = getmodelMon();
+                daomenu.update(mn);
+                this.fillToTableMenu();
+                new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+            }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
     }
 
@@ -298,27 +314,39 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }
 
     private void insertLoaiMon() {
-        LoaiMon lm = getLoaiMon();
-        try {
-            daoloaimon.insert(lm);
-            this.loadToListLM();
-            this.clearLoaiMon();
-            new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
-            e.printStackTrace();
+        Regex r = new Regex();
+        if (r.checkMaLM(txtMaLoaiMon) && r.checkTenLM(txtTenLoaiMon)) {
+            LoaiMon lm = getLoaiMon();
+            try {
+                daoloaimon.insert(lm);
+                this.loadToListLM();
+                this.clearLoaiMon();
+                new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
+                e.printStackTrace();
+            }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
+
     }
 
     private void updateLoaiMon() {
-        try {
-            LoaiMon lm = getLoaiMon();
-            daoloaimon.update(lm);
-            this.loadToListLM();
-            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+        Regex r = new Regex();
+        if (r.checkTenLM(txtTenLoaiMon)) {
+            try {
+                LoaiMon lm = getLoaiMon();
+                daoloaimon.update(lm);
+                this.loadToListLM();
+                new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+            }
+        } else {
+            new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
         }
+
     }
 
     private void deleteLoaiMon() {
@@ -343,13 +371,56 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         fileChooser.setDialogTitle("Chọn hình nhân viên");
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            if (file!=null) {
+            if (file != null) {
                 XImage.savemenu(file);
-                ImageIcon icon = XImage.readmon(file.getName(),lblAnhMon.getWidth(), lblAnhMon.getHeight());
+                ImageIcon icon = XImage.readmon(file.getName(), lblAnhMon.getWidth(), lblAnhMon.getHeight());
                 lblAnhMon.setIcon(icon);
-                lblAnhMon.setToolTipText(file.getName()); 
+                lblAnhMon.setToolTipText(file.getName());
             }
         }
+    }
+    //REGEX
+    List<JTextField> listTF = new ArrayList<>();
+
+    private void addTFtoList() {
+        listTF.add(txtMaMon);
+        listTF.add(txtTenMon);
+        listTF.add(txtDonGia);
+        listTF.add(txtMaLoaiMon);
+        listTF.add(txtTenLoaiMon);
+
+    }
+
+    private void setTextFieldEvent() {
+        for (JTextField txt : listTF) {
+            eventClickTxt(txt);
+        }
+    }
+
+    private void resetBorderTF() {
+        for (JTextField txt : listTF) {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+        }
+    }
+
+    private void eventClickTxt(JTextField txt) {
+        txt.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                txt.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+
+        });
     }
 
     //CONTROL

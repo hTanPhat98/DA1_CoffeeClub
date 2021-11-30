@@ -181,5 +181,65 @@ public class Regex {
             return false;
         }
     }
+    //THUC DON
+    public boolean checkMaLM(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[A-Z]{3,10}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0,red));
+            kq = kq + "Mã loại món gồm chữ in hoa tối đa 3-10 ký tự!\n";
+            return false;
+        }
+    }
+
+    public boolean checkTenLM(JTextField txt) {
+        String text = txt.getText();
+        String rgx = "^[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{5,20}$";
+        if (text.matches(rgx)) {
+            return true;
+        } else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Tên món gồm chữ in hoa ,in thường giới hạn 5-20 ký tự!\n";
+            return false;
+        }
+    }
+    public boolean checkMamon(JTextField txt){
+        String text = txt.getText();
+        String rgx = "[A-Z0-9]{3,10}";
+        if (text.matches(rgx)){
+            return true;
+        }else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Mã món bao gồm kí tự in hoa và số giới hạn 3-10 kí tự!\n";
+            return false;
+        }
+    }
+    
+    public boolean checkTenmon(JTextField txt){
+        String text = txt.getText();
+        String rgx = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{3,50}$";
+        if (text.matches(rgx)){
+            return true;
+        }else {
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Tên món bao gồm kí tự in hoa giới hạn 3-50 kí tự!\n";
+            return false;
+        }
+    }
+    
+    public boolean checkDongia(JTextField txt){
+        String text = txt.getText();
+        String rgx = "[0-9]{5,6}";
+        if (text.matches(rgx)) {
+            return true;
+        }else{
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+            kq = kq + "Đơn giá không chứa kí tự chữ và giá trị âm! ";
+        }
+        return false;
+    }
+
 
 }
