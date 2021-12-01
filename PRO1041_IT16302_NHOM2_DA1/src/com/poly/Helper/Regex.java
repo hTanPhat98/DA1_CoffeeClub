@@ -5,10 +5,7 @@
 package com.poly.Helper;
 
 import java.awt.Color;
-import static java.awt.Color.pink;
 import static java.awt.Color.red;
-import static java.awt.Color.white;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
@@ -29,17 +26,17 @@ public class Regex {
     }
 
     //NHAN VIEN VA TAI KHOAN
-    public boolean checkMaNV(JTextField txt) {
-        String text = txt.getText();
-        String rgx = "^[A-Z0-9]{5}$";
-        if (text.matches(rgx)) {
-            return true;
-        } else {
-            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
-            kq = kq + "Mã NV gồm chữ in hoa, số, tối đa 5 ký tự!\n";
-            return false;
-        }
-    }
+//    public boolean checkMaNV(JTextField txt) {
+//        String text = txt.getText();
+//        String rgx = "^[A-Z0-9]{5}$";
+//        if (text.matches(rgx)) {
+//            return true;
+//        } else {
+//            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
+//            kq = kq + "Mã NV gồm chữ in hoa, số, tối đa 5 ký tự!\n";
+//            return false;
+//        }
+//    }
 
     public boolean checkNameNV(JTextField txt) {
         String text = txt.getText();
@@ -124,7 +121,7 @@ public class Regex {
     //KHU VUC VA BAN
     public boolean checkMaKV(JTextField txt) {
         String text = txt.getText();
-        String rgx = "^[A-Z0-9 ]{3,5}$";
+        String rgx = "^[A-Z0-9]{3,5}$";
         if (text.matches(rgx)) {
             return true;
         } else {
@@ -205,17 +202,17 @@ public class Regex {
             return false;
         }
     }
-    public boolean checkMamon(JTextField txt){
-        String text = txt.getText();
-        String rgx = "[A-Z0-9]{3,10}";
-        if (text.matches(rgx)){
-            return true;
-        }else {
-            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-            kq = kq + "Mã món bao gồm kí tự in hoa và số giới hạn 3-10 kí tự!\n";
-            return false;
-        }
-    }
+//    public boolean checkMamon(JTextField txt){
+//        String text = txt.getText();
+//        String rgx = "^[A-Z0-9]{3,10}$";
+//        if (text.matches(rgx)){
+//            return true;
+//        }else {
+//            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+//            kq = kq + "Mã món bao gồm kí tự in hoa và số giới hạn 3-10 kí tự!\n";
+//            return false;
+//        }
+//    }
     
     public boolean checkTenmon(JTextField txt){
         String text = txt.getText();
@@ -224,14 +221,14 @@ public class Regex {
             return true;
         }else {
             txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-            kq = kq + "Tên món bao gồm kí tự in hoa giới hạn 3-50 kí tự!\n";
+            kq = kq + "Tên món không chứa kí tự đặc biệt và số giới hạn 3-50 kí tự!\n";
             return false;
         }
     }
     
     public boolean checkDongia(JTextField txt){
         String text = txt.getText();
-        String rgx = "[0-9]{5,6}";
+        String rgx = "^1[0-9]{5,6}$";
         if (text.matches(rgx)) {
             return true;
         }else{

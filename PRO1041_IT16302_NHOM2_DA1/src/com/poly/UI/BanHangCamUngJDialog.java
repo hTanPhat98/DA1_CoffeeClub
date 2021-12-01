@@ -91,7 +91,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
     private void setHeaderTable(JTableHeader a) {
         JTableHeader header = a;
         header.setFont(new Font("Dialog", Font.BOLD, 16));
-        
+
     }
 
     private void fillTableSP() {
@@ -223,6 +223,15 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    List<KhuVuc> listkv = daokv.selectAll();
+                    int i = 0;
+                    for (KhuVuc kv1 : listkv) {
+                        if (kv1.getMaKV().equals(b.getMaKV())) {
+                            vtT = i;
+                        } else {
+                            i++;
+                        }
+                    }
                     getMaBan = b.getMaBan();
                     HoaDon hd = daohd.selectByMahd(b.getMaBan());
                     if (hd != null) {
@@ -232,6 +241,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                             if (!hd.isTrangThai()) {
                                 editHD(hd);
                                 fillTbHD();
+                                tabBan.setSelectedIndex(vtT);
                                 btnThanhToan.setEnabled(false);
                                 btnXemBill.setEnabled(false);
                                 btnGopBanGhepBan.setEnabled(false);
@@ -244,6 +254,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                             if (!hd.isTrangThai()) {
                                 editHD(hd);
                                 fillTbHD();
+                                tabBan.setSelectedIndex(vtT);
                                 btnThanhToan.setEnabled(true);
                                 btnXemBill.setEnabled(true);
                                 btnGopBanGhepBan.setEnabled(true);
@@ -252,17 +263,6 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                             }
                         }
                     } else {
-                        switch (b.getMaKV()) {
-                            case "KV01 ":
-                                vtT = 0;
-                                break;
-                            case "KV02 ":
-                                vtT = 1;
-                                break;
-                            case "KV03 ":
-                                vtT = 2;
-                                break;
-                        }
                         resetHD();
                         tabBan.setSelectedIndex(vtT);
                         btnOrder.setEnabled(false);
@@ -272,6 +272,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                         btnGopBanGhepBan.setEnabled(false);
                         spnSoLuong.setEnabled(false);
                         ktgb = true;
+                        
                     }
 
                 }
@@ -317,6 +318,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
         }
         getMaBan = "";
         this.fillTTB();
+        tabBan.setSelectedIndex(vtT);
         btnThanhToan.setEnabled(true);
         btnXemBill.setEnabled(true);
         btnGopBanGhepBan.setEnabled(true);
@@ -784,7 +786,6 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tblSanPham.setAutoCreateRowSorter(true);
         tblSanPham.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -847,9 +848,9 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                         .addComponent(lblLoaiSP)
                         .addGap(18, 18, 18)
                         .addComponent(cboLoaiSP, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(pnlMoTa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(pnlMoTa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         pnlThucDonLayout.setVerticalGroup(
             pnlThucDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -909,7 +910,6 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
         txtThanhTien.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtThanhTien.setBorder(null);
 
-        tblHoaDon.setAutoCreateRowSorter(true);
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

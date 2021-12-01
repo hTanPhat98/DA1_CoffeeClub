@@ -83,14 +83,14 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void init() {
         this.setIconImage(XImage.getAppIcon());
-        setLocationRelativeTo(null);
-        setHeaderTable(tblHoaDon.getTableHeader());
-        setHeaderTable(tblSanPham.getTableHeader());
-        HeaderRenderer(tblHoaDon);
+        this.setLocationRelativeTo(null);
+        this.setHeaderTable(tblHoaDon.getTableHeader());
+        this.setHeaderTable(tblSanPham.getTableHeader());
+        this.HeaderRenderer(tblHoaDon);
         keyWorld = txtTiemKiemTenMon.getText();
-        fillTableSP();
-        fillTTB();
-        fillComBoBox();
+        this.fillTableSP();
+        this.fillTTB();
+        this.fillComBoBox();
     }
 
     private void setHeaderTable(JTableHeader a) {
@@ -239,6 +239,15 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    List<KhuVuc> listkv = daokv.selectAll();
+                    int i = 0;
+                    for (KhuVuc kv1 : listkv) {
+                        if (kv1.getMaKV().equals(b.getMaKV())) {
+                            vtT = i;
+                        } else {
+                            i++;
+                        }
+                    }
                     getMaBan = b.getMaBan();
                     HoaDon hd = daohd.selectByMahd(b.getMaBan());
                     if (hd != null) {
@@ -248,6 +257,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                             if (!hd.isTrangThai()) {
                                 editHD(hd);
                                 fillTbHD();
+                                tabBan.setSelectedIndex(vtT);
                                 btnThanhToan.setEnabled(false);
                                 btnXemBill.setEnabled(false);
                                 btnGopBanGhepBan.setEnabled(false);
@@ -260,6 +270,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                             if (!hd.isTrangThai()) {
                                 editHD(hd);
                                 fillTbHD();
+                                tabBan.setSelectedIndex(vtT);
                                 btnThanhToan.setEnabled(true);
                                 btnXemBill.setEnabled(true);
                                 btnGopBanGhepBan.setEnabled(true);
@@ -268,18 +279,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
                             }
                         }
                     } else {
-                        switch (b.getMaKV()) {
-                            case "KV01 ":
-                                vtT = 0;
-                                break;
-                            case "KV02 ":
-                                vtT = 1;
-                                break;
-                            case "KV03 ":
-                                vtT = 2;
-                                break;
-                        }
                         resetHD();
+                        System.out.println(vtT);
                         tabBan.setSelectedIndex(vtT);
                         btnOrder.setEnabled(false);
                         btnThanhToan.setEnabled(false);
@@ -288,6 +289,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
                         btnGopBanGhepBan.setEnabled(false);
                         spnSoLuong.setEnabled(false);
                         ktgb = true;
+
                     }
 
                 }
@@ -333,6 +335,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         }
         getMaBan = "";
         this.fillTTB();
+        tabBan.setSelectedIndex(vtT);
         btnThanhToan.setEnabled(true);
         btnXemBill.setEnabled(true);
         btnGopBanGhepBan.setEnabled(true);
@@ -801,7 +804,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 .addContainerGap(31, Short.MAX_VALUE))
         );
 
-        tblSanPham.setAutoCreateRowSorter(true);
         tblSanPham.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -964,7 +966,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
 
-        tblHoaDon.setAutoCreateRowSorter(true);
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

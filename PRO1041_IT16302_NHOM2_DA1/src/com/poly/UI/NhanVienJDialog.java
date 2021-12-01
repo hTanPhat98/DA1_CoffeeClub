@@ -89,7 +89,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void insertNV() {
         Regex r = new Regex();
-        if (r.checkMaNV(txtMaNV) && r.checkNameNV(txtTenNV) && r.checkSDT(txtSDT) && r.checkEmail(txtEmail) && r.checkCMND(txtCMND)) {
+        if (r.checkNameNV(txtTenNV) && r.checkSDT(txtSDT) && r.checkEmail(txtEmail) && r.checkCMND(txtCMND)) {
             try {
                 NhanVien nv = getFormNV();
                 daonv.insert(nv);
@@ -145,6 +145,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void clearFormNV() {
         this.resetBorderTF();
         NhanVien nv = new NhanVien();
+        nv.setMaNV(taoMaNV());
         nv.setHinhNV("kocogi.jpg");
         nv.setGioiTinh("");
         nv.setNgaySinh(new Date());
@@ -269,8 +270,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         boolean edit = (this.rownv >= 0);
         boolean first = (this.rownv == 0);
         boolean last = (this.rownv == tblNhanVien.getRowCount() - 1);
-
-        txtMaNV.setEditable(!edit);
         btnSaveNV.setEnabled(!edit);
         btnUpdateNV.setEnabled(edit);
         btnDeleteNV.setEnabled(edit);
@@ -396,7 +395,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void deleteAcc() {
-        String manv=cboMaNV.getSelectedItem().toString();
+        String manv = cboMaNV.getSelectedItem().toString();
         NhanVien nvc = daonv.selectById(manv);
         if (!Auth.isManager()) {
             new ThongBaoJDialog(null, true).alert(2, "Bạn không có quyền xóa!");
@@ -495,8 +494,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void updateStatusAcc() {
         boolean edit = (this.rowacc >= 0);
-        
-//        cboMaNV.setEditable(!edit);
         btnSaveAcc.setEnabled(!edit);
         btnUpdateAcc.setEnabled(edit);
         btnDeleteAcc.setEnabled(edit);
@@ -604,16 +601,16 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void chonMaNV() {
         List<Account> list = daoac.selectAll();
         boolean kt = false;
-        Account a=new Account();
+        Account a = new Account();
         String maNV = "";
         for (Account acc : list) {
             if (cboMaNV.getSelectedItem() == null) {
             } else if (cboMaNV.getSelectedItem().toString().equals(acc.getMaNV())) {
                 kt = true;
-                a=acc;
+                a = acc;
                 break;
             } else {
-                maNV=cboMaNV.getSelectedItem().toString();
+                maNV = cboMaNV.getSelectedItem().toString();
                 kt = false;
             }
         }
@@ -665,6 +662,25 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
             }
         });
+    }
+
+    private String taoMaNV() {
+        String mn = "NV";
+        String mnv;
+        int i = 1;
+        mnv = mn + "00" + i;
+        List<NhanVien> list = daonv.selectAll();
+        for (NhanVien nv : list) {
+            if (nv.getMaNV().equals(mnv)) {
+                i++;
+                if (i < 10) {
+                    mnv = mn + "00" + i;
+                } else {
+                    mnv = mn + "0" + i;
+                }
+            }
+        }
+        return mnv;
     }
 
     /**
@@ -835,6 +851,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        txtMaNV.setEditable(false);
         txtMaNV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaNV.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
 

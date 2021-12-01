@@ -143,11 +143,6 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="158" max="-2" attributes="0"/>
-                      <Component id="jSeparator1" min="-2" pref="328" max="-2" attributes="0"/>
-                      <EmptySpace pref="214" max="32767" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -167,11 +162,16 @@
                                   <Component id="cboDanhMuc" pref="360" max="32767" attributes="0"/>
                                   <Component id="txtDonGia" alignment="0" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="25" max="32767" attributes="0"/>
                               <Component id="lblAnhMon" min="-2" pref="200" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="158" max="-2" attributes="0"/>
+                      <Component id="jSeparator1" min="-2" pref="370" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -269,6 +269,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtMaMon">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="14" style="0"/>
                 </Property>
@@ -294,14 +295,13 @@
             <Component class="javax.swing.JComboBox" name="cboDanhMuc">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="7">
-                    <StringItem index="0" value="T&#x1ea5;t c&#x1ea3;"/>
-                    <StringItem index="1" value="PHIN Coffee"/>
-                    <StringItem index="2" value="Espresso Coffee"/>
-                    <StringItem index="3" value="Tr&#xe0;"/>
-                    <StringItem index="4" value="B&#xe1;nh m&#xec;"/>
-                    <StringItem index="5" value="B&#xe1;nh ng&#x1ecd;t"/>
-                    <StringItem index="6" value="Th&#x1ee9;c u&#x1ed1;ng"/>
+                  <StringArray count="6">
+                    <StringItem index="0" value="PHIN Coffee"/>
+                    <StringItem index="1" value="Espresso Coffee"/>
+                    <StringItem index="2" value="Tr&#xe0;"/>
+                    <StringItem index="3" value="B&#xe1;nh m&#xec;"/>
+                    <StringItem index="4" value="B&#xe1;nh ng&#x1ecd;t"/>
+                    <StringItem index="5" value="Th&#x1ee9;c u&#x1ed1;ng"/>
                   </StringArray>
                 </Property>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -523,7 +523,7 @@
                     <Property name="focusable" type="boolean" value="false"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLoaiMonMouseClicked"/>
+                    <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstLoaiMonMousePressed"/>
                   </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>

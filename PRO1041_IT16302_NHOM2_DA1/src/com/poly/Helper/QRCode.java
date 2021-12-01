@@ -53,7 +53,8 @@ public class QRCode {
             }
 
             // change this path to match yours (this is my mac home folder, you can use: c:\\qr_png.png if you are on windows)
-            String filePath = "image/qr_png.png";
+            String[] user=mm.split("-");
+            String filePath = "C:\\Users\\"+System.getProperty("user.name")+"\\Desktop\\qr_"+user[0]+".png";
             file = new File(filePath);
             try {
                 MatrixToImageWriter.writeToFile(matrix, "PNG", file);

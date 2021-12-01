@@ -7,28 +7,23 @@ package com.poly.UI;
 
 import com.poly.DAO.AccountDAO;
 import com.poly.Helper.Auth;
+import com.poly.Helper.Regex;
 import com.poly.Helper.XImage;
 import com.poly.Model.Account;
 import com.poly.Model.TKQMK;
 import java.awt.Color;
-import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.swing.JButton;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.MultiPartEmail;
 
 /**
  *
@@ -93,15 +88,14 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
     private void resetPassword() {
         if (otp == 0) {
-            //thông báo vui nhập mã otp
-            System.out.println("vui lòng nhập mã otp");
+            new ThongBaoJDialog(null, true).alert(2, "Vui lòng lấy mã OTP!");
         } else if (otp == Integer.parseInt(txtOTP.getText())) {
             if (txtNewPassword.getText().equalsIgnoreCase(txtConfirmPassword.getText())) {
                 dao.update(new Account(qmk.getUserName(), String.valueOf(txtNewPassword.getPassword()), qmk.getMaNV(), qmk.isVaiTro()));
-                //Thông báo đổi mk thành công
-                System.out.println("Đặt lại mật khẩu thành công");
                 otp = 0;
                 qmk = null;
+                new ThongBaoJDialog(null, true).alert(1, "Đặt lại mật khẩu thành công");
+                this.exitFormResetPass();
             } else {
                 new ThongBaoJDialog(null, true).alert(2, "Mật khẩu xác thực không khớp!");
             }
@@ -111,49 +105,43 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     }
 
     private void getOTP() {
-        boolean OTPTC = false;
-        otp = randomOTP();
-        List<TKQMK> list = new ArrayList<>();
-        list = dao.selectEmail();
-        for (TKQMK tkqmk : list) {
-            if (tkqmk.getEmail().equalsIgnoreCase(txtEmail.getText())) {
-                qmk = tkqmk;
-                Properties p = new Properties();
-                p.put("mail.smtp.auth", "true");
-                p.put("mail.smtp.starttls.enable", "true");
-                p.put("mail.smtp.host", "smtp.gmail.com");
-                p.put("mail.smtp.port", 587);
-                String username = "dhoa8488@gmail.com", password = "Ma1412pet@";
-                try {
-                    Session s = Session.getInstance(p, new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(username, password);
-                        }
-                    });
-                    String from = "TheCoffeeClub";
-                    String to = txtEmail.getText();
-                    String subject = "Mã xác thực tài khoản The Coffee Club";
-                    String OTP = String.valueOf(otp);
-                    String body = "Mã OTP: " + OTP;
-                    Message message = new MimeMessage(s);
-                    message.setFrom(new InternetAddress(from));
-                    message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-                    message.setSubject(subject);
-                    message.setText(body);
-                    Transport.send(message);
-                    OTPTC = true;
-                } catch (MessagingException | HeadlessException e) {
-                    Logger.getLogger(DangNhapJDialog.class.getName()).log(Level.SEVERE, null, e);
+        Regex r = new Regex();
+        if (r.checkEmail(txtEmail)) {
+            String usernamem = "thecoffeclubverify@gmail.com", passwordm = "CoffeeDuan1";
+            boolean OTPTC = false;
+            otp = randomOTP();
+            List<TKQMK> list = new ArrayList<>();
+            list = dao.selectEmail();
+            for (TKQMK tkqmk : list) {
+                if (tkqmk.getEmail().equalsIgnoreCase(txtEmail.getText())) {
+                    qmk = tkqmk;
+                    try {
+                        MultiPartEmail email = new MultiPartEmail();
+                        email.setHostName("smtp.googlemail.com");
+                        email.setSmtpPort(465);
+                        email.setSSLOnConnect(true);
+                        email.setAuthenticator(new DefaultAuthenticator(usernamem, passwordm));
+                        email.setFrom(usernamem, "TheCoffeeClub");
+                        email.addTo(txtEmail.getText());
+                        email.setSubject("Mã xác thực tài khoản The Coffee Club");
+                        email.setMsg("Mã OTP của bạn là: " + otp);
+                        email.send();
+                        OTPTC = true;
+                    } catch (EmailException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
-        }
-        if (OTPTC) {
-            new ThongBaoJDialog(null, true).alert(1, "Lấy OTP thành công!");
-            btnGetOTP.setEnabled(false);
-        } else {
-            new ThongBaoJDialog(null, true).alert(2, "Lấy OTP thất bại!");
-            otp = 0;
+            if (OTPTC) {
+                new ThongBaoJDialog(null, true).alert(1, "Lấy OTP thành công!");
+                btnGetOTP.setEnabled(false);
+                otp = 0;
+            } else {
+                new ThongBaoJDialog(null, true).alert(2, "Lấy OTP thất bại! Kiểm tra lại Email!!");
+                otp = 0;
+            }
+        }else{
+            new ThongBaoJDialog(null, true).alert(2, r.getKq());
         }
 
     }
@@ -462,6 +450,11 @@ public class DangNhapJDialog extends javax.swing.JDialog {
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtEmail.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 5, 1, 1)));
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEmailKeyPressed(evt);
+            }
+        });
 
         lblOTP.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblOTP.setText("OTP");
@@ -772,6 +765,10 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     private void btnLoginQRcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginQRcodeActionPerformed
         this.dangNhapQR();
     }//GEN-LAST:event_btnLoginQRcodeActionPerformed
+
+    private void txtEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyPressed
+        txtEmail.setBorder(new CompoundBorder(new LineBorder(Color.black, 1), new EmptyBorder(1, 4, 1, 1)));
+    }//GEN-LAST:event_txtEmailKeyPressed
 
     /**
      * @param args the command line arguments

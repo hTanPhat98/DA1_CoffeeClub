@@ -19,6 +19,8 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form MaQRcode
+     * @param parent
+     * @param modal
      */
     public MaQRcodeJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -58,7 +60,7 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
             email.setMsg("Mã QR của bạn là: ");
             email.attach(attachment);
             email.send();
-            lblThongBao.setText("Mã QR đã gửi vào Email của tài khoản!");
+            lblThongBao.setText("Mã QR đã gửi vào Email của tài khoản và lưu tại màn hình chính!");
         } catch (EmailException e) {
             System.out.println(e.getMessage());
         }
@@ -82,6 +84,7 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
 
         lblQRcode.setPreferredSize(new java.awt.Dimension(500, 500));
 
+        lblThongBao.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         lblThongBao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblThongBao.setText("Thông Báo");
 
@@ -101,7 +104,7 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblQRcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(lblThongBao)
                 .addGap(33, 33, 33))
         );

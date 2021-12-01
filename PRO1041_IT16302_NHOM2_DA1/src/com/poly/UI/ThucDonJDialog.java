@@ -75,13 +75,12 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         try {
             List<Menu> list = daomenu.selectAll();
             for (Menu mon : list) {
-                LoaiMon listlm = daoloaimon.selectById(mon.getMaLoai());
                 Object[] row = {
                     i,
                     mon.getMaMon(),
                     mon.getTenMon(),
                     currencyVN.format(mon.getGia()),
-                    listlm.getMaLoai()};
+                    mon.getMaLoai()};
                 Menu listmenu = new Menu();
                 listmenu.setMaMon(mon.getMaMon());
                 listmenu.setTenMon(mon.getTenMon());
@@ -104,6 +103,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             itermlistloai = "";
             List<LoaiMon> list = daoloaimon.selectAll();
             cboDanhMuc.removeAllItems();
+            model.addElement("Tất cả");
             for (LoaiMon lm : list) {
                 model.addElement(lm.getTenLoai() + "-" + lm.getMaLoai());
                 cboDanhMuc.addItem(lm.getTenLoai() + "-" + lm.getMaLoai());
@@ -164,6 +164,8 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     private void clearMon() {
         Menu m = new Menu();
         m.setHinhAnh("");
+        m.setMaMon(taoMaMon());
+        m.setGia(10000);
         this.setmodelMon(m);
         this.indexM = -1;
         this.updateStatusMon();
@@ -171,7 +173,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void updateStatusMon() {
         boolean edit = (this.indexM >= 0);
-        txtMaMon.setEditable(!edit);
         btnSaveM.setEnabled(!edit);
         btnUpdateM.setEnabled(edit);
         btnDeleteM.setEnabled(edit);
@@ -216,35 +217,40 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }
 
     private void editListDanhMuc() {
-        String maloai = (String) lstLoaiMon.getSelectedValue();
-        String[] key = maloai.split("-");
-        DefaultTableModel modelbang = (DefaultTableModel) tblLoaiMon.getModel();
-        modelbang.setRowCount(0);
-        int i = 1;
-        try {
-            LoaiMon model = daoloaimon.selectById(key[1]);
-            if (model != null) {
-                this.setmodelLoai(model);
+        if (lstLoaiMon.getSelectedIndex() == 0) {
+            fillToTableMenu();
+        } else {
+            String maloai = (String) lstLoaiMon.getSelectedValue();
+            String[] key = maloai.split("-");
+            DefaultTableModel modelbang = (DefaultTableModel) tblLoaiMon.getModel();
+            modelbang.setRowCount(0);
+            int i = 1;
+            try {
+                LoaiMon model = daoloaimon.selectById(key[1]);
+                if (model != null) {
+                    this.setmodelLoai(model);
+                }
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
             }
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
-        }
-        try {
-            List<Menu> list = (List<Menu>) daomenu.SelectByIDmaloai(key[1]);
-            for (Menu m : list) {
-                Object[] row = {
-                    i,
-                    m.getMaMon(),
-                    m.getTenMon(),
-                    m.getGia(),
-                    m.getMaLoai()
-                };
-                modelbang.addRow(row);
-                i++;
+            try {
+                List<Menu> list = (List<Menu>) daomenu.SelectByIDmaloai(key[1]);
+                for (Menu m : list) {
+                    Object[] row = {
+                        i,
+                        m.getMaMon(),
+                        m.getTenMon(),
+                        currencyVN.format(m.getGia()),
+                        m.getMaLoai()
+                    };
+                    modelbang.addRow(row);
+                    i++;
+                }
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
             }
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn!");
         }
+
     }
 
     private void clickListLM(MouseEvent evt) {
@@ -264,7 +270,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     //CONTROL
     private void insertMon() {
         Regex r = new Regex();
-        if (r.checkMamon(txtMaMon) && r.checkTenmon(txtTenMon) && r.checkDongia(txtDonGia)) {
+        if (r.checkTenmon(txtTenMon) && r.checkDongia(txtDonGia)) {
             Menu menu = getmodelMon();
             try {
                 daomenu.insert(menu);
@@ -273,7 +279,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
-                e.printStackTrace();
             }
         } else {
             new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());
@@ -283,7 +288,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void updateMon() {
         Regex r = new Regex();
-        if (r.checkMamon(txtMaMon) && r.checkTenmon(txtTenMon) && r.checkDongia(txtDonGia)) {
+        if (r.checkTenmon(txtTenMon) && r.checkDongia(txtDonGia)) {
             String cbo = (String) cboDanhMuc.getSelectedItem();
             String[] maLoai = cbo.split("-");
             List<Menu> list = daomenu.SelectByIDmaloai(maLoai[1]);
@@ -428,6 +433,30 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         });
     }
 
+    private String taoMaMon() {
+        if (!cboDanhMuc.getSelectedItem().toString().equals("")) {
+            String[] ml = cboDanhMuc.getSelectedItem().toString().split("-");
+            List<Menu> list = daomenu.SelectByIDmaloai(ml[1]);
+            String mm;
+            int i = 1;
+            mm = ml[1] + "0" + i;
+            for (Menu m : list) {
+                if (m.getMaMon().equals(mm)) {
+                    i++;
+                    if (i < 10) {
+                        mm = ml[1] + "0" + i;
+                    } else {
+                        mm = ml[1] + i;
+                    }
+                }
+
+            }
+
+            return mm;
+        }
+        return "";
+    }
+
     //CONTROL
     /**
      * This method is called from within the constructor to initialize the form.
@@ -525,13 +554,14 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             }
         });
 
+        txtMaMon.setEditable(false);
         txtMaMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaMon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
         txtTenMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtTenMon.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
-        cboDanhMuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "PHIN Coffee", "Espresso Coffee", "Trà", "Bánh mì", "Bánh ngọt", "Thức uống" }));
+        cboDanhMuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PHIN Coffee", "Espresso Coffee", "Trà", "Bánh mì", "Bánh ngọt", "Thức uống" }));
         cboDanhMuc.setFocusable(false);
 
         lblMaMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -607,10 +637,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         pnlMon.setLayout(pnlMonLayout);
         pnlMonLayout.setHorizontalGroup(
             pnlMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMonLayout.createSequentialGroup()
-                .addGap(158, 158, 158)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(214, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMonLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -628,9 +654,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                             .addComponent(txtMaMon, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cboDanhMuc, 0, 360, Short.MAX_VALUE)
                             .addComponent(txtDonGia, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(lblAnhMon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(16, 16, 16))
+            .addGroup(pnlMonLayout.createSequentialGroup()
+                .addGap(158, 158, 158)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlMonLayout.setVerticalGroup(
             pnlMonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -676,8 +706,8 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         lstLoaiMon.setAlignmentY(1.0F);
         lstLoaiMon.setFocusable(false);
         lstLoaiMon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lstLoaiMonMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lstLoaiMonMousePressed(evt);
             }
         });
         jScrollPane3.setViewportView(lstLoaiMon);
@@ -904,10 +934,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         this.deleteMon();
     }//GEN-LAST:event_btnDeleteMActionPerformed
 
-    private void lstLoaiMonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLoaiMonMouseClicked
-        this.clickListLM(evt);
-    }//GEN-LAST:event_lstLoaiMonMouseClicked
-
     private void btnNewLMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewLMActionPerformed
         this.clearLoaiMon();
     }//GEN-LAST:event_btnNewLMActionPerformed
@@ -931,6 +957,10 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     private void lblAnhMonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblAnhMonMousePressed
         this.chonAnh();
     }//GEN-LAST:event_lblAnhMonMousePressed
+
+    private void lstLoaiMonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstLoaiMonMousePressed
+        this.clickListLM(evt);
+    }//GEN-LAST:event_lstLoaiMonMousePressed
 
     /**
      * @param args the command line arguments

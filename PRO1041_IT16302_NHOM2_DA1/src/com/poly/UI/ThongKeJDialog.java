@@ -29,7 +29,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -56,17 +58,19 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     float tthd = 0;
     float ttmon;
     float tongtienHN = 0;
-
+    boolean ktbieudo = true;
     private Locale localeVN = new Locale("vi", "VN");
     private NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-
     SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
-
+    LocalDateTime now = LocalDateTime.now();
+    int year = now.getYear();
     MenuDAO daoMenu = new MenuDAO();
     HoaDonDAO hddao = new HoaDonDAO();
     ThongKeDAO tkdao = new ThongKeDAO();
     NhanVienDAO nvdao = new NhanVienDAO();
     HoaDonCTDAO hdctdao = new HoaDonCTDAO();
+    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+    DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 
     List<HoaDon> list = new ArrayList<HoaDon>();
 
@@ -76,7 +80,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         this.LoadHDhomnay();
         this.LoadLichSuHD();
         this.showTenNV();
-        this.showLineChart();
+        this.showLineChart(year);
+        this.HeaderRenderer(tblThongKe);
+        this.HeaderRendererHN(tblHoaDon);
+        this.HeaderRendererCTHD(tblChiTietHoaDon);
+        this.HeaderRendererHN(tblLichSuHoaDon);
+        this.HeaderRendererCTHD(tblCTHD);
     }
 
     //TABLE
@@ -194,7 +203,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                     listnv.getTenNV()
                 };
                 model.addRow(row);
-                tongHD = hd.getMaHD();
+                tongHD++;
                 tongTien += hd.getTongTien();
                 i++;
             }
@@ -326,49 +335,30 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }
 
     //CHART
-    private void showLineChart() {
+    private void showLineChart(int year) {
         //create dataset for the graph
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        LocalDateTime now = LocalDateTime.now();
-        int year = now.getYear();
-
         for (int month = 1; month < 13; month++) {
             List<HoaDon> hd = tkdao.selectDoanhThu(month, year);
             for (HoaDon hoaDon : hd) {
                 dataset.setValue(hoaDon.getTongTien(), "Doanh thu", "Tháng " + month);
             }
         }
-
         //CREATE CHART
         JFreeChart linechart = ChartFactory.createLineChart(
                 "Biểu đồ doanh thu năm " + year,
-                "Tháng",
+                "",
                 "Doanh thu (VNĐ)", dataset, PlotOrientation.VERTICAL, false, true, false);
 
         //create plot object
         CategoryPlot lineCategoryPlot = linechart.getCategoryPlot();
         lineCategoryPlot.setRangeGridlinePaint(Color.GRAY);
         lineCategoryPlot.setBackgroundPaint(Color.white);
-
         //create render object to change the moficy the line properties like color
         LineAndShapeRenderer lineRenderer = (LineAndShapeRenderer) lineCategoryPlot.getRenderer();
         Color lineChartColor = new Color(0, 204, 0);
         lineRenderer.setSeriesPaint(0, lineChartColor);
-
         //CHART FRAME
-//        ChartFrame frame = new ChartFrame("Line chart", linechart, true);
-//        frame.setSize(1600, 900);
-//        frame.setLocationRelativeTo(null);
-//        frame.setVisible(true);
-//        frame.setResizable(false);
-//
-//        JDialog jdl = new JDialog(this);
-//        jdl.setContentPane(frame.getChartPanel());
-//        jdl.setSize(frame.getSize());
-//        jdl.setTitle("Xem Hóa Đơn");
-//        jdl.setLocationRelativeTo(null);
-//        jdl.setVisible(true);
         jpnBieuDo.removeAll();
         jpnBieuDo.setLayout(new java.awt.BorderLayout());
         ChartPanel CP = new ChartPanel(linechart);
@@ -377,12 +367,9 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
     }
 
-    public void showBarChart() {
+    public void showBarChart(int year) {
         //Khởi tạo datatset cho chart
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        LocalDateTime now = LocalDateTime.now();
-        int year = now.getYear();
 
         for (int month = 1; month < 13; month++) {
             List<HoaDon> hd = tkdao.selectDoanhThu(month, year);
@@ -407,11 +394,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         barRender.setSeriesPaint(0, barColor);
 
         //Tạo khung chart
-//        ChartFrame frame = new ChartFrame("Line chart", barChart, true);
-//        frame.setVisible(true);
-//        frame.setSize(1600, 900);
-//        frame.setLocationRelativeTo(null);
-//        frame.setResizable(false);
         jpnBieuDo.removeAll();
         jpnBieuDo.setLayout(new java.awt.BorderLayout());
         ChartPanel CP = new ChartPanel(barChart);
@@ -422,11 +404,72 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private void exportExcelFile(JTable tbl, String tenfile) {
         try {
             EpExcel excel = new EpExcel();
-            excel.exportTable(tbl, new File(tenfile + ".xls"));
+            excel.exportTable(tbl, new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + tenfile + ".xls"));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            new ThongBaoJDialog(null, true).alert(2, "Xuất Excel thất bại!");
+            System.out.println(e);
         }
     }
+
+    private void HeaderRenderer(JTable table) {
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+    }
+
+    private void HeaderRendererHN(JTable table) {
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+    }
+
+    private void HeaderRendererCTHD(JTable table) {
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+    }
+
+    private void prevBieuDo(boolean kt) {
+        year--;
+        if (kt) {
+            this.showLineChart(year);
+            btnNext.setEnabled(true);
+        } else {
+            this.showBarChart(year);
+            btnNext.setEnabled(true);
+        }
+
+    }
+
+    private void nextBieuDo(boolean kt) {
+        year++;
+        if (kt) {
+            if (year == now.getYear()) {
+                this.showLineChart(year);
+                btnNext.setEnabled(false);
+            } else {
+                this.showLineChart(year);
+            }
+        } else {
+            if (year == now.getYear()) {
+                this.showBarChart(year);
+                btnNext.setEnabled(false);
+            } else {
+                this.showBarChart(year);
+            }
+        }
+
+    }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -483,6 +526,9 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlCTHD = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblCTHD = new javax.swing.JTable();
+        jpnFloor = new javax.swing.JPanel();
+        btnPrev = new javax.swing.JButton();
+        btnNext = new javax.swing.JButton();
         jpnBieuDo = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -523,9 +569,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         lblSort.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblSort.setText("Sort:");
 
+        txtTongHDHomNay.setEditable(false);
         txtTongHDHomNay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtTongHDHomNay.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
+        txtTongTienHomNay.setEditable(false);
         txtTongTienHomNay.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtTongTienHomNay.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
 
@@ -538,7 +586,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
 
-        tblHoaDon.setAutoCreateRowSorter(true);
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -575,6 +622,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         btnXuatExcel1.setBackground(new java.awt.Color(255, 255, 255));
         btnXuatExcel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnXuatExcel1.setText("Xuất Excel");
+        btnXuatExcel1.setFocusable(false);
         btnXuatExcel1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXuatExcel1ActionPerformed(evt);
@@ -637,7 +685,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlChiTiet.setBackground(new java.awt.Color(255, 255, 255));
         pnlChiTiet.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CHI TIẾT HÓA ĐƠN", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
-        tblChiTietHoaDon.setAutoCreateRowSorter(true);
         tblChiTietHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblChiTietHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -729,7 +776,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pblLichSuHoaDon.setBackground(new java.awt.Color(255, 255, 255));
         pblLichSuHoaDon.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "LỊCH SỬ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
-        tblLichSuHoaDon.setAutoCreateRowSorter(true);
         tblLichSuHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblLichSuHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -905,12 +951,13 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pnlXuatExcel2.setBackground(new java.awt.Color(255, 255, 255));
         pnlXuatExcel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         pnlXuatExcel2.setText("Xuất Excel");
+        pnlXuatExcel2.setFocusable(false);
         pnlXuatExcel2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pnlXuatExcel2ActionPerformed(evt);
@@ -927,7 +974,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                     .addComponent(jScrollPane4)
                     .addComponent(pnlLocDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pblLichSuHoaDonLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlXuatExcel2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -946,7 +993,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         pnlCTHD.setBackground(new java.awt.Color(255, 255, 255));
         pnlCTHD.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CHI TIẾT HÓA ĐƠN", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
-        tblCTHD.setAutoCreateRowSorter(true);
         tblCTHD.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblCTHD.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -978,7 +1024,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             pnlCTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCTHDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 891, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 879, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlCTHDLayout.setVerticalGroup(
@@ -1022,18 +1068,50 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         tabThongKe.addTab("LỊCH SỬ HÓA ĐƠN", pnlLichSu);
 
+        jpnFloor.setBackground(new java.awt.Color(255, 255, 255));
+        jpnFloor.setLayout(new java.awt.BorderLayout());
+
+        btnPrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32.png"))); // NOI18N
+        btnPrev.setBorderPainted(false);
+        btnPrev.setContentAreaFilled(false);
+        btnPrev.setFocusable(false);
+        btnPrev.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_first_x32blue.png"))); // NOI18N
+        btnPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevActionPerformed(evt);
+            }
+        });
+        jpnFloor.add(btnPrev, java.awt.BorderLayout.LINE_START);
+
+        btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_last_x32.png"))); // NOI18N
+        btnNext.setBorderPainted(false);
+        btnNext.setContentAreaFilled(false);
+        btnNext.setEnabled(false);
+        btnNext.setFocusable(false);
+        btnNext.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/control_last_x32blue.png"))); // NOI18N
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
+        jpnFloor.add(btnNext, java.awt.BorderLayout.LINE_END);
+
+        jpnBieuDo.setBackground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout jpnBieuDoLayout = new javax.swing.GroupLayout(jpnBieuDo);
         jpnBieuDo.setLayout(jpnBieuDoLayout);
         jpnBieuDoLayout.setHorizontalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1595, Short.MAX_VALUE)
+            .addGap(0, 1463, Short.MAX_VALUE)
         );
         jpnBieuDoLayout.setVerticalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 808, Short.MAX_VALUE)
+            .addGap(0, 812, Short.MAX_VALUE)
         );
 
-        tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnBieuDo);
+        jpnFloor.add(jpnBieuDo, java.awt.BorderLayout.CENTER);
+
+        tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnFloor);
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
@@ -1065,12 +1143,16 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLineChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLineChartActionPerformed
-        this.showLineChart();
+        this.showLineChart(now.getYear());
+        ktbieudo = true;
+        year = now.getYear();
         tabThongKe.setSelectedIndex(2);
     }//GEN-LAST:event_btnLineChartActionPerformed
 
     private void btnBarChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarChartActionPerformed
-        this.showBarChart();
+        this.showBarChart(now.getYear());
+        ktbieudo = false;
+        year = now.getYear();
         tabThongKe.setSelectedIndex(2);
     }//GEN-LAST:event_btnBarChartActionPerformed
 
@@ -1105,6 +1187,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private void pnlXuatExcel2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pnlXuatExcel2ActionPerformed
         this.exportExcelFile(tblLichSuHoaDon, "Thông kê lịch sử hóa đơn");
     }//GEN-LAST:event_pnlXuatExcel2ActionPerformed
+
+    private void btnPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevActionPerformed
+        this.prevBieuDo(ktbieudo);
+    }//GEN-LAST:event_btnPrevActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        this.nextBieuDo(ktbieudo);
+    }//GEN-LAST:event_btnNextActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1155,6 +1245,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnBarChart;
     private javax.swing.JButton btnLineChart;
     private javax.swing.JButton btnLocTheoNgay;
+    private javax.swing.JButton btnNext;
+    private javax.swing.JButton btnPrev;
     private javax.swing.JButton btnXuatExcel1;
     private javax.swing.JComboBox<String> cboNhanVien;
     private javax.swing.JComboBox<String> cboSoTien;
@@ -1169,6 +1261,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel jpnBieuDo;
+    private javax.swing.JPanel jpnFloor;
     private javax.swing.JLabel lblDenNgay;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblNhanVien;
