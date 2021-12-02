@@ -38,11 +38,15 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
     }
 
     private void init() {
+        this.setLocationRelativeTo(null);
         this.setIconImage(XImage.getAppIcon());
-        String usernamem = "thecoffeclubverify@gmail.com", passwordm = "CoffeeDuan1";
-        setLocationRelativeTo(null);
         String path = new QRCode().creatQRCode(username + "-" + password+"-NV");
         lblQRcode.setIcon(XImage.read("qr_png.png"));
+        this.sentEmail(path);
+    }
+
+    private void sentEmail(String path){
+        String usernamem = "thecoffeclubverify@gmail.com", passwordm = "CoffeeDuan1";
         try {
             EmailAttachment attachment = new EmailAttachment();
             attachment.setPath(path);
@@ -60,13 +64,12 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
             email.setMsg("Mã QR của bạn là: ");
             email.attach(attachment);
             email.send();
-            lblThongBao.setText("Mã QR đã gửi vào Email của tài khoản và lưu tại màn hình chính!");
+            txtThongBao.setText("Mã QR đã gửi vào Email của tài khoản và lưu tại màn hình chính!");
         } catch (EmailException e) {
-            System.out.println(e.getMessage());
+            txtThongBao.setText("Mã QR đã lưu tại màn hình chính!\nInternet không khả dụng, không thể gửi QR code đến email!");
         }
-
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,16 +80,20 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         lblQRcode = new javax.swing.JLabel();
-        lblThongBao = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtThongBao = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Mã QR tài khoản của nhân viên");
 
         lblQRcode.setPreferredSize(new java.awt.Dimension(500, 500));
 
-        lblThongBao.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblThongBao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblThongBao.setText("Thông Báo");
+        jScrollPane1.setBorder(null);
+
+        txtThongBao.setEditable(false);
+        txtThongBao.setBorder(null);
+        txtThongBao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(txtThongBao);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -96,7 +103,7 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblQRcode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblThongBao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -104,9 +111,9 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblQRcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(lblThongBao)
-                .addGap(33, 33, 33))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -156,7 +163,8 @@ public class MaQRcodeJDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblQRcode;
-    private javax.swing.JLabel lblThongBao;
+    private javax.swing.JTextPane txtThongBao;
     // End of variables declaration//GEN-END:variables
 }

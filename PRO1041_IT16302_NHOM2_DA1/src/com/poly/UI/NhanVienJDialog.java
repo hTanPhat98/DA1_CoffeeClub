@@ -154,6 +154,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.setFormNV(nv);
         this.rownv = -1;
         this.updateStatusNV();
+        tblNhanVien.clearSelection();
     }
 
     private void fillTableNV() {
@@ -278,7 +279,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         btnPrev.setEnabled(edit && !first);
         btnNext.setEnabled(edit && !last);
         btnFinal.setEnabled(edit && !last);
-        tblNhanVien.clearSelection();
     }
 
     private void chonAnh() {
@@ -476,6 +476,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.rowacc = -1;
         this.updateStatusAcc();
         btnTaoQRCode.setEnabled(false);
+        tblAccount.clearSelection();
     }
 
     private void editAcc() {
@@ -497,7 +498,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         btnSaveAcc.setEnabled(!edit);
         btnUpdateAcc.setEnabled(edit);
         btnDeleteAcc.setEnabled(edit);
-        tblAccount.clearSelection();
     }
 
     private void editNVacc(String manv) {
@@ -1221,7 +1221,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
-        tblNhanVien.setAutoCreateRowSorter(true);
         tblNhanVien.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblNhanVien.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1348,7 +1347,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtPassword.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1)));
 
-        tblAccount.setAutoCreateRowSorter(true);
         tblAccount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblAccount.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1703,22 +1701,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(NhanVienJDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
