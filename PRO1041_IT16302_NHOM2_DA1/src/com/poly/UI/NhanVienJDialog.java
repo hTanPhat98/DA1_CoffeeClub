@@ -41,6 +41,9 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form Employee
+     *
+     * @param parent
+     * @param modal
      */
     public NhanVienJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -58,6 +61,8 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     private void init() {
         this.setIconImage(XImage.getAppIcon());
         this.setLocationRelativeTo(null);
+        this.setHeaderTable(tblNhanVien.getTableHeader());
+        this.setHeaderTable(tblAccount.getTableHeader());
         this.fillTableNV();
         this.fillTableAcc();
         this.fillComboBoxMaNV();
@@ -68,8 +73,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.w = lblAnhNhanVien.getWidth();
         this.h = lblAnhNhanVien.getHeight();
         this.addTFtoList();
-        this.setTextFieldEvent();
-
     }
 
     private void addTFtoList() {
@@ -80,6 +83,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         listTF.add(txtCMND);
         listTF.add(txtUsername);
         listTF.add(txtPassword);
+        this.setTextFieldEvent();
     }
 
     private void setHeaderTable(JTableHeader a) {
@@ -315,7 +319,6 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                     btnTaoTK.setEnabled(true);
                 }
             }
-
         } catch (Exception e) {
             new ThongBaoJDialog(null, true).alert(2, "Lỗi truy vấn dữ liệu!");
         }
@@ -635,7 +638,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
 
     private void setTextFieldEvent() {
         for (JTextField txt : listTF) {
-            eventClickTxt(txt);
+            this.eventClickTxt(txt);
         }
     }
 

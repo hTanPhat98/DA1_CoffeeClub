@@ -13,6 +13,7 @@ import com.poly.Helper.XImage;
 import com.poly.Model.LoaiMon;
 import com.poly.Model.Menu;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -24,9 +25,13 @@ import java.util.Locale;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -51,11 +56,13 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.indexM = -1;
         this.indexLM = -1;
+        this.setHeaderTable(tblLoaiMon.getTableHeader());
+        this.HeaderRendererCTHD(tblLoaiMon);
         this.loadToListLM();
         this.updateStatusMon();
         this.updateStatusLoaiMon();
-        addTFtoList();
-        setTextFieldEvent();
+        this.addTFtoList();
+        
     }
 
     int indexM = -1, indexLM = -1;
@@ -218,7 +225,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
 
     private void editListDanhMuc() {
         if (lstLoaiMon.getSelectedIndex() == 0) {
-            fillToTableMenu();
+            this.fillToTableMenu();
         } else {
             String maloai = (String) lstLoaiMon.getSelectedValue();
             String[] key = maloai.split("-");
@@ -393,23 +400,16 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     List<JTextField> listTF = new ArrayList<>();
 
     private void addTFtoList() {
-        listTF.add(txtMaMon);
         listTF.add(txtTenMon);
         listTF.add(txtDonGia);
         listTF.add(txtMaLoaiMon);
         listTF.add(txtTenLoaiMon);
-
+        this.setTextFieldEvent();
     }
 
     private void setTextFieldEvent() {
         for (JTextField txt : listTF) {
-            eventClickTxt(txt);
-        }
-    }
-
-    private void resetBorderTF() {
-        for (JTextField txt : listTF) {
-            txt.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+            this.eventClickTxt(txt);
         }
     }
 
@@ -429,7 +429,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             public void keyReleased(KeyEvent e) {
 
             }
-
         });
     }
 
@@ -449,12 +448,26 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                         mm = ml[1] + i;
                     }
                 }
-
             }
-
             return mm;
         }
         return "";
+    }
+
+    private void setHeaderTable(JTableHeader a) {
+        JTableHeader header = a;
+        header.setFont(new Font("Dialog", Font.BOLD, 14));
+    }
+
+    private void HeaderRendererCTHD(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
     }
 
     //CONTROL
@@ -741,6 +754,11 @@ public class ThucDonJDialog extends javax.swing.JDialog {
             }
         });
         jScrollPane1.setViewportView(tblLoaiMon);
+        if (tblLoaiMon.getColumnModel().getColumnCount() > 0) {
+            tblLoaiMon.getColumnModel().getColumn(0).setMinWidth(50);
+            tblLoaiMon.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblLoaiMon.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout pnlLoaiMonLayout = new javax.swing.GroupLayout(pnlLoaiMon);
         pnlLoaiMon.setLayout(pnlLoaiMonLayout);

@@ -119,17 +119,17 @@ public class Regex {
     }
     
     //KHU VUC VA BAN
-    public boolean checkMaKV(JTextField txt) {
-        String text = txt.getText();
-        String rgx = "^[A-Z0-9]{3,5}$";
-        if (text.matches(rgx)) {
-            return true;
-        } else {
-            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-            kq = kq + "Mã khu vực chỉ bao gồm kí tự in hoa không dấu và số, tối tiểu 3-5 kí tự!\n";
-            return false;
-        }
-    }
+//    public boolean checkMaKV(JTextField txt) {
+//        String text = txt.getText();
+//        String rgx = "^[A-Z0-9]{3,5}$";
+//        if (text.matches(rgx)) {
+//            return true;
+//        } else {
+//            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
+//            kq = kq + "Mã khu vực chỉ bao gồm kí tự in hoa không dấu và số, tối tiểu 3-5 kí tự!\n";
+//            return false;
+//        }
+//    }
 
     public boolean checkTenKV(JTextField txt) {
         String text = txt.getText();
@@ -228,7 +228,7 @@ public class Regex {
     
     public boolean checkDongia(JTextField txt){
         String text = txt.getText();
-        String rgx = "^1[0-9]{5,6}$";
+        String rgx = "^1[0-9]{4,5}$";
         if (text.matches(rgx)) {
             return true;
         }else{

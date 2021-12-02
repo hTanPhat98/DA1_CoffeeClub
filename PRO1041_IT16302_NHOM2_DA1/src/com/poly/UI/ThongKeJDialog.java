@@ -19,6 +19,7 @@ import com.poly.Model.Menu;
 import com.poly.Model.NhanVien;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -33,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -72,11 +74,16 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
     DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 
-    List<HoaDon> list = new ArrayList<HoaDon>();
+    List<HoaDon> list = new ArrayList<>();
 
     private void init() {
         this.setIconImage(XImage.getAppIcon());
         this.setLocationRelativeTo(null);
+        this.setHeaderTable(tblCTHD.getTableHeader());
+        this.setHeaderTable(tblChiTietHoaDon.getTableHeader());
+        this.setHeaderTable(tblHoaDon.getTableHeader());
+        this.setHeaderTable(tblLichSuHoaDon.getTableHeader());
+        this.setHeaderTable(tblThongKe.getTableHeader());
         this.LoadHDhomnay();
         this.LoadLichSuHD();
         this.showTenNV();
@@ -94,14 +101,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         model.setRowCount(0);
         int i = 1;
         try {
-
-            LocalDateTime now = LocalDateTime.now();
-            int year = now.getYear();
             int month = now.getMonthValue();
             int day = now.getDayOfMonth();
 
-            List<HoaDon> list = tkdao.selectAll(day, month, year);
-            for (HoaDon hd : list) {
+            List<HoaDon> listhn = tkdao.selectAll(day, month, year);
+            for (HoaDon hd : listhn) {
                 NhanVien listnv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
                     i,
@@ -128,8 +132,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         model.setRowCount(0);
         int i = 1;
         try {
-            LocalDateTime now = LocalDateTime.now();
-            int year = now.getYear();
             int month = now.getMonthValue();
             int day = now.getDayOfMonth();
             List<HDTHONGKE> listHD = tkdao.selectHDNV(day, month, year
@@ -192,8 +194,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         model2.setRowCount(0);
         int i = 1;
         try {
-            List<HoaDon> list = tkdao.selectLichSuHD();
-            for (HoaDon hd : list) {
+            List<HoaDon> listhd = tkdao.selectLichSuHD();
+            for (HoaDon hd : listhd) {
                 NhanVien listnv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
                     i,
@@ -220,8 +222,8 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
     private void showTenNV() {
 
-        List<HDTHONGKE> list = tkdao.selectByTenNV();
-        for (HDTHONGKE nv : list) {
+        List<HDTHONGKE> listhdtk = tkdao.selectByTenNV();
+        for (HDTHONGKE nv : listhdtk) {
             cboNhanVien.addItem(nv.getTenNV());
         }
     }
@@ -263,15 +265,15 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         try {
             List<HoaDonCT> listCTHD = hdctdao.selectByHDCT(MaHD);
 
-            for (HoaDonCT list : listCTHD) {
-                Menu mon = daoMenu.selectById(list.getMaMon());
-                ttmon = list.getSoLuong() * list.getDonGia();
+            for (HoaDonCT hdct : listCTHD) {
+                Menu mon = daoMenu.selectById(hdct.getMaMon());
+                ttmon = hdct.getSoLuong() * hdct.getDonGia();
                 Object[] row = {
                     i,
-                    list.getMaHDCT(),
+                    hdct.getMaHDCT(),
                     mon.getTenMon(),
-                    currencyVN.format(list.getDonGia()),
-                    list.getSoLuong(),
+                    currencyVN.format(hdct.getDonGia()),
+                    hdct.getSoLuong(),
                     currencyVN.format(ttmon)
                 };
                 model.addRow(row);
@@ -290,13 +292,13 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         int i = 1;
         try {
             List<HoaDon> listhd = tkdao.findNgayThangNam(formatter.format(dt1), formatter.format(dt2));
-            for (HoaDon list : listhd) {
-                NhanVien nv = nvdao.selectById(list.getMaNV());
+            for (HoaDon hd : listhd) {
+                NhanVien nv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
                     i,
-                    list.getMaHD(),
-                    dateformat.format(list.getNgayHD()),
-                    currencyVN.format(list.getTongTien()),
+                    hd.getMaHD(),
+                    dateformat.format(hd.getNgayHD()),
+                    currencyVN.format(hd.getTongTien()),
                     nv.getTenNV()
                 };
                 model.addRow(row);
@@ -316,13 +318,13 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         } else {
             try {
                 List<HoaDon> listHD = tkdao.selectByKhoangTien(money);
-                for (HoaDon list : listHD) {
-                    NhanVien nv = nvdao.selectById(list.getMaNV());
+                for (HoaDon hd : listHD) {
+                    NhanVien nv = nvdao.selectById(hd.getMaNV());
                     Object[] row = {
                         i,
-                        list.getMaHD(),
-                        dateformat.format(list.getNgayHD()),
-                        currencyVN.format(list.getTongTien()),
+                        hd.getMaHD(),
+                        dateformat.format(hd.getNgayHD()),
+                        currencyVN.format(hd.getTongTien()),
                         nv.getTenNV()
                     };
                     model.addRow(row);
@@ -381,7 +383,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         //Tạo chart
         JFreeChart barChart = ChartFactory.createBarChart(
                 "Biểu đồ doanh thu năm " + year,
-                "Tháng",
+                "",
                 "Doanh thu", dataset, PlotOrientation.VERTICAL, false, true, false);
 
         //Tạo thuộc tính hiện thị của đối tượng
@@ -469,7 +471,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
     }
 
-    
+    private void setHeaderTable(JTableHeader a) {
+        JTableHeader header = a;
+        header.setFont(new Font("Dialog", Font.BOLD, 14));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -614,6 +619,17 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
         jScrollPane2.setViewportView(tblHoaDon);
+        if (tblHoaDon.getColumnModel().getColumnCount() > 0) {
+            tblHoaDon.getColumnModel().getColumn(0).setMinWidth(50);
+            tblHoaDon.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblHoaDon.getColumnModel().getColumn(0).setMaxWidth(50);
+            tblHoaDon.getColumnModel().getColumn(1).setMinWidth(100);
+            tblHoaDon.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tblHoaDon.getColumnModel().getColumn(1).setMaxWidth(100);
+            tblHoaDon.getColumnModel().getColumn(2).setMinWidth(150);
+            tblHoaDon.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tblHoaDon.getColumnModel().getColumn(2).setMaxWidth(150);
+        }
 
         lblVnd.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblVnd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -708,6 +724,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblChiTietHoaDon.setRowHeight(20);
         tblChiTietHoaDon.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblChiTietHoaDon);
+        if (tblChiTietHoaDon.getColumnModel().getColumnCount() > 0) {
+            tblChiTietHoaDon.getColumnModel().getColumn(0).setMinWidth(50);
+            tblChiTietHoaDon.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblChiTietHoaDon.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout pnlChiTietLayout = new javax.swing.GroupLayout(pnlChiTiet);
         pnlChiTiet.setLayout(pnlChiTietLayout);
@@ -812,6 +833,17 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
         jScrollPane4.setViewportView(tblLichSuHoaDon);
+        if (tblLichSuHoaDon.getColumnModel().getColumnCount() > 0) {
+            tblLichSuHoaDon.getColumnModel().getColumn(0).setMinWidth(50);
+            tblLichSuHoaDon.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblLichSuHoaDon.getColumnModel().getColumn(0).setMaxWidth(50);
+            tblLichSuHoaDon.getColumnModel().getColumn(1).setMinWidth(100);
+            tblLichSuHoaDon.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tblLichSuHoaDon.getColumnModel().getColumn(1).setMaxWidth(100);
+            tblLichSuHoaDon.getColumnModel().getColumn(2).setMinWidth(125);
+            tblLichSuHoaDon.getColumnModel().getColumn(2).setPreferredWidth(125);
+            tblLichSuHoaDon.getColumnModel().getColumn(2).setMaxWidth(125);
+        }
 
         pnlLocDoanhThu.setBackground(new java.awt.Color(255, 255, 255));
         pnlLocDoanhThu.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bộ lọc & Biểu đồ", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
@@ -973,9 +1005,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pblLichSuHoaDonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
                     .addComponent(pnlLocDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pblLichSuHoaDonLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pnlXuatExcel2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(pnlXuatExcel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         pblLichSuHoaDonLayout.setVerticalGroup(
@@ -1017,6 +1047,11 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblCTHD.getTableHeader().setResizingAllowed(false);
         tblCTHD.getTableHeader().setReorderingAllowed(false);
         jScrollPane5.setViewportView(tblCTHD);
+        if (tblCTHD.getColumnModel().getColumnCount() > 0) {
+            tblCTHD.getColumnModel().getColumn(0).setMinWidth(50);
+            tblCTHD.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblCTHD.getColumnModel().getColumn(0).setMaxWidth(50);
+        }
 
         javax.swing.GroupLayout pnlCTHDLayout = new javax.swing.GroupLayout(pnlCTHD);
         pnlCTHD.setLayout(pnlCTHDLayout);

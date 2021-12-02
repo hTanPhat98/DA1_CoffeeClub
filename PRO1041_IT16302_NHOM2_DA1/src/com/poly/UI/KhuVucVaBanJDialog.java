@@ -7,15 +7,21 @@ package com.poly.UI;
 
 import com.poly.DAO.BanDAO;
 import com.poly.DAO.KhuVucDAO;
+import com.poly.Helper.Regex;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
 import com.poly.Model.KhuVuc;
-import java.awt.event.MouseEvent;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -32,9 +38,11 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     private void init() {
         this.setIconImage(XImage.getAppIcon());
         this.setLocationRelativeTo(null);
-        fillToListKV();
-        updateStatutTable();
-        updateStatutKV();
+        this.setHeaderTable(tblQuanLyKhuVucBan.getTableHeader());
+        this.fillToListKV();
+        this.updateStatutTable();
+        this.updateStatutKV();
+        this.addTFtoList();
     }
 
     int index = -1;
@@ -193,11 +201,10 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     // CONTROL
     private void clearFormKV() {
         KhuVuc kv = new KhuVuc();
-        kv.setMaKV("");
+        kv.setMaKV(taoMaKV());
         kv.setTenKV("");
         kv.setTienIch("");
         this.setModelkhuvuc(kv);
-        //this.fillTableBan();
         this.index = -1;
         updateStatutKV();
     }
@@ -214,15 +221,20 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     private void insertKhuvuc() {
-        KhuVuc kv = getModelKhuvuc();
-        try {
-            daokv.insert(kv);
-            this.fillToListKV();
-            new ThongBaoJDialog(null, true).alert(1, "Lưu thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Lưu thất bại!");
-
+        Regex r = new Regex();
+        if (r.checkTenKV(txtTenKV)) {
+            KhuVuc kv = getModelKhuvuc();
+            try {
+                daokv.insert(kv);
+                this.fillToListKV();
+                new ThongBaoJDialog(null, true).alert(1, "Lưu thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Lưu thất bại!");
+            }
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, r.getKq());
         }
+
     }
 
     private void deleteKhuVuc() {
@@ -231,7 +243,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             try {
                 daokv.delete(makv);
                 this.fillToListKV();
-                clearFormKV();
+                this.clearFormKV();
                 new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
@@ -240,53 +252,60 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     private void updateKhuvuc() {
-        KhuVuc kv = getModelKhuvuc();
+        Regex r = new Regex();
+        if (r.checkTenKV(txtTenKV)) {
+            KhuVuc kv = getModelKhuvuc();
 
-        try {
-            daokv.update(kv);
-            this.fillToListKV();
-            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+            try {
+                daokv.update(kv);
+                this.fillToListKV();
+                new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+            }
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, r.getKq());
         }
     }
 
     private void insertBan() {
-        String cbo = (String) cboKhuVucBan.getSelectedItem();
-        String[] makhuvuc = cbo.split("-"); //xử cắt chuỗi lấy makv tại cboKhuVucBan
-        List<Ban> list = daoban.findByIdKhuVuc(makhuvuc[1]);
-
-        if (list.size() == 12) {
-            new ThongBaoJDialog(null, true).alert(2, "Khu vực này đã đạt số bàn tối đa!");
-        } else if (list.size() < 12) {
-
-            Ban model = getModelBan();
-
-            try {
-                daoban.insert(model);
-                fillToTableBan();
-                new ThongBaoJDialog(null, true).alert(1, "Thêm thành công!");
-            } catch (Exception e) {
-                new ThongBaoJDialog(null, true).alert(2, "Thêm thất bại!");
+        Regex r = new Regex();
+        if (r.checkMaBan(txtMaBan) && r.checkTenBan(txtMaKV)) {
+            String cbo = (String) cboKhuVucBan.getSelectedItem();
+            String[] makhuvuc = cbo.split("-"); //xử cắt chuỗi lấy makv tại cboKhuVucBan
+            List<Ban> list = daoban.findByIdKhuVuc(makhuvuc[1]);
+            if (list.size() == 12) {
+                new ThongBaoJDialog(null, true).alert(2, "Khu vực này đã đạt số bàn tối đa!");
+            } else if (list.size() < 12) {
+                Ban model = getModelBan();
+                try {
+                    daoban.insert(model);
+                    this.fillToTableBan();
+                    this.clearFormBan();
+                    new ThongBaoJDialog(null, true).alert(1, "Thêm thành công!");
+                } catch (Exception e) {
+                    new ThongBaoJDialog(null, true).alert(2, "Thêm thất bại!");
+                }
             }
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, r.getKq());
         }
     }
 
     private void updateBan() {
-        String cbo = (String) cboKhuVucBan.getSelectedItem();
-        String[] makhuvuc = cbo.split("-"); //xử cắt chuỗi lấy makv tại cboKhuVucBan
-        List<Ban> list = daoban.findByIdKhuVuc(makhuvuc[1]);
-
-        Ban ban = getModelBan();
-
-        try {
-            daoban.update(ban);
-            fillToTableBan();
-            new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
-        } catch (Exception e) {
-            new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+        Regex r = new Regex();
+        if (r.checkMaBan(txtMaBan) && r.checkTenBan(txtMaKV)) {
+            Ban ban = getModelBan();
+            try {
+                daoban.update(ban);
+                fillToTableBan();
+                new ThongBaoJDialog(null, true).alert(1, "Cập nhật thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Cập nhật thất bại!");
+            }
+        } else {
+            new ThongBaoJDialog(null, true).alert(2, r.getKq());
         }
-
     }
 
     private void deleteban() {
@@ -295,7 +314,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             try {
                 daoban.delete(maban);
                 this.fillToListKV();
-                clearFormBan();
+                this.clearFormBan();
                 new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
@@ -314,13 +333,68 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     private void updateStatutKV() {
         boolean edit = (this.index >= 0);
-
-        txtMaKV.setEditable(!edit);
         btnSaveKV.setEnabled(!edit);
         btnUpdateKV.setEnabled(edit);
         btnDeleteKV.setEnabled(edit);
     }
 
+    private String taoMaKV() {
+        String mn = "KV";
+        String mnv;
+        int i = 1;
+        mnv = mn + "0" + i;
+        List<KhuVuc> list = daokv.selectAll();
+        for (KhuVuc kv : list) {
+            if (kv.getMaKV().equals(mnv)) {
+                i++;
+                if (i < 10) {
+                    mnv = mn + "0" + i;
+                } else {
+                    mnv = mn + i;
+                }
+            }
+        }
+        return mnv;
+    }
+
+    private void setHeaderTable(JTableHeader a) {
+        JTableHeader header = a;
+        header.setFont(new Font("Dialog", Font.BOLD, 14));
+    }
+    
+    List<JTextField> listTF = new ArrayList<>();
+
+    private void addTFtoList() {
+        listTF.add(txtMaBan);
+        listTF.add(txtTenBan);
+        listTF.add(txtTenKV);
+        this.setTextFieldEvent();
+    }
+    
+     private void setTextFieldEvent() {
+        for (JTextField txt : listTF) {
+            this.eventClickTxt(txt);
+        }
+    }
+    
+    private void eventClickTxt(JTextField txt) {
+        txt.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                txt.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

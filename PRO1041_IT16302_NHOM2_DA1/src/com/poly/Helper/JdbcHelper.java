@@ -79,7 +79,8 @@ public class JdbcHelper {
     public JdbcHelper() {
         try {
             connection = DriverManager.getConnection(dburl, username, password);
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            
         }
     }
 

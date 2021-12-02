@@ -86,7 +86,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.setHeaderTable(tblHoaDon.getTableHeader());
         this.setHeaderTable(tblSanPham.getTableHeader());
-        this.HeaderRenderer(tblHoaDon);
+        this.HeaderRendererDHCT(tblHoaDon);
+        this.HeaderRendererMenu(tblSanPham);
         keyWorld = txtTiemKiemTenMon.getText();
         this.fillTableSP();
         this.fillTTB();
@@ -98,7 +99,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         header.setFont(new Font("Dialog", Font.BOLD, 14));
     }
 
-    private void HeaderRenderer(JTable table) {
+    private void HeaderRendererDHCT(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -109,7 +110,17 @@ public class BanHangJDialog extends javax.swing.JDialog {
         table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
         table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
     }
-
+    
+    private void HeaderRendererMenu(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+    }
+    
     private void fillTableSP() {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
@@ -280,7 +291,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                         }
                     } else {
                         resetHD();
-                        System.out.println(vtT);
                         tabBan.setSelectedIndex(vtT);
                         btnOrder.setEnabled(false);
                         btnThanhToan.setEnabled(false);
@@ -385,7 +395,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
-                    //                    hdct.getMaMon(),
                     hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),
@@ -416,7 +425,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
-                    //                    hdct.getMaMon(),
                     hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),
@@ -469,10 +477,9 @@ public class BanHangJDialog extends javax.swing.JDialog {
             Hashtable map = new Hashtable();
             JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\reportHoaDon.jrxml");
             map.put("MaHD", mahd);
-            new JdbcHelper();
-            JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
+            JdbcHelper jdbc =new JdbcHelper();
+            JasperPrint p = JasperFillManager.fillReport(report, map, jdbc.connection);
             JasperViewer jasperViewer = new JasperViewer(p, false);
-
             JDialog jdl = new JDialog(this);
             jdl.setContentPane(jasperViewer.getContentPane());
             jdl.setSize(jasperViewer.getSize());

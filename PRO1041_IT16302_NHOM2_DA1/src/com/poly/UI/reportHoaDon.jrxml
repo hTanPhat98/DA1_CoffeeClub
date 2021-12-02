@@ -94,7 +94,7 @@ WHERE
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<text><![CDATA[778/B1 Nguyễn Kiệm, P.4, Q. Phú Nhuận, TP. Hồ Chí Minh]]></text>
+				<text><![CDATA[Công viên phần mềm, Quang Trung, Quận 12, Thành phố Hồ Chí Minh, Việt Nam]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="36" width="510" height="40" uuid="014d85a7-7cfa-4fa9-8024-6385d4be6db6"/>
