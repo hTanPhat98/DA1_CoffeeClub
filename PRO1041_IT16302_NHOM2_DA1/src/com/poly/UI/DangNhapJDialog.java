@@ -107,7 +107,7 @@ public class DangNhapJDialog extends javax.swing.JDialog {
     private void getOTP() {
         Regex r = new Regex();
         if (r.checkEmail(txtEmail)) {
-            String usernamem = "thecoffeclubverify@gmail.com", passwordm = "CoffeeDuan1";
+            String usernamem = "thecoffeclubverify@gmail.com", passwordm = "CoffeeDuan1", knm = "";
             boolean OTPTC = false;
             otp = randomOTP();
             List<TKQMK> list = new ArrayList<>();
@@ -128,19 +128,19 @@ public class DangNhapJDialog extends javax.swing.JDialog {
                         email.send();
                         OTPTC = true;
                     } catch (EmailException e) {
-                        System.out.println(e.getMessage());
+                        knm = " Hoặc đường truyền mạng!";
                     }
                 }
             }
             if (OTPTC) {
-                new ThongBaoJDialog(null, true).alert(1, "Lấy OTP thành công!");
+                new ThongBaoJDialog(null, true).alert(1, "Lấy OTP thành công! Vui lòng kiểm tra Email của bạn!");
                 btnGetOTP.setEnabled(false);
-                otp = 0;
             } else {
-                new ThongBaoJDialog(null, true).alert(2, "Lấy OTP thất bại! Kiểm tra lại Email!!");
+                new ThongBaoJDialog(null, true).alert(2, "Lấy OTP thất bại! Kiểm tra lại Email!" + knm);
                 otp = 0;
+                knm = "";
             }
-        }else{
+        } else {
             new ThongBaoJDialog(null, true).alert(2, r.getKq());
         }
 
