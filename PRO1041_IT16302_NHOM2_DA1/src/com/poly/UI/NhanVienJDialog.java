@@ -784,9 +784,9 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         HeaderJPanel.add(lblTitle);
         lblTitle.setBounds(10, 4, 1260, 40);
 
-        lblHeader.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/header_black_1280x50.png"))); // NOI18N
+        lblHeader.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/header_black_1600x50.png"))); // NOI18N
         HeaderJPanel.add(lblHeader);
-        lblHeader.setBounds(0, 0, 1280, 50);
+        lblHeader.setBounds(0, 0, 1290, 50);
 
         tabs.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -952,6 +952,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnTaoTK.setBackground(new java.awt.Color(255, 255, 255));
         btnTaoTK.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnTaoTK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnTaoTK.setText("Tạo tài khoản");
@@ -1061,7 +1062,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                             .addComponent(btnPrev, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         btnThemAnh.setBackground(new java.awt.Color(255, 255, 255));
@@ -1381,6 +1382,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             tblAccount.getColumnModel().getColumn(0).setMaxWidth(50);
         }
 
+        btnNewAcc.setBackground(new java.awt.Color(255, 255, 255));
         btnNewAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNewAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnNewAcc.setText("Tạo mới");
@@ -1392,6 +1394,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnSaveAcc.setBackground(new java.awt.Color(255, 255, 255));
         btnSaveAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnSaveAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue_x32.png"))); // NOI18N
         btnSaveAcc.setText("Lưu thông tin");
@@ -1403,6 +1406,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnUpdateAcc.setBackground(new java.awt.Color(255, 255, 255));
         btnUpdateAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnUpdateAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue_x32.png"))); // NOI18N
         btnUpdateAcc.setText("Cập nhật");
@@ -1414,6 +1418,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnDeleteAcc.setBackground(new java.awt.Color(255, 255, 255));
         btnDeleteAcc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnDeleteAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue_x32.png"))); // NOI18N
         btnDeleteAcc.setText("Xóa tài khoản");
@@ -1425,6 +1430,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnChiTietThongTin.setBackground(new java.awt.Color(255, 255, 255));
         btnChiTietThongTin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnChiTietThongTin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_info_yellow_x32.png"))); // NOI18N
         btnChiTietThongTin.setText("Chi tiết thông tin");
@@ -1463,6 +1469,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnTaoQRCode.setBackground(new java.awt.Color(255, 255, 255));
         btnTaoQRCode.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnTaoQRCode.setText("Tạo QR Code");
         btnTaoQRCode.setEnabled(false);
@@ -1548,7 +1555,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(TaiKhoanjPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1560,17 +1567,15 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         jPanel_Wall.setLayout(jPanel_WallLayout);
         jPanel_WallLayout.setHorizontalGroup(
             jPanel_WallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(tabs)
             .addComponent(HeaderJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel_WallLayout.createSequentialGroup()
-                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 1280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel_WallLayout.setVerticalGroup(
             jPanel_WallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_WallLayout.createSequentialGroup()
                 .addComponent(HeaderJPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tabs))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

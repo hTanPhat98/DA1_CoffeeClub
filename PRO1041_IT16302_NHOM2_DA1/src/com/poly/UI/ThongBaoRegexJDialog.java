@@ -107,6 +107,7 @@ public class ThongBaoRegexJDialog extends javax.swing.JDialog {
         lblIcon.setMaximumSize(new java.awt.Dimension(32, 32));
         lblIcon.setPreferredSize(new java.awt.Dimension(40, 34));
 
+        btnOK.setBackground(new java.awt.Color(255, 255, 255));
         btnOK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnOK.setText("OK");
         btnOK.setFocusable(false);

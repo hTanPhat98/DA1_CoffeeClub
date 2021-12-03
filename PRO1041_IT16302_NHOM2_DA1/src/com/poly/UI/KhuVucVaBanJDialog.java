@@ -519,7 +519,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         pnlListLayout.setVerticalGroup(
             pnlListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlListLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6))
@@ -598,7 +598,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         lblTienIch.setText("Tiện ích:");
 
         pnlControl1.setBackground(new java.awt.Color(255, 255, 255));
-        pnlControl1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 12, 12));
+        pnlControl1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 16, 16));
 
         btnNewKV.setBackground(new java.awt.Color(255, 255, 255));
         btnNewKV.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -733,8 +733,9 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         cboKhuVucBan.setFocusable(false);
 
         pnlControl2.setBackground(new java.awt.Color(255, 255, 255));
-        pnlControl2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 12, 12));
+        pnlControl2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 16, 16));
 
+        btnNewTbl.setBackground(new java.awt.Color(255, 255, 255));
         btnNewTbl.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNewTbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_new_blue_x32.png"))); // NOI18N
         btnNewTbl.setText("Tạo mới bàn");
@@ -749,6 +750,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         });
         pnlControl2.add(btnNewTbl);
 
+        btnSaveTbl.setBackground(new java.awt.Color(255, 255, 255));
         btnSaveTbl.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnSaveTbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_save_blue_x32.png"))); // NOI18N
         btnSaveTbl.setText("Thêm bàn");
@@ -763,6 +765,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         });
         pnlControl2.add(btnSaveTbl);
 
+        btnUpdateTbl.setBackground(new java.awt.Color(255, 255, 255));
         btnUpdateTbl.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnUpdateTbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_update_blue_x32.png"))); // NOI18N
         btnUpdateTbl.setText("Cập nhật bàn");
@@ -777,6 +780,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         });
         pnlControl2.add(btnUpdateTbl);
 
+        btnDeleteTbl.setBackground(new java.awt.Color(255, 255, 255));
         btnDeleteTbl.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnDeleteTbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/UI_remove_blue_x32.png"))); // NOI18N
         btnDeleteTbl.setText("Xóa bàn");
@@ -830,7 +834,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                     .addComponent(lblKhuVucBan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboKhuVucBan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(pnlControl2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                .addComponent(pnlControl2, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -849,8 +853,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(pnlControlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlKhuVuc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(pnlBan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);

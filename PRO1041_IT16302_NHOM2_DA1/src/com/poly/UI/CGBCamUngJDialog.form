@@ -509,7 +509,7 @@
                                   <Component id="cboChuyenGhep" max="32767" attributes="0"/>
                                   <Group type="102" attributes="0">
                                       <Component id="txtMaHoaDonBanChuyen" min="-2" pref="260" max="-2" attributes="0"/>
-                                      <EmptySpace pref="22" max="32767" attributes="0"/>
+                                      <EmptySpace pref="38" max="32767" attributes="0"/>
                                       <Component id="btnTaoHDMoi" min="-2" pref="250" max="-2" attributes="0"/>
                                   </Group>
                               </Group>

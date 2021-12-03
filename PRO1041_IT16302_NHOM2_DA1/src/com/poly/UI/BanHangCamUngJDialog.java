@@ -38,8 +38,11 @@ import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import net.sf.jasperreports.engine.JRException;
@@ -80,12 +83,37 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
     private void init() {
         this.setIconImage(XImage.getAppIcon());
         setLocationRelativeTo(null);
-        setHeaderTable(tblHoaDon.getTableHeader());
-        setHeaderTable(tblSanPham.getTableHeader());
+        this.setHeaderTable(tblHoaDon.getTableHeader());
+        this.setHeaderTable(tblSanPham.getTableHeader());
+        this.HeaderRendererDHCT(tblHoaDon);
+        this.HeaderRendererMenu(tblSanPham);
         keyWorld = txtTiemKiemTenMon.getText();
         fillTableSP();
         fillTTB();
         fillComBoBox();
+
+    }
+
+    private void HeaderRendererDHCT(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+    }
+
+    private void HeaderRendererMenu(JTable table) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
     }
 
     private void setHeaderTable(JTableHeader a) {
@@ -190,6 +218,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
             btn.setBorder(new BevelBorder(1, Color.black, Color.gray));
             btn.setBackground(Color.GREEN);
             btn.setForeground(Color.BLACK);
+            btn.setFocusable(false);
             btn.setFont(new Font("Tahoma", 1, 14));
             btn.setToolTipText(b.getMaBan());
 
@@ -271,7 +300,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                         btnGopBanGhepBan.setEnabled(false);
                         spnSoLuong.setEnabled(false);
                         ktgb = true;
-                        
+
                     }
 
                 }
@@ -368,7 +397,6 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
-                    hdct.getMaMon(),
                     hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),
@@ -705,6 +733,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
         lblLoaiMota.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblLoaiMota.setText("Loại:");
 
+        btnOrder.setBackground(new java.awt.Color(255, 255, 255));
         btnOrder.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/order_icon_x32.png"))); // NOI18N
         btnOrder.setText("ORDER");
@@ -917,11 +946,11 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "STT", "Mã HDCT", "Mã món", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
+                "STT", "Mã HDCT", "Tên món", "Giá tiền", "Số lượng", "Thành tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -944,6 +973,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        btnXemBill.setBackground(new java.awt.Color(255, 255, 255));
         btnXemBill.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnXemBill.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/bill_view_x32.png"))); // NOI18N
         btnXemBill.setText("XEM BILL");
@@ -956,6 +986,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnThanhToan.setBackground(new java.awt.Color(255, 255, 255));
         btnThanhToan.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnThanhToan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/bill_pos_x32.png"))); // NOI18N
         btnThanhToan.setText("THANH TOÁN");
@@ -968,6 +999,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnGopBanGhepBan.setBackground(new java.awt.Color(255, 255, 255));
         btnGopBanGhepBan.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnGopBanGhepBan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/move_table_x32.png"))); // NOI18N
         btnGopBanGhepBan.setText("CHUYỂN BÀN - GHÉP BÀN");

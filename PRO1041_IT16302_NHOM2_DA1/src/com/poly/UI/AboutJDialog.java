@@ -41,6 +41,14 @@ public class AboutJDialog extends javax.swing.JDialog {
             Logger.getLogger(AboutJDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    private void goingWebsite1(){
+        Desktop link = Desktop.getDesktop();
+        try {
+            link.browse(new URI("https://www.facebook.com/User.VoQuangThoai"));
+        } catch (Exception e) {
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,10 +62,11 @@ public class AboutJDialog extends javax.swing.JDialog {
         pnlWall = new javax.swing.JPanel();
         pnlLogo = new javax.swing.JPanel();
         lblLogo = new javax.swing.JLabel();
+        lblLinkWeb = new javax.swing.JLabel();
+        lblLinkWeb1 = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txpGioiThieu = new javax.swing.JTextPane();
-        lblLinkWeb = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About");
@@ -69,21 +78,48 @@ public class AboutJDialog extends javax.swing.JDialog {
         lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/about_logo_tcc_x500.png"))); // NOI18N
 
+        lblLinkWeb.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblLinkWeb.setForeground(new java.awt.Color(255, 255, 255));
+        lblLinkWeb.setText("About us");
+        lblLinkWeb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblLinkWebMousePressed(evt);
+            }
+        });
+
+        lblLinkWeb1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblLinkWeb1.setForeground(new java.awt.Color(255, 255, 255));
+        lblLinkWeb1.setText("Facebook");
+        lblLinkWeb1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblLinkWeb1MousePressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlLogoLayout = new javax.swing.GroupLayout(pnlLogo);
         pnlLogo.setLayout(pnlLogoLayout);
         pnlLogoLayout.setHorizontalGroup(
             pnlLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlLogoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(pnlLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblLogo)
+                    .addGroup(pnlLogoLayout.createSequentialGroup()
+                        .addComponent(lblLinkWeb)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblLinkWeb1)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         pnlLogoLayout.setVerticalGroup(
             pnlLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlLogoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 699, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLogoLayout.createSequentialGroup()
+                .addContainerGap(72, Short.MAX_VALUE)
+                .addGroup(pnlLogoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLinkWeb)
+                    .addComponent(lblLinkWeb1))
+                .addGap(18, 18, 18)
+                .addComponent(lblLogo)
+                .addGap(111, 111, 111))
         );
 
         lblTitle.setBackground(new java.awt.Color(255, 255, 255));
@@ -102,15 +138,6 @@ public class AboutJDialog extends javax.swing.JDialog {
         txpGioiThieu.setMargin(new java.awt.Insets(6, 6, 6, 6));
         jScrollPane1.setViewportView(txpGioiThieu);
 
-        lblLinkWeb.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblLinkWeb.setForeground(new java.awt.Color(255, 255, 255));
-        lblLinkWeb.setText("Về Chúng Tôi");
-        lblLinkWeb.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                lblLinkWebMousePressed(evt);
-            }
-        });
-
         javax.swing.GroupLayout pnlWallLayout = new javax.swing.GroupLayout(pnlWall);
         pnlWall.setLayout(pnlWallLayout);
         pnlWallLayout.setHorizontalGroup(
@@ -119,10 +146,7 @@ public class AboutJDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(pnlWallLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(pnlWallLayout.createSequentialGroup()
-                        .addComponent(lblLinkWeb)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(pnlLogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -134,9 +158,7 @@ public class AboutJDialog extends javax.swing.JDialog {
                 .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblLinkWeb)
-                .addContainerGap())
+                .addGap(41, 41, 41))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -156,6 +178,10 @@ public class AboutJDialog extends javax.swing.JDialog {
     private void lblLinkWebMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLinkWebMousePressed
         this.goingWebsite();
     }//GEN-LAST:event_lblLinkWebMousePressed
+
+    private void lblLinkWeb1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLinkWeb1MousePressed
+       goingWebsite1();
+    }//GEN-LAST:event_lblLinkWeb1MousePressed
 
     /**
      * @param args the command line arguments
@@ -203,6 +229,7 @@ public class AboutJDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblLinkWeb;
+    private javax.swing.JLabel lblLinkWeb1;
     private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnlLogo;

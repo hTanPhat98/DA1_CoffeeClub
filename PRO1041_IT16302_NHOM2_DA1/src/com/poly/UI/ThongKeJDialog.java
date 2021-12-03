@@ -901,6 +901,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         });
         pnlBoxBtn.add(btnLocTheoNgay);
 
+        btnLineChart.setBackground(new java.awt.Color(255, 255, 255));
         btnLineChart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnLineChart.setText("Biểu đồ đường (Doanh thu từng tháng)");
         btnLineChart.setFocusable(false);
@@ -910,6 +911,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnBarChart.setBackground(new java.awt.Color(255, 255, 255));
         btnBarChart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnBarChart.setText("Biểu đồ cột (Doanh thu từng tháng)");
         btnBarChart.setFocusable(false);
@@ -983,7 +985,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pnlXuatExcel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -1141,7 +1143,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         );
         jpnBieuDoLayout.setVerticalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 812, Short.MAX_VALUE)
+            .addGap(0, 808, Short.MAX_VALUE)
         );
 
         jpnFloor.add(jpnBieuDo, java.awt.BorderLayout.CENTER);

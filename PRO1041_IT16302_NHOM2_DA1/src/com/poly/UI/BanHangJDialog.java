@@ -727,6 +727,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         lblLoaiMota.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblLoaiMota.setText("Loại:");
 
+        btnOrder.setBackground(new java.awt.Color(255, 255, 255));
         btnOrder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/order_icon_x32.png"))); // NOI18N
         btnOrder.setText("ORDER");
@@ -938,6 +939,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         txtThanhTien.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtThanhTien.setBorder(null);
 
+        btnXemBill.setBackground(new java.awt.Color(255, 255, 255));
         btnXemBill.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnXemBill.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/bill_view_x32.png"))); // NOI18N
         btnXemBill.setText("XEM BILL");
@@ -950,6 +952,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnThanhToan.setBackground(new java.awt.Color(255, 255, 255));
         btnThanhToan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnThanhToan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/bill_pos_x32.png"))); // NOI18N
         btnThanhToan.setText("THANH TOÁN");
@@ -962,6 +965,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnGopBanGhepBan.setBackground(new java.awt.Color(255, 255, 255));
         btnGopBanGhepBan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGopBanGhepBan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/move_table_x32.png"))); // NOI18N
         btnGopBanGhepBan.setText("CHUYỂN BÀN - GHÉP BÀN");

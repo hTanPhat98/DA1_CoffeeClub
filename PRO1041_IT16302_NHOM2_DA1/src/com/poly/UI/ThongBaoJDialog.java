@@ -129,6 +129,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         lblMess.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblMess.setText("Mess");
 
+        btnOK.setBackground(new java.awt.Color(255, 255, 255));
         btnOK.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnOK.setText("OK");
         btnOK.setFocusable(false);
@@ -182,6 +183,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
         lblMessConfim.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblMessConfim.setText("Mess");
 
+        btnYES.setBackground(new java.awt.Color(255, 255, 255));
         btnYES.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnYES.setText("YES");
         btnYES.setFocusable(false);
@@ -191,6 +193,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
             }
         });
 
+        btnNo.setBackground(new java.awt.Color(255, 255, 255));
         btnNo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnNo.setText("NO");
         btnNo.setFocusable(false);
