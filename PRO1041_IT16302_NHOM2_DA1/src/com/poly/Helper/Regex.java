@@ -26,18 +26,6 @@ public class Regex {
     }
 
     //NHAN VIEN VA TAI KHOAN
-//    public boolean checkMaNV(JTextField txt) {
-//        String text = txt.getText();
-//        String rgx = "^[A-Z0-9]{5}$";
-//        if (text.matches(rgx)) {
-//            return true;
-//        } else {
-//            txt.setBorder(new CompoundBorder(new LineBorder(Color.red, 1), new EmptyBorder(1, 4, 1, 1)));
-//            kq = kq + "Mã NV gồm chữ in hoa, số, tối đa 5 ký tự!\n";
-//            return false;
-//        }
-//    }
-
     public boolean checkNameNV(JTextField txt) {
         String text = txt.getText();
         String rgx = "^[A-Za-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{5,30}$";
@@ -84,7 +72,6 @@ public class Regex {
         } else {
             kt = text.matches(rgx2);
         }
-
         if (kt) {
             return kt;
         } else {
@@ -117,20 +104,8 @@ public class Regex {
             return false;
         }
     }
-    
-    //KHU VUC VA BAN
-//    public boolean checkMaKV(JTextField txt) {
-//        String text = txt.getText();
-//        String rgx = "^[A-Z0-9]{3,5}$";
-//        if (text.matches(rgx)) {
-//            return true;
-//        } else {
-//            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-//            kq = kq + "Mã khu vực chỉ bao gồm kí tự in hoa không dấu và số, tối tiểu 3-5 kí tự!\n";
-//            return false;
-//        }
-//    }
 
+    //KHU VUC VA BAN
     public boolean checkTenKV(JTextField txt) {
         String text = txt.getText();
         String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{3,20}$";
@@ -155,18 +130,6 @@ public class Regex {
         }
     }
 
-    public boolean checkMaBan(JTextField txt) {
-        String text = txt.getText();
-        String rgx = "^[A-Z0-9]{4,10}$";
-        if (text.matches(rgx)) {
-            return true;
-        } else {
-            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-            kq = kq + "Mã Bàn bao gồm kí tự in hoa và số, tối thiểu 4-10 kí tự!\n";
-            return false;
-        }
-    }
-
     public boolean checkTenBan(JTextField txt) {
         String text = txt.getText();
         String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{5,8}$";
@@ -178,6 +141,7 @@ public class Regex {
             return false;
         }
     }
+
     //THUC DON
     public boolean checkMaLM(JTextField txt) {
         String text = txt.getText();
@@ -185,7 +149,7 @@ public class Regex {
         if (text.matches(rgx)) {
             return true;
         } else {
-            txt.setBorder(new MatteBorder(0, 0, 1, 0,red));
+            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
             kq = kq + "Mã loại món gồm chữ in hoa tối đa 3-10 ký tự!\n";
             return false;
         }
@@ -202,41 +166,29 @@ public class Regex {
             return false;
         }
     }
-//    public boolean checkMamon(JTextField txt){
-//        String text = txt.getText();
-//        String rgx = "^[A-Z0-9]{3,10}$";
-//        if (text.matches(rgx)){
-//            return true;
-//        }else {
-//            txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-//            kq = kq + "Mã món bao gồm kí tự in hoa và số giới hạn 3-10 kí tự!\n";
-//            return false;
-//        }
-//    }
-    
-    public boolean checkTenmon(JTextField txt){
+
+    public boolean checkTenmon(JTextField txt) {
         String text = txt.getText();
         String rgx = "^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{3,50}$";
-        if (text.matches(rgx)){
+        if (text.matches(rgx)) {
             return true;
-        }else {
+        } else {
             txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
             kq = kq + "Tên món không chứa kí tự đặc biệt và số giới hạn 3-50 kí tự!\n";
             return false;
         }
     }
-    
-    public boolean checkDongia(JTextField txt){
+
+    public boolean checkDongia(JTextField txt) {
         String text = txt.getText();
-        String rgx = "^1[0-9]{4,5}$";
+        String rgx = "^[1-9][0-9]{4,5}$";
         if (text.matches(rgx)) {
             return true;
-        }else{
+        } else {
             txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
             kq = kq + "Đơn giá không chứa kí tự chữ và giá trị âm! ";
         }
         return false;
     }
-
 
 }

@@ -341,7 +341,6 @@ public class ThucDonJDialog extends javax.swing.JDialog {
                 new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
             } catch (Exception e) {
                 new ThongBaoJDialog(null, true).alert(2, "Thêm mới thất bại!");
-                e.printStackTrace();
             }
         } else {
             new ThongBaoRegexJDialog(null, true).alert(2, r.getKq());

@@ -107,7 +107,7 @@ public class XImage {
     }
 
     public static ImageIcon readMess(String fileName) {
-        File path = new File("src\\com\\poly\\Icons\\message", fileName);
+        File path = new File("image/message", fileName);
         Image img = null;
         try {
             BufferedImage image = ImageIO.read(path);

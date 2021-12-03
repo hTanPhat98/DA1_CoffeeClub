@@ -30,6 +30,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -47,6 +49,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -473,9 +476,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
     }
 
     private void xuatBill(int mahd) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_hh_mm_ss");
         try {
             Hashtable map = new Hashtable();
-            JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\reportHoaDon.jrxml");
+            JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\Helper\\reportHoaDon.jrxml");
             map.put("MaHD", mahd);
             JdbcHelper jdbc = new JdbcHelper();
             JasperPrint p = JasperFillManager.fillReport(report, map, jdbc.connection);
@@ -486,9 +491,8 @@ public class BanHangJDialog extends javax.swing.JDialog {
             jdl.setTitle("Xem Hóa Đơn");
             jdl.setLocationRelativeTo(null);
             jdl.setVisible(true);
-
-//            JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
-//            JasperExportManager.exportReportToHtmlFile(p, "bill.html");
+            String tenfile="Bill "+now.format(formatter)+".docx";
+            JasperExportManager.exportReportToHtmlFile(p, tenfile);
         } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
