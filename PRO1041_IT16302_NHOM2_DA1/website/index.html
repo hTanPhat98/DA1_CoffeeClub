@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>complete responsive coffee shop website design</title>
+
+    <!-- font awesome cdn link  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="/C_logo_x32.png" />
+    <link rel="icon" type="image/png" href="images/C_logo_x32.png" />
+  </head>
+  <body>
+    <!-- header section starts  -->
+
+    <header class="header">
+      <a href="#" class="logo">
+        <img src="images/The_Coffee_Club_logo.png" alt="" />
+      </a>
+
+      <nav class="navbar">
+        <a href="#home">Trang chủ</a>
+        <a href="#about">Chi tiết</a>
+        <a href="#menu">Menu</a>
+        <a href="#products">Sản phẩm</a>
+        <a href="#review">Review</a>
+        <a href="#contact">Liên hệ</a>
+        <a href="#blogs">Blogs</a>
+      </nav>
+
+      <div class="icons">
+        <div class="fas fa-search" id="search-btn"></div>
+        <div class="fas fa-shopping-cart" id="cart-btn"></div>
+        <div class="fas fa-bars" id="menu-btn"></div>
+      </div>
+
+      <div class="search-form">
+        <input type="search" id="search-box" placeholder="Tiềm kiếm ở đây..." />
+        <label for="search-box" class="fas fa-search"></label>
+      </div>
+
+      <div class="cart-items-container">
+        <div class="cart-item">
+          <span class="fas fa-times"></span>
+          <img src="images/cart-item-1.png" alt="" />
+          <div class="content">
+            <h3>cart item 01</h3>
+            <div class="price">45.000 vnđ/-</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <span class="fas fa-times"></span>
+          <img src="images/cart-item-2.png" alt="" />
+          <div class="content">
+            <h3>cart item 02</h3>
+            <div class="price">50.000 vnđ/-</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <span class="fas fa-times"></span>
+          <img src="images/cart-item-3.png" alt="" />
+          <div class="content">
+            <h3>cart item 03</h3>
+            <div class="price">35.000 vnđ/-</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <span class="fas fa-times"></span>
+          <img src="images/cart-item-4.png" alt="" />
+          <div class="content">
+            <h3>cart item 04</h3>
+            <div class="price">35.000 vnđ/-</div>
+          </div>
+        </div>
+        <a href="#" class="btn">checkout now</a>
+      </div>
+    </header>
+
+    <!-- header section ends -->
+
+    <!-- home section starts  -->
+
+    <section class="home" id="home">
+      <div class="content">
+        <h3>Cafe tươi cho mỗi buổi sáng</h3>
+        <p>
+          "MUỐN NẾM VỊ CAFE PHẢI CHỜ ĐỢI PHA CHẾ, ĐÓ LÀ NÉT TINH HOA ĐƯỢC CHẮT
+          CHIU LẠI MỖI GIÂY SỐNG CHẬM VỚI CUỘC ĐỜI."
+        </p>
+        <a href="#" class="btn">get yours now</a>
+      </div>
+    </section>
+
+    <!-- home section ends -->
+
+    <!-- about section starts  -->
+
+    <section class="about" id="about">
+      <h1 class="heading"><span>Về</span> chúng tôi</h1>
+
+      <div class="row">
+        <div class="image">
+          <img src="images/about-img.jpeg" alt="" />
+        </div>
+
+        <div class="content">
+          <h3>Điều gì đã làm café của chúng tôi trở nên khác biệt?</h3>
+          <p>
+            Ra đời vào giữa năm 1996 -The Coffee Club là 1 nhãn hiệu cà phê non
+            trẻ của Việt Nam, nhưng đã nhanh chóng tạo dựng được uy tín và trở
+            thành thương hiệu cà phê quen thuộc nhất đối với người tiêu dùng cả
+            trong và ngoài nước.
+          </p>
+          <p>
+            Hạt cà phê chính là nguyên liệu để tạo nên những ly cà phê sữa đá vô
+            cùng thơm ngon hấp dẫn của Việt Nam. Từ cà phê hạt, người ta tiến
+            hành rang xay cà phê theo phương pháp rang xay thủ công hoặc công
+            nghiệp, với sự khác nhau về nhiệt độ và thời gian xay sẽ tạo ra
+            hương vị bột cà phê khác nhau.
+          </p>
+          <a href="#" class="btn">Tìm hiểu thêm</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- about section ends -->
+
+    <!-- menu section starts  -->
+
+    <section class="menu" id="menu">
+      <h1 class="heading">MENU <span>CỦA CHÚNG TÔI</span></h1>
+
+      <div class="box-container">
+        <div class="box">
+          <img src="images/menu-1.png" alt="" />
+          <h3>Tasty and Healty</h3>
+          <div class="price">45.000 vnđ <span>55.000 vnđ</span></div>
+          <a href="#" class="btn">add to card</a>
+        </div>
+
+        <div class="box">
+          <img src="images/menu-2.png" alt="" />
+          <h3>tasty and healty</h3>
+          <div class="price">55.000 vnđ <span>65.000 vnđ</span></div>
+          <a href="#" class="btn">add to cart</a>
+        </div>
+
+        <div class="box">
+          <img src="images/menu-3.png" alt="" />
+          <h3>tasty and healty</h3>
+          <div class="price">45.000 vnđ <span>65.000 vnđ</span></div>
+          <a href="#" class="btn">add to cart</a>
+        </div>
+
+        <div class="box">
+          <img src="images/menu-4.png" alt="" />
+          <h3>tasty and healty</h3>
+          <div class="price">55.000 vnđ <span>65.000 vnđ</span></div>
+          <a href="#" class="btn">add to cart</a>
+        </div>
+
+        <div class="box">
+          <img src="images/menu-5.png" alt="" />
+          <h3>tasty and healty</h3>
+          <div class="price">45.000 vnđ <span>55.000 vnđ</span></div>
+          <a href="#" class="btn">add to cart</a>
+        </div>
+
+        <div class="box">
+          <img src="images/menu-6.png" alt="" />
+          <h3>tasty and healty</h3>
+          <div class="price">55.000 vnđ <span>65.000 vnđ</span></div>
+          <a href="#" class="btn">add to cart</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- menu section ends -->
+
+    <section class="products" id="products">
+      <h1 class="heading"><span>SẢN PHẨM</span></h1>
+
+      <div class="box-container">
+        <div class="box">
+          <div class="icons">
+            <a href="#" class="fas fa-shopping-cart"></a>
+            <a href="#" class="fas fa-heart"></a>
+            <a href="#" class="fas fa-eye"></a>
+          </div>
+          <div class="image">
+            <img src="images/product-1.png" alt="" />
+          </div>
+          <div class="content">
+            <h3>Cafe hạt Nicaragua</h3>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <div class="price">$10.99 <span>$15.99</span></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="icons">
+            <a href="#" class="fas fa-shopping-cart"></a>
+            <a href="#" class="fas fa-heart"></a>
+            <a href="#" class="fas fa-eye"></a>
+          </div>
+          <div class="image">
+            <img src="images/product-2.png" alt="" />
+          </div>
+          <div class="content">
+            <h3>Cafe hạt Columbia</h3>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <div class="price">$15.99 <span>$20.99</span></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="icons">
+            <a href="#" class="fas fa-shopping-cart"></a>
+            <a href="#" class="fas fa-heart"></a>
+            <a href="#" class="fas fa-eye"></a>
+          </div>
+          <div class="image">
+            <img src="images/product-3.png" alt="" />
+          </div>
+          <div class="content">
+            <h3>Cafe hạt Peru</h3>
+            <div class="stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+            <div class="price">$20.99 <span>$26.99</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- review section starts  -->
+
+    <section class="review" id="review">
+      <h1 class="heading">Đánh giá <span>của khách hàng</span></h1>
+
+      <div class="box-container">
+        <div class="box">
+          <img src="images/quote-img.png" alt="" class="quote" />
+          <p>
+            OK AE! CAFE NÀY CÓ MÀU ĐEN, HƠI ĐẮNG, UỐNG NGHE MÙI CAFE, SAU KHI
+            UỐNG CAFE MIỆNG TÔI CÓ VỊ CAFE. TẠM ĐƯỢC!
+          </p>
+          <img src="images/pic-1.jpg" class="user" alt="" />
+          <h3>THOẠI DỊCH VỤ FACEBOOK</h3>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+
+        <div class="box">
+          <img src="images/quote-img.png" alt="" class="quote" />
+          <p>
+            TÔI THẤY VẬY LÀ RẤT TỐT, CÁC BẠN LÀM ĂN RẤT NHIỆT TÌNH, TÔI RẤT ƯNG
+            Ý, TÔI CHỈ CÒN 1 SAO ĐỂ CHO CÁC BẠN VÌ 4 SAO KIA BỊ ĂN CẤP RỒI.
+          </p>
+          <img src="images/pic-2.jpg" class="user" alt="" />
+          <h3>TÙNG BẢO VỆ SIÊU CẤP VIP PRO</h3>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <!-- <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fa-star-half-alt"></i> -->
+          </div>
+        </div>
+
+        <div class="box">
+          <img src="images/quote-img.png" alt="" class="quote" />
+          <p>
+            BẠN NÀO CẦN HỖ TRỢ CÔNG TÁC SINH VIÊN LIÊN HỆ MÌNH. MÌNH LÀ CEO CÔNG
+            THÀNH CHUYÊN CUNG CẤP HỖ TRỢ CÁC AE TỈA NẾN - BẮT ĐÁY - BẮT ĐỈNH.
+          </p>
+          <img src="images/pic-3.jpg" class="user" alt="" />
+          <h3>THÀNH CEO BAO HÀNG KHỞI NGHIỆP</h3>
+          <div class="stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- review section ends -->
+
+    <!-- contact section starts  -->
+
+    <section class="contact" id="contact">
+      <h1 class="heading"><span>Liện hệ</span> với chúng tôi</h1>
+
+      <div class="row">
+        <iframe
+          class="map"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.4586462021066!2d106.62673451526062!3d10.852678260748092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752bed268389cb%3A0xde88fbf72e7ca24b!2sThe%20Coffee%20Club%20FAKE!5e0!3m2!1svi!2s!4v1637748619701!5m2!1svi!2s"
+          allowfullscreen=""
+          loading="lazy"
+        ></iframe>
+
+        <form action="">
+          <h3>LIÊN LẠC</h3>
+          <div class="inputBox">
+            <span class="fas fa-user"></span>
+            <input type="text" placeholder="Tên" />
+          </div>
+          <div class="inputBox">
+            <span class="fas fa-envelope"></span>
+            <input type="email" placeholder="Email" />
+          </div>
+          <div class="inputBox">
+            <span class="fas fa-phone"></span>
+            <input type="number" placeholder="Số điện thoại" />
+          </div>
+          <input type="submit" value="Liên hệ ngay" class="btn" />
+        </form>
+      </div>
+    </section>
+
+    <!-- contact section ends -->
+
+    <!-- blogs section starts  -->
+
+    <section class="blogs" id="blogs">
+      <h1 class="heading">our <span>blogs</span></h1>
+
+      <div class="box-container">
+        <div class="box">
+          <div class="image">
+            <img src="images/blog-1.jpeg" alt="" />
+          </div>
+          <div class="content">
+            <a href="#" class="title">tasty and refreshing coffee</a>
+            <span>by admin / 22-11-2021</span>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
+              dicta.
+            </p>
+            <a href="#" class="btn">Đọc thêm</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="image">
+            <img src="images/blog-2.jpeg" alt="" />
+          </div>
+          <div class="content">
+            <a href="#" class="title">tasty and refreshing coffee</a>
+            <span>by admin / 22-11-2021</span>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
+              dicta.
+            </p>
+            <a href="#" class="btn">Đọc thêm</a>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="image">
+            <img src="images/blog-3.jpeg" alt="" />
+          </div>
+          <div class="content">
+            <a href="#" class="title">tasty and refreshing coffee</a>
+            <span>by admin / 22-11-2021</span>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Non,
+              dicta.
+            </p>
+            <a href="#" class="btn">Đọc thêm</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- blogs section ends -->
+
+    <!-- footer section starts  -->
+
+    <section class="footer">
+      <div class="share">
+        <a
+          href="https://facebook.com/freewebsitecode/"
+          class="fab fa-facebook-f"
+        ></a>
+        <a href="https://freewebsitecode.com/" class="fab fa-twitter"></a>
+        <a href="https://freewebsitecode.com/" class="fab fa-instagram"></a>
+        <a href="https://freewebsitecode.com/" class="fab fa-linkedin"></a>
+        <a href="https://freewebsitecode.com/" class="fab fa-pinterest"></a>
+        <a
+          href="https://www.youtube.com/channel/UC9HlQRmKgG3jeVD_fBxj1Pw/videos"
+          class="fab fa-youtube"
+        ></a>
+      </div>
+
+      <div class="links">
+        <a href="#">Trang chủ</a>
+        <a href="#">Chi tiết</a>
+        <a href="#">Menu</a>
+        <a href="#">Sản phẩm</a>
+        <a href="#">Review</a>
+        <a href="#">Liên hệ</a>
+        <a href="#">Blogs</a>
+      </div>
+
+      <!-- <div class="credit">
+        created by
+        <span
+          ><a href="https://freewebsitecode.com/">Free Website Code</a></span
+        >
+        | Đã được đăng ký bản quyền.
+      </div> -->
+    </section>
+
+    <!-- footer section ends -->
+
+    <!-- custom js file link  -->
+    <script src="js/script.js"></script>
+  </body>
+</html>
