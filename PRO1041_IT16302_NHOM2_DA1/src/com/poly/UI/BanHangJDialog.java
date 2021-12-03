@@ -110,7 +110,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
         table.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
     }
-    
+
     private void HeaderRendererMenu(JTable table) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -120,7 +120,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         table.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
     }
-    
+
     private void fillTableSP() {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
@@ -299,7 +299,6 @@ public class BanHangJDialog extends javax.swing.JDialog {
                         btnGopBanGhepBan.setEnabled(false);
                         spnSoLuong.setEnabled(false);
                         ktgb = true;
-
                     }
 
                 }
@@ -349,6 +348,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         btnThanhToan.setEnabled(true);
         btnXemBill.setEnabled(true);
         btnGopBanGhepBan.setEnabled(true);
+        btnDatBan.setEnabled(false);
     }
 
     private void editHD(HoaDon hd) {
@@ -477,7 +477,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             Hashtable map = new Hashtable();
             JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\reportHoaDon.jrxml");
             map.put("MaHD", mahd);
-            JdbcHelper jdbc =new JdbcHelper();
+            JdbcHelper jdbc = new JdbcHelper();
             JasperPrint p = JasperFillManager.fillReport(report, map, jdbc.connection);
             JasperViewer jasperViewer = new JasperViewer(p, false);
             JDialog jdl = new JDialog(this);
@@ -517,6 +517,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         this.updateTT();
         this.resetHD();
         TTHD = 0;
+        btnDatBan.setEnabled(false);
     }
 
     public void updateSL(KeyEvent evt) {

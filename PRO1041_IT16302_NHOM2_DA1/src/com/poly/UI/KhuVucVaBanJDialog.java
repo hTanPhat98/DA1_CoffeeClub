@@ -49,7 +49,6 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     KhuVucDAO daokv = new KhuVucDAO();
     BanDAO daoban = new BanDAO();
     List<Ban> listBan = new ArrayList();
-    String itemliskhuvuc = "";
 
     // TABLE AND LIST
     private void fillToTableBan() {
@@ -81,17 +80,15 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     private void fillToListKV() {
-        fillToTableBan();
+        this.fillToTableBan();
         DefaultListModel model = new DefaultListModel();
 
         try {
-            itemliskhuvuc = "";
             List<KhuVuc> list = daokv.selectAll();
             cboKhuVucBan.removeAllItems();
             for (KhuVuc kv : list) {
                 model.addElement(kv.getTenKV() + "-" + kv.getMaKV());
                 cboKhuVucBan.addItem(kv.getTenKV() + "-" + kv.getMaKV());
-                itemliskhuvuc += kv.getTenKV() + "-" + kv.getMaKV() + "chiakey";
             }
             lstKhuVucBan.setModel(model);
         } catch (Exception e) {
@@ -104,11 +101,11 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
         txtMaBan.setText(model.getMaBan());
         txtTenBan.setText(model.getTenBan());
-
-        String[] key = itemliskhuvuc.split("chiakey");
-        for (int i = 0; i < key.length; i++) {
-            if (key[i].indexOf(model.getMaKV()) != -1) {
-                cboKhuVucBan.setSelectedItem(key[i]);
+        
+        for (int i = 0; i < cboKhuVucBan.getItemCount(); i++) {
+            String[] kv = cboKhuVucBan.getItemAt(i).split("-");
+            if (kv[1].equals(model.getMaKV())) {
+                cboKhuVucBan.setSelectedIndex(i);
             }
         }
     }
@@ -211,18 +208,18 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     private void clearFormBan() {
         Ban ban = new Ban();
-        ban.setMaBan("");
+        ban.setMaBan(taoMaBan());
         ban.setTenBan("");
-        ban.setMaKV("");
+        String[] mkv = cboKhuVucBan.getSelectedItem().toString().split("-");
+        ban.setMaKV(mkv[1]);
         this.setModelBan(ban);
-        cboKhuVucBan.setSelectedItem(null);
         this.index = -1;
-        updateStatutTable();
+        this.updateStatutTable();
     }
 
     private void insertKhuvuc() {
         Regex r = new Regex();
-        if (r.checkTenKV(txtTenKV)) {
+        if (r.checkTenKV(txtTenKV) && r.checkTienIchKV(txtTienIch)) {
             KhuVuc kv = getModelKhuvuc();
             try {
                 daokv.insert(kv);
@@ -238,7 +235,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     private void deleteKhuVuc() {
-        if (new ThongBaoJDialog(null, true).confirm("Thao tác sẽ xóa mọi dữ liệu về khu vực, xác nhận xóa hoặc không?")) {
+        if (new ThongBaoJDialog(null, true).confirm("Xác nhận xóa hoặc không?")) {
             String makv = txtMaKV.getText();
             try {
                 daokv.delete(makv);
@@ -270,7 +267,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     private void insertBan() {
         Regex r = new Regex();
-        if (r.checkMaBan(txtMaBan) && r.checkTenBan(txtMaKV)) {
+        if (r.checkTenBan(txtTenBan)) {
             String cbo = (String) cboKhuVucBan.getSelectedItem();
             String[] makhuvuc = cbo.split("-"); //xử cắt chuỗi lấy makv tại cboKhuVucBan
             List<Ban> list = daoban.findByIdKhuVuc(makhuvuc[1]);
@@ -294,7 +291,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
     private void updateBan() {
         Regex r = new Regex();
-        if (r.checkMaBan(txtMaBan) && r.checkTenBan(txtMaKV)) {
+        if (r.checkTenBan(txtTenBan)) {
             Ban ban = getModelBan();
             try {
                 daoban.update(ban);
@@ -325,7 +322,6 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     //STATUT
     private void updateStatutTable() {
         boolean edit = (this.index >= 0);
-        txtMaBan.setEditable(!edit);
         btnSaveTbl.setEnabled(!edit);
         btnUpdateTbl.setEnabled(edit);
         btnDeleteTbl.setEnabled(edit);
@@ -361,7 +357,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         JTableHeader header = a;
         header.setFont(new Font("Dialog", Font.BOLD, 14));
     }
-    
+
     List<JTextField> listTF = new ArrayList<>();
 
     private void addTFtoList() {
@@ -370,13 +366,13 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         listTF.add(txtTenKV);
         this.setTextFieldEvent();
     }
-    
-     private void setTextFieldEvent() {
+
+    private void setTextFieldEvent() {
         for (JTextField txt : listTF) {
             this.eventClickTxt(txt);
         }
     }
-    
+
     private void eventClickTxt(JTextField txt) {
         txt.addKeyListener(new KeyListener() {
             @Override
@@ -395,6 +391,27 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             }
         });
     }
+
+    private String taoMaBan() {
+        String mn = "BAN";
+        String[] mkv = cboKhuVucBan.getSelectedItem().toString().split("-");
+        String mnv;
+        int i = 1;
+        mnv = mkv[1] + mn + "0" + i;
+        List<Ban> list = daoban.selectAll();
+        for (Ban b : list) {
+            if (b.getMaBan().equals(mnv)) {
+                i++;
+                if (i < 10) {
+                    mnv = mkv[1] + mn + "0" + i;
+                } else {
+                    mnv = mkv[1] + mn + i;
+                }
+            }
+        }
+        return mnv;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -564,6 +581,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         pnlKhuVuc.setBackground(new java.awt.Color(255, 255, 255));
         pnlKhuVuc.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "KHU VỰC", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
+        txtMaKV.setEditable(false);
         txtMaKV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaKV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(102, 102, 102)));
 
@@ -704,6 +722,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         lblKhuVucBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblKhuVucBan.setText("Khu vực bàn:");
 
+        txtMaBan.setEditable(false);
         txtMaBan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaBan.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(102, 102, 102)));
 
@@ -811,7 +830,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
                     .addComponent(lblKhuVucBan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cboKhuVucBan, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(pnlControl2, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                .addComponent(pnlControl2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

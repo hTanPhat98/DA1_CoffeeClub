@@ -47,6 +47,7 @@ public class ThongBaoJDialog extends javax.swing.JDialog {
     public boolean confirm(String message) {
         this.setLocationRelativeTo(null);
         lblTagName.setText("Thông Báo");
+        lblIconConfirm.setText("");
         lblIconConfirm.setIcon(XImage.readMess("question_mess_x32.png"));
         lblMessConfim.setText(message);
         pnlConfirm.setVisible(true);

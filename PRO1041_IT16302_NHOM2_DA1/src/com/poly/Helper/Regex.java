@@ -169,12 +169,12 @@ public class Regex {
 
     public boolean checkTenBan(JTextField txt) {
         String text = txt.getText();
-        String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{6,8}$";
+        String rgx = "^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠ-ỹ ]{5,8}$";
         if (text.matches(rgx)) {
             return true;
         } else {
             txt.setBorder(new MatteBorder(0, 0, 1, 0, red));
-            kq = kq + "Tên Bàn không chứa kí tự đặc biệt, giới hạn 6-8 kí tự!\n";
+            kq = kq + "Tên Bàn không chứa kí tự đặc biệt, giới hạn 5-8 kí tự!\n";
             return false;
         }
     }

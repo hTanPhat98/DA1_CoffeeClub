@@ -191,7 +191,6 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
             btn.setBackground(Color.GREEN);
             btn.setForeground(Color.BLACK);
             btn.setFont(new Font("Tahoma", 1, 14));
-            btn.setFocusable(false);
             btn.setToolTipText(b.getMaBan());
 
             for (HoaDon hd : list) {
@@ -322,6 +321,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
         btnThanhToan.setEnabled(true);
         btnXemBill.setEnabled(true);
         btnGopBanGhepBan.setEnabled(true);
+        btnDatBan.setEnabled(false);
     }
 
     private void editHD(HoaDon hd) {
@@ -493,6 +493,7 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
         this.updateTT();
         this.resetHD();
         TTHD = 0;
+        btnDatBan.setEnabled(false);
     }
 
     public void updateSL(KeyEvent evt) {
