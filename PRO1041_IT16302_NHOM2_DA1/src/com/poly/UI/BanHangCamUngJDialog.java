@@ -31,11 +31,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -47,10 +50,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -479,23 +480,23 @@ public class BanHangCamUngJDialog extends javax.swing.JDialog {
     }
 
     private void xuatBill(int mahd) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_hh_mm_ss");
         try {
-            Hashtable map = new Hashtable();
-            JasperReport report = JasperCompileManager.compileReport("src\\com\\poly\\UI\\reportHoaDon.jrxml");
+            String sourceFileName = "report\\reportHoaDon.jasper";
+            String tenfile = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Bill " + now.format(formatter) + ".pdf";
+            Map map = new HashMap();
             map.put("MaHD", mahd);
-            new JdbcHelper();
-            JasperPrint p = JasperFillManager.fillReport(report, map, JdbcHelper.connection);
-            JasperViewer jasperViewer = new JasperViewer(p, false);
-
+            JdbcHelper jdbc = new JdbcHelper();
+            String rp=JasperFillManager.fillReportToFile(sourceFileName, map, jdbc.connection);
+            JasperExportManager.exportReportToPdfFile(rp, tenfile);
+            JasperViewer jasperViewer = new JasperViewer(rp, false);
             JDialog jdl = new JDialog(this);
             jdl.setContentPane(jasperViewer.getContentPane());
             jdl.setSize(jasperViewer.getSize());
             jdl.setTitle("Xem Hóa Đơn");
             jdl.setLocationRelativeTo(null);
             jdl.setVisible(true);
-
-//            JasperExportManager.exportReportToPdfFile(p, "bill.pdf");
-//            JasperExportManager.exportReportToHtmlFile(p, "bill.html");
         } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
