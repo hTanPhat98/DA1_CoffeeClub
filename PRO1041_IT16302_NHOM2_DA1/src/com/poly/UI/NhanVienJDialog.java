@@ -69,7 +69,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
         this.rownv = -1;
         this.rowacc = -1;
         this.updateStatusNV();
-        this.updateStatusAcc();
+        this.chonMaNV();
         this.w = lblAnhNhanVien.getWidth();
         this.h = lblAnhNhanVien.getHeight();
         this.addTFtoList();
@@ -366,7 +366,7 @@ public class NhanVienJDialog extends javax.swing.JDialog {
                 if (kt) {
                     daoac.insert(acc);
                     this.fillTableAcc();
-                    this.clearFormNV();
+                    this.chonMaNV();
                     new ThongBaoJDialog(null, true).alert(1, "Thêm mới thành công!");
                     btnTaoQRCode.setEnabled(true);
                 } else {
@@ -398,19 +398,18 @@ public class NhanVienJDialog extends javax.swing.JDialog {
     }
 
     private void deleteAcc() {
-        String manv = cboMaNV.getSelectedItem().toString();
-        NhanVien nvc = daonv.selectById(manv);
+        Account acc = daoac.selectById(txtUsername.getText());
         if (!Auth.isManager()) {
             new ThongBaoJDialog(null, true).alert(2, "Bạn không có quyền xóa!");
         } else {
-            if (Auth.user.getMaNV().equalsIgnoreCase(nvc.getMaNV())) {
+            if (Auth.user.getMaNV().equalsIgnoreCase(acc.getMaNV())) {
                 new ThongBaoJDialog(null, true).alert(2, "Bạn không thể xóa chính bạn!");
             } else if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa nhân viên này?")) {
-                String manvx = nvc.getMaNV();
                 try {
-                    daonv.delete(manvx);
+                    daoac.delete(acc.getUserName());
                     this.fillTableAcc();
-                    this.clearFormAcc("");
+                    this.clearFormAcc("NV001");
+                    this.updateStatusAcc();
                     new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
                 } catch (Exception e) {
                     new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");

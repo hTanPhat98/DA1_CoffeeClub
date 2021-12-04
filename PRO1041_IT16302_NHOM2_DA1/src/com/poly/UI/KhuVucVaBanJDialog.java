@@ -244,19 +244,21 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
             boolean kt1 = false;
             List<HoaDon> listhd = daohd.selectAll();
             List<Ban> listb = daoban.findByIdKhuVuc(makv);
-            for (Ban ban : listb) {
-                for (HoaDon hd : listhd) {
-                    if (hd.getMaBan().equals(ban.getMaBan())) {
-                        if (hd.isTrangThai() == true) {
-                            kt1 = true;
-                        } else {
-                            kt1 = false;
-                            break;
+            if (!listhd.isEmpty()) {
+                for (Ban ban : listb) {
+                    for (HoaDon hd : listhd) {
+                        if (hd.getMaBan().equals(ban.getMaBan())) {
+                            if (hd.isTrangThai() == true) {
+                                kt1 = true;
+                            } else {
+                                kt1 = false;
+                                break;
+                            }
                         }
                     }
-                }
-                if (!kt1) {
-                    break;
+                    if (!kt1) {
+                        break;
+                    }
                 }
             }
             if (kt1) {
@@ -333,17 +335,19 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     }
 
     private void deleteban() {
-        if (new ThongBaoJDialog(null, true).confirm("Thao tác sẽ xóa mọi dữ liệu của bàn, xác nhận xóa hoặc không?")) {
+        if (new ThongBaoJDialog(null, true).confirm("Xác nhận xóa hoặc không?")) {
             String maban = txtMaBan.getText();
             List<HoaDon> list = daohd.selectAll();
             boolean kt = false;
-            for (HoaDon hd : list) {
-                if (hd.getMaBan().equals(maban)) {
-                    if (hd.isTrangThai() == true) {
-                        kt = true;
-                    } else {
-                        kt = false;
-                        break;
+            if (!list.isEmpty()) {
+                for (HoaDon hd : list) {
+                    if (hd.getMaBan().equals(maban)) {
+                        if (hd.isTrangThai() == true) {
+                            kt = true;
+                        } else {
+                            kt = false;
+                            break;
+                        }
                     }
                 }
             }

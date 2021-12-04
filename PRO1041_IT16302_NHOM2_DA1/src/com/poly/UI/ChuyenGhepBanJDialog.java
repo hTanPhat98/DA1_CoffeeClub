@@ -15,6 +15,8 @@ import com.poly.Model.Ban;
 import com.poly.Model.HoaDon;
 import com.poly.Model.HoaDonCT;
 import com.poly.Model.NhanVien;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +34,9 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form ChuyenGhepBanJDialog
+     *
+     * @param parent
+     * @param modal
      */
     public ChuyenGhepBanJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -53,6 +58,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private HoaDon hd1, hd2;
 
     private void init(Integer MaHD, BanHangJDialog bhjd) {
+        this.addClosing();
         this.setIconImage(XImage.getAppIcon());
         this.setLocationRelativeTo(null);
         this.loadTTBan(MaHD);
@@ -84,10 +90,14 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
     private void loadTTBan(Integer MaHD) {
         HoaDon hd = daohd.selectById(MaHD);
+        Ban b = daoban.selectById(hd.getMaBan());
         hd1 = hd;
         txtBanDangChon.setText(daoban.selectTenBan(hd.getMaBan()));
         txtMaBan.setText(hd.getMaBan());
         txtMaHoaDon.setText(String.valueOf(hd.getMaHD()));
+        if (!b.getGhepBan().equals("")) {
+            btnGopBan.setEnabled(false);
+        }
     }
 
     private void loadMon(int hdct) {
@@ -143,13 +153,34 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private void loadMahdC(String ttb) {
         String[] TTB = ttb.split("-");
         if (TTB.length == 3) {
-            String maHD = TTB[1];
-            HoaDon hd = daohd.selectByMahd(maHD);
+            String maBan = TTB[1];
+            Ban b = daoban.selectById(maBan);
+            Ban b1 = daoban.selectById(txtMaBan.getText());
+            if (!b.getGhepBan().equals("")) {
+                btnChuyenBan.setEnabled(false);
+                btnChuyenMon.setEnabled(false);
+                btnGopBan.setEnabled(false);
+            } else {
+                btnChuyenBan.setEnabled(true);
+                btnChuyenMon.setEnabled(true);
+                if (b1.getGhepBan().equals("")) {
+                    btnGopBan.setEnabled(true);
+                } else {
+                    btnGopBan.setEnabled(false);
+                }
+            }
+            HoaDon hd = daohd.selectByMahd(maBan);
             hd2 = hd;
             txtMaHoaDonBanChuyen.setText(hd.getMaHD() + "");
             this.fillTable2(hd.getMaHD());
             btnTaoHDMoi.setEnabled(false);
         } else {
+            String maBan = TTB[1];
+            Ban b = daoban.selectById(maBan);
+            if (b.getGhepBan().equals("")) {
+                btnChuyenBan.setEnabled(true);
+                btnChuyenMon.setEnabled(true);
+            }
             txtMaHoaDonBanChuyen.setText("Bàn Mới");
             DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
             model.setRowCount(0);
@@ -157,7 +188,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         }
     }
 
-    private void chuyenBan() {
+    private void chonBan() {
         if (cboChuyenGhep.getSelectedItem() != null) {
             String ttb = cboChuyenGhep.getSelectedItem().toString();
             this.loadMahdC(ttb);
@@ -294,36 +325,57 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }
 
     private void clickTblLeft() {
-        btnMoveAllLeft.setEnabled(false);
-        btnMoveLeft.setEnabled(false);
-        btnMoveRight.setEnabled(true);
-        btnMoveAllRight.setEnabled(true);
-        int rows = tblHoaDonGoc.getSelectedRow();
-        int hdct = (int) tblHoaDonGoc.getValueAt(rows, 1);
-        this.loadMon(hdct);
+        Ban b = daoban.selectById(txtMaBan.getText());
+        if (b.getGhepBan().equals("")) {
+            btnMoveAllLeft.setEnabled(false);
+            btnMoveLeft.setEnabled(false);
+            btnMoveRight.setEnabled(true);
+            btnMoveAllRight.setEnabled(true);
+            int rows = tblHoaDonGoc.getSelectedRow();
+            int hdct = (int) tblHoaDonGoc.getValueAt(rows, 1);
+            this.loadMon(hdct);
+        }
     }
 
     private void clickTblRight() {
-        btnMoveAllLeft.setEnabled(true);
-        btnMoveLeft.setEnabled(true);
-        btnMoveRight.setEnabled(false);
-        btnMoveAllRight.setEnabled(false);
-        int rows = tblHoaDonDaChuyen.getSelectedRow();
-        int hdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
-        this.loadMon(hdct);
+        Ban b = daoban.selectById(cboChuyenGhep.getSelectedItem().toString().split("-")[1]);
+        if (b.getGhepBan().equals("")) {
+            btnMoveAllLeft.setEnabled(true);
+            btnMoveLeft.setEnabled(true);
+            btnMoveRight.setEnabled(false);
+            btnMoveAllRight.setEnabled(false);
+            int rows = tblHoaDonDaChuyen.getSelectedRow();
+            int hdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
+            this.loadMon(hdct);
+        }
     }
 
     private void chuyenDoiBan() {
         if (txtMaHoaDonBanChuyen.getText().equals("Bàn Mới")) {
             new ThongBaoJDialog(null, true).alert(2, "Chưa có hóa đơn trên bàn mới!!!");
-        } else if (tblHoaDonGoc.getRowCount() == 0) {
+        } else {
+            this.chuyenAllR();
+            Ban b1 = daoban.selectById(txtMaBan.getText());
+
+            HoaDon hd = daohd.selectById(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+            Ban b3 = daoban.selectById(hd.getMaBan());
+
+            if (!b1.getGhepBan().equals("")) {
+
+                Ban b2 = daoban.selectById(b1.getGhepBan());
+                b2.setGhepBan(b3.getMaBan());
+                daoban.update(b2);
+
+                b3.setGhepBan(b1.getGhepBan());
+                daoban.update(b3);
+
+                b1.setGhepBan("");
+                daoban.update(b1);
+            }
             daohd.delete(Integer.valueOf(txtMaHoaDon.getText()));
             athis.resetForm();
             this.dispose();
-        } else {
-            new ThongBaoJDialog(null, true).alert(2, "Danh sách của hóa đơn cần chuyển còn sản phẩm!!!");
         }
-
     }
 
     private void gopGhepBan() {
@@ -344,6 +396,45 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private void chuyenMon() {
         athis.resetForm();
         this.dispose();
+    }
+
+    private void addClosing() {
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                athis.resetForm();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 
     /**
@@ -776,7 +867,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cboChuyenGhepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChuyenGhepActionPerformed
-        this.chuyenBan();
+        this.chonBan();
     }//GEN-LAST:event_cboChuyenGhepActionPerformed
 
     private void btnMoveAllRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveAllRightActionPerformed
