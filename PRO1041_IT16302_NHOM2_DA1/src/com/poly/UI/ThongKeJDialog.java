@@ -106,13 +106,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
             List<HoaDon> listhn = tkdao.selectAll(day, month, year);
             for (HoaDon hd : listhn) {
-                NhanVien listnv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
                     i,
                     hd.getMaHD(),
                     dateformat.format(hd.getNgayHD()),
                     currencyVN.format(hd.getTongTien()),
-                    listnv.getTenNV()
+                    hd.getTenNV()
                 };
                 model.addRow(row);
                 i++;
@@ -167,15 +166,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tblChiTietHoaDon.getModel();
         model.setRowCount(0);
         int i = 1;
-        List<HoaDonCT> listHDCT = (List<HoaDonCT>) hdctdao.selectByHDCT(mahd);
+        List<HoaDonCT> listHDCT = (List<HoaDonCT>) hdctdao.selectHDCTByHD(mahd);
 
         for (HoaDonCT hdct : listHDCT) {
-            Menu mon = daoMenu.selectById(hdct.getMaMon());
             ttmon = hdct.getDonGia() * hdct.getSoLuong();
             Object[] row = {
                 i,
                 hdct.getMaHDCT(),
-                mon.getTenMon(),
+                hdct.getTenMon(),
                 currencyVN.format(hdct.getDonGia()),
                 hdct.getSoLuong(),
                 currencyVN.format(ttmon)
@@ -196,13 +194,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         try {
             List<HoaDon> listhd = tkdao.selectLichSuHD();
             for (HoaDon hd : listhd) {
-                NhanVien listnv = nvdao.selectById(hd.getMaNV());
                 Object[] row = {
                     i,
                     hd.getMaHD(),
                     dateformat.format(hd.getNgayHD()),
                     currencyVN.format(hd.getTongTien()),
-                    listnv.getTenNV()
+                    hd.getTenNV()
                 };
                 model.addRow(row);
                 tongHD++;
@@ -263,15 +260,14 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         model.setRowCount(0);
         int i = 1;
         try {
-            List<HoaDonCT> listCTHD = hdctdao.selectByHDCT(MaHD);
+            List<HoaDonCT> listCTHD = hdctdao.selectHDCTByHD(MaHD);
 
             for (HoaDonCT hdct : listCTHD) {
-                Menu mon = daoMenu.selectById(hdct.getMaMon());
                 ttmon = hdct.getSoLuong() * hdct.getDonGia();
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
-                    mon.getTenMon(),
+                    hdct.getTenMon(),
                     currencyVN.format(hdct.getDonGia()),
                     hdct.getSoLuong(),
                     currencyVN.format(ttmon)

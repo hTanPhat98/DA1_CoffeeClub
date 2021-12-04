@@ -8,12 +8,13 @@ package com.poly.UI;
 import com.poly.DAO.BanDAO;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.DAO.HoaDonDAO;
+import com.poly.DAO.NhanVienDAO;
 import com.poly.Helper.Auth;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
 import com.poly.Model.HoaDon;
 import com.poly.Model.HoaDonCT;
-import com.poly.Model.HoaDonShow;
+import com.poly.Model.NhanVien;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +47,7 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
     BanDAO daoban = new BanDAO();
     HoaDonDAO daohd = new HoaDonDAO();
     HoaDonCTDAO daohdct = new HoaDonCTDAO();
+    NhanVienDAO daonv=new NhanVienDAO();
     Locale localeVN = new Locale("vi", "VN");
     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
     private BanHangCamUngJDialog athis;
@@ -66,8 +68,8 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
         model.setRowCount(0);
         int i = 1;
         try {
-            List<HoaDonShow> list = daohdct.selectHDShow(MaHD);
-            for (HoaDonShow hdct : list) {
+            List<HoaDonCT> list = daohdct.selectHDCTByHD(MaHD);
+            for (HoaDonCT hdct : list) {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
@@ -91,7 +93,7 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
     }
 
     private void loadMon(int hdct) {
-        HoaDonShow hds = daohdct.selecthdctShow(hdct);
+        HoaDonCT hds = daohdct.selectById(hdct);
         txtMon.setText(hds.getTenMon());
         SpinnerModel model = new SpinnerNumberModel(hds.getSoLuong(), 1, hds.getSoLuong(), 1);
         spnSoLuongChuyen.setModel(model);
@@ -169,8 +171,8 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
         model.setRowCount(0);
         int i = 1;
         try {
-            List<HoaDonShow> list = daohdct.selectHDShow(Mahd);
-            for (HoaDonShow hdct : list) {
+            List<HoaDonCT> list = daohdct.selectHDCTByHD(Mahd);
+            for (HoaDonCT hdct : list) {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
@@ -195,8 +197,9 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
     private void taoHDMoi() {
         String ttb = cboChuyenGhep.getSelectedItem().toString();
         int i = cboChuyenGhep.getSelectedIndex();
+        NhanVien nv = daonv.selectById(Auth.user.getMaNV());
         String[] ttBSplit = ttb.split("-");
-        HoaDon hdm = new HoaDon(ttBSplit[1], Auth.user.getMaNV(), new Date(), 0, false);
+        HoaDon hdm = new HoaDon(ttBSplit[1], nv.getMaNV(), new Date(), 0, false, nv.getTenNV());
         daohd.insert(hdm);
         HoaDon hdmt = daohd.selectByMahd(ttBSplit[1]);
         txtMaHoaDonBanChuyen.setText(hdmt.getMaHD() + "");

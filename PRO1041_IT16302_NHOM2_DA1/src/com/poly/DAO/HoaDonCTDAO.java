@@ -7,7 +7,7 @@ package com.poly.DAO;
 
 import com.poly.Helper.JdbcHelper;
 import com.poly.Model.HoaDonCT;
-import com.poly.Model.HoaDonShow;
+//import com.poly.Model.HoaDonShow;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,13 @@ import java.util.List;
  */
 public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
 
-    String INSERT_SQL = "INSERT INTO HOADONCT (MaHD, MaMon, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
-    String UPDATE_SQL = "UPDATE HOADONCT SET MaHD=?, MaMon=?, SoLuong=?, DonGia=? WHERE MaHDCT=?";
+    String INSERT_SQL = "INSERT INTO HOADONCT (MaHD, MaMon, SoLuong, DonGia, TenMon) VALUES (?, ?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE HOADONCT SET MaHD=?, MaMon=?, SoLuong=?, DonGia=?, TenMon=? WHERE MaHDCT=?";
     String DELETE_SQL = "DELETE FROM HOADONCT WHERE MaHDCT=?";
     String SELECT_ALL_SQL = "SELECT * FROM HOADONCT ";
     String SELECT_BY_ID_SQL = "SELECT * FROM HOADONCT WHERE MaHDCT=?";
+    
+    //hoa don show
     String SELECT_HD_HDCT = "SELECT hdct.MaHDCT,hdct.MaMon,mon.TenMon,hdct.DonGia,hdct.SoLuong FROM HOADONCT hdct"
             + " JOIN HOADON hd on hdct.MaHD=hd.MaHD"
             + "	JOIN MENU mon on mon.MaMon =hdct.MaMon"
@@ -31,6 +33,7 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
             + " JOIN HOADON hd on hdct.MaHD=hd.MaHD"
             + "	JOIN MENU mon on mon.MaMon =hdct.MaMon"
             + "	WHERE hdct.MaHDCT=?";
+    
     String UPDATE_SL = "UPDATE HOADONCT SET SoLuong=? WHERE MaHDCT=?";
     String SELECT_ID_HD = "SELECT * FROM HOADONCT WHERE MaHD=?";
 
@@ -40,7 +43,8 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
                 entity.getMaHD(),
                 entity.getMaMon(),
                 entity.getSoLuong(),
-                entity.getDonGia()
+                entity.getDonGia(),
+                entity.getTenMon()
         );
     }
 
@@ -51,11 +55,13 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
                 entity.getMaMon(),
                 entity.getSoLuong(),
                 entity.getDonGia(),
+                entity.getTenMon(),
                 entity.getMaHDCT()
+                
         );
     }
 
-    public void updateSl(HoaDonShow entity) {
+    public void updateSl(HoaDonCT entity) {
         JdbcHelper.update(UPDATE_SL,
                 entity.getSoLuong(),
                 entity.getMaHDCT()
@@ -93,26 +99,7 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
                 entity.setMaMon(rs.getString("MaMon"));
                 entity.setSoLuong(rs.getInt("SoLuong"));
                 entity.setDonGia(rs.getFloat("DonGia"));
-                list.add(entity);
-            }
-            rs.getStatement().getConnection().close();
-            return list;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected List<HoaDonShow> selectHDCT(String sql, Object... args) {
-        List<HoaDonShow> list = new ArrayList<>();
-        try {
-            ResultSet rs = JdbcHelper.query(sql, args);
-            while (rs.next()) {
-                HoaDonShow entity = new HoaDonShow();
-                entity.setMaHDCT(rs.getInt("MaHDCT"));
-                entity.setMaMon(rs.getString("MaMon"));
                 entity.setTenMon(rs.getString("TenMon"));
-                entity.setDonGia(rs.getFloat("DonGia"));
-                entity.setSoLuong(rs.getInt("SoLuong"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
@@ -122,19 +109,39 @@ public class HoaDonCTDAO extends CoffeShopSysDAO<HoaDonCT, Integer> {
         }
     }
 
-    public List<HoaDonShow> selectHDShow(Integer key) {
-        return this.selectHDCT(SELECT_HD_HDCT, key);
-    }
+//    protected List<HoaDonShow> selectHDCT(String sql, Object... args) {
+//        List<HoaDonShow> list = new ArrayList<>();
+//        try {
+//            ResultSet rs = JdbcHelper.query(sql, args);
+//            while (rs.next()) {
+//                HoaDonShow entity = new HoaDonShow();
+//                entity.setMaHDCT(rs.getInt("MaHDCT"));
+//                entity.setMaMon(rs.getString("MaMon"));
+//                entity.setTenMon(rs.getString("TenMon"));
+//                entity.setDonGia(rs.getFloat("DonGia"));
+//                entity.setSoLuong(rs.getInt("SoLuong"));
+//                list.add(entity);
+//            }
+//            rs.getStatement().getConnection().close();
+//            return list;
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    public List<HoaDonShow> selectHDShow(Integer key) {
+//        return this.selectHDCT(SELECT_HD_HDCT, key);
+//    }
+//
+//    public HoaDonShow selecthdctShow(Integer key) {
+//        List<HoaDonShow> list = this.selectHDCT(SELECT_HDCT, key);
+//        if (list.isEmpty()) {
+//            return null;
+//        }
+//        return list.get(0);
+//    }
 
-    public HoaDonShow selecthdctShow(Integer key) {
-        List<HoaDonShow> list = this.selectHDCT(SELECT_HDCT, key);
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
-    }
-
-    public List<HoaDonCT> selectByHDCT(Integer key) {
+    public List<HoaDonCT> selectHDCTByHD(Integer key) {
         return this.selectBySql(SELECT_ID_HD, key);
     }
 

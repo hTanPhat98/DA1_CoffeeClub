@@ -15,18 +15,18 @@ public class HoaDonCT {
     private String maMon;
     private int soLuong;
     private float donGia;
+    private String tenMon;
 
     public HoaDonCT() {
     }
 
-    public HoaDonCT(int maHD, String maMon, int soLuong, float donGia) {
+    public HoaDonCT(int maHD, String maMon, int soLuong, float donGia, String tenMon) {
         this.maHD = maHD;
         this.maMon = maMon;
         this.soLuong = soLuong;
         this.donGia = donGia;
+        this.tenMon = tenMon;
     }
-
-    
     
     public int getMaHDCT() {
         return maHDCT;
@@ -66,6 +66,14 @@ public class HoaDonCT {
 
     public void setDonGia(float donGia) {
         this.donGia = donGia;
+    }
+
+    public String getTenMon() {
+        return tenMon;
+    }
+
+    public void setTenMon(String tenMon) {
+        this.tenMon = tenMon;
     }
 
     

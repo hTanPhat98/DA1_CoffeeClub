@@ -6,10 +6,12 @@
 package com.poly.UI;
 
 import com.poly.DAO.BanDAO;
+import com.poly.DAO.HoaDonDAO;
 import com.poly.DAO.KhuVucDAO;
 import com.poly.Helper.Regex;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
+import com.poly.Model.HoaDon;
 import com.poly.Model.KhuVuc;
 import java.awt.Color;
 import java.awt.Font;
@@ -48,6 +50,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     int index = -1;
     KhuVucDAO daokv = new KhuVucDAO();
     BanDAO daoban = new BanDAO();
+    HoaDonDAO daohd = new HoaDonDAO();
     List<Ban> listBan = new ArrayList();
 
     // TABLE AND LIST
@@ -101,7 +104,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
 
         txtMaBan.setText(model.getMaBan());
         txtTenBan.setText(model.getTenBan());
-        
+
         for (int i = 0; i < cboKhuVucBan.getItemCount(); i++) {
             String[] kv = cboKhuVucBan.getItemAt(i).split("-");
             if (kv[1].equals(model.getMaKV())) {
@@ -221,6 +224,7 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
         Regex r = new Regex();
         if (r.checkTenKV(txtTenKV) && r.checkTienIchKV(txtTienIch)) {
             KhuVuc kv = getModelKhuvuc();
+
             try {
                 daokv.insert(kv);
                 this.fillToListKV();
@@ -237,14 +241,37 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     private void deleteKhuVuc() {
         if (new ThongBaoJDialog(null, true).confirm("Xác nhận xóa hoặc không?")) {
             String makv = txtMaKV.getText();
-            try {
-                daokv.delete(makv);
-                this.fillToListKV();
-                this.clearFormKV();
-                new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
-            } catch (Exception e) {
-                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
+            boolean kt1 = false;
+            List<HoaDon> listhd = daohd.selectAll();
+            List<Ban> listb = daoban.findByIdKhuVuc(makv);
+            for (Ban ban : listb) {
+                for (HoaDon hd : listhd) {
+                    if (hd.getMaBan().equals(ban.getMaBan())) {
+                        if (hd.isTrangThai() == true) {
+                            kt1 = true;
+                        } else {
+                            kt1 = false;
+                            break;
+                        }
+                    }
+                }
+                if (!kt1) {
+                    break;
+                }
             }
+            if (kt1) {
+                try {
+                    daokv.delete(makv);
+                    this.fillToListKV();
+                    this.clearFormKV();
+                    new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
+                } catch (Exception e) {
+                    new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
+                }
+            } else {
+                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại! Có bàn chưa thanh toán hóa đơn!");
+            }
+
         }
     }
 
@@ -308,14 +335,31 @@ public class KhuVucVaBanJDialog extends javax.swing.JDialog {
     private void deleteban() {
         if (new ThongBaoJDialog(null, true).confirm("Thao tác sẽ xóa mọi dữ liệu của bàn, xác nhận xóa hoặc không?")) {
             String maban = txtMaBan.getText();
-            try {
-                daoban.delete(maban);
-                this.fillToListKV();
-                this.clearFormBan();
-                new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
-            } catch (Exception e) {
-                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
+            List<HoaDon> list = daohd.selectAll();
+            boolean kt = false;
+            for (HoaDon hd : list) {
+                if (hd.getMaBan().equals(maban)) {
+                    if (hd.isTrangThai() == true) {
+                        kt = true;
+                    } else {
+                        kt = false;
+                        break;
+                    }
+                }
             }
+            if (kt) {
+                try {
+                    daoban.delete(maban);
+                    this.fillToListKV();
+                    this.clearFormBan();
+                    new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
+                } catch (Exception e) {
+                    new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
+                }
+            } else {
+                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại! Bàn chưa thanh toán hóa đơn!");
+            }
+
         }
     }
 

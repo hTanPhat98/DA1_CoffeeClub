@@ -62,7 +62,7 @@ public class ThucDonJDialog extends javax.swing.JDialog {
         this.updateStatusMon();
         this.updateStatusLoaiMon();
         this.addTFtoList();
-        
+
     }
 
     int indexM = -1, indexLM = -1;
@@ -313,21 +313,19 @@ public class ThucDonJDialog extends javax.swing.JDialog {
     }
 
     private void deleteMon() {
-        if (!Auth.isManager()) {
-            new ThongBaoJDialog(null, true).alert(2, "Bạn không có quyền xóa!");
-        } else {
-            if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa món ăn này?")) {
-                String maloaimon = txtMaMon.getText();
-                try {
-                    daomenu.delete(maloaimon);
-                    this.fillToTableMenu();
-                    this.clearMon();
-                    new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
-                } catch (Exception e) {
-                    new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
-                }
+        
+        if (new ThongBaoJDialog(null, true).confirm("Bạn thực sự muốn xóa món ăn này?")) {
+            String maloaimon = txtMaMon.getText();
+            try {
+                daomenu.delete(maloaimon);
+                this.fillToTableMenu();
+                this.clearMon();
+                new ThongBaoJDialog(null, true).alert(1, "Xóa thành công!");
+            } catch (Exception e) {
+                new ThongBaoJDialog(null, true).alert(2, "Xóa thất bại!");
             }
         }
+
     }
 
     private void insertLoaiMon() {

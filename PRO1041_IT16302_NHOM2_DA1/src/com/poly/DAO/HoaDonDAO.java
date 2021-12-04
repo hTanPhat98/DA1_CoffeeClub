@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
 
-    String INSERT_SQL = "INSERT INTO HOADON (MaBan, MaNV, NgayHD, Tongtien, Trangthai) VALUES (?, ?, ?, ?, ?)";
-    String UPDATE_SQL = "UPDATE HOADON SET MaBan=?, MaNV=?, NgayHD=?, Tongtien=?, Trangthai=? WHERE MaHD=?";
+    String INSERT_SQL = "INSERT INTO HOADON (MaBan, MaNV, NgayHD, Tongtien, Trangthai, TenNV) VALUES (?, ?, ?, ?, ?, ?)";
+    String UPDATE_SQL = "UPDATE HOADON SET MaBan=?, MaNV=?, NgayHD=?, Tongtien=?, Trangthai=?, TenNV=?  WHERE MaHD=?";
     String UPDATE_TT_SQL = "UPDATE HOADON SET Tongtien=?, Trangthai=? WHERE MaHD=?";
     String DELETE_SQL = "DELETE FROM HOADON WHERE MaHD=?";
     String SELECT_ALL_SQL = "SELECT * FROM HOADON";
@@ -33,7 +33,8 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
                 entity.getMaNV(),
                 entity.getNgayHD(),
                 entity.getTongTien(),
-                entity.isTrangThai()
+                entity.isTrangThai(),
+                entity.getTenNV()
         );
     }
 
@@ -45,6 +46,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
                 entity.getNgayHD(),
                 entity.getTongTien(),
                 entity.isTrangThai(),
+                entity.getTenNV(),
                 entity.getMaHD()
         );
     }
@@ -89,6 +91,7 @@ public class HoaDonDAO extends CoffeShopSysDAO<HoaDon, Integer> {
                 entity.setNgayHD(rs.getDate("NgayHD"));
                 entity.setTongTien(rs.getFloat("TongTien"));
                 entity.setTrangThai(rs.getBoolean("TrangThai"));
+                entity.setTenNV(rs.getString("TenNV"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

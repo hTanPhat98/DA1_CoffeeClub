@@ -8,12 +8,13 @@ package com.poly.UI;
 import com.poly.DAO.BanDAO;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.DAO.HoaDonDAO;
+import com.poly.DAO.NhanVienDAO;
 import com.poly.Helper.Auth;
 import com.poly.Helper.XImage;
 import com.poly.Model.Ban;
 import com.poly.Model.HoaDon;
 import com.poly.Model.HoaDonCT;
-import com.poly.Model.HoaDonShow;
+import com.poly.Model.NhanVien;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,7 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     BanDAO daoban = new BanDAO();
     HoaDonDAO daohd = new HoaDonDAO();
     HoaDonCTDAO daohdct = new HoaDonCTDAO();
+    NhanVienDAO daonv = new NhanVienDAO();
     Locale localeVN = new Locale("vi", "VN");
     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
     private BanHangJDialog athis;
@@ -55,17 +57,17 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
         this.loadTTBan(MaHD);
         this.fillTable1(MaHD);
-        this.loadDSBan(MaHD,0);
+        this.loadDSBan(MaHD, 0);
         this.athis = bhjd;
     }
 
     private void fillTable1(Integer MaHD) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDonGoc.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
-            List<HoaDonShow> list = daohdct.selectHDShow(MaHD);
-            for (HoaDonShow hdct : list) {
+            List<HoaDonCT> list = daohdct.selectHDCTByHD(MaHD);
+            for (HoaDonCT hdct : list) {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
@@ -89,9 +91,9 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     }
 
     private void loadMon(int hdct) {
-        HoaDonShow hds = daohdct.selecthdctShow(hdct);
-        txtMon.setText(hds.getTenMon());
-        SpinnerModel model = new SpinnerNumberModel(hds.getSoLuong(), 1, hds.getSoLuong(), 1);
+        HoaDonCT hdcts = daohdct.selectById(hdct);
+        txtMon.setText(hdcts.getTenMon());
+        SpinnerModel model = new SpinnerNumberModel(hdcts.getSoLuong(), 1, hdcts.getSoLuong(), 1);
         spnSoLuongChuyen.setModel(model);
         spnSoLuongChuyen.setValue(1);
     }
@@ -165,10 +167,10 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
     private void fillTable2(Integer Mahd) {
         DefaultTableModel model = (DefaultTableModel) tblHoaDonDaChuyen.getModel();
         model.setRowCount(0);
-        int i=1;
+        int i = 1;
         try {
-            List<HoaDonShow> list = daohdct.selectHDShow(Mahd);
-            for (HoaDonShow hdct : list) {
+            List<HoaDonCT> list = daohdct.selectHDCTByHD(Mahd);
+            for (HoaDonCT hdct : list) {
                 Object[] row = {
                     i,
                     hdct.getMaHDCT(),
@@ -192,14 +194,15 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
 
     private void taoHDMoi() {
         String ttb = cboChuyenGhep.getSelectedItem().toString();
-        int i=cboChuyenGhep.getSelectedIndex();
+        int i = cboChuyenGhep.getSelectedIndex();
+        NhanVien nv = daonv.selectById(Auth.user.getMaNV());
         String[] ttBSplit = ttb.split("-");
-        HoaDon hdm = new HoaDon(ttBSplit[1], Auth.user.getMaNV(), new Date(), 0, false);
+        HoaDon hdm = new HoaDon(ttBSplit[1], nv.getMaNV(), new Date(), 0, false, nv.getTenNV());
         daohd.insert(hdm);
         HoaDon hdmt = daohd.selectByMahd(ttBSplit[1]);
         txtMaHoaDonBanChuyen.setText(hdmt.getMaHD() + "");
         btnTaoHDMoi.setEnabled(false);
-        this.loadDSBan(Integer.valueOf(txtMaHoaDon.getText()),i);
+        this.loadDSBan(Integer.valueOf(txtMaHoaDon.getText()), i);
     }
 
     private void chuyenR() {
@@ -258,22 +261,22 @@ public class ChuyenGhepBanJDialog extends javax.swing.JDialog {
             if (rows == -1) {
                 new ThongBaoJDialog(null, true).alert(2, "Chưa chọn món!!!");
             } else {
-            int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 5), sls;
-            int slc = (int) spnSoLuongChuyen.getValue();
-            if (slc < sld) {
-                int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
-                HoaDonCT hdct = daohdct.selectById(mahdct);
-                sls = sld - slc;
-                hdct.setSoLuong(sls);
-                daohdct.update(hdct);
-                hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
-                hdct.setSoLuong(slc);
-                daohdct.insert(hdct);
-            } else {
-                chuyenHdctL(rows);
-            }
-            fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
-            fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
+                int sld = (int) tblHoaDonDaChuyen.getValueAt(rows, 5), sls;
+                int slc = (int) spnSoLuongChuyen.getValue();
+                if (slc < sld) {
+                    int mahdct = (int) tblHoaDonDaChuyen.getValueAt(rows, 1);
+                    HoaDonCT hdct = daohdct.selectById(mahdct);
+                    sls = sld - slc;
+                    hdct.setSoLuong(sls);
+                    daohdct.update(hdct);
+                    hdct.setMaHD(Integer.valueOf(txtMaHoaDon.getText()));
+                    hdct.setSoLuong(slc);
+                    daohdct.insert(hdct);
+                } else {
+                    chuyenHdctL(rows);
+                }
+                fillTable1(Integer.valueOf(txtMaHoaDon.getText()));
+                fillTable2(Integer.valueOf(txtMaHoaDonBanChuyen.getText()));
             }
         }
     }

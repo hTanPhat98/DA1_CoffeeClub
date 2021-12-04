@@ -8,7 +8,6 @@ package com.poly.UI;
 import com.poly.DAO.HoaDonCTDAO;
 import com.poly.Helper.XImage;
 import com.poly.Model.HoaDonCT;
-import com.poly.Model.HoaDonShow;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -25,13 +24,13 @@ public class CNSPCamUngJDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    private HoaDonShow hds;
+    private HoaDonCT hds;
     BanHangCamUngJDialog athis;
     HoaDonCTDAO daohdct = new HoaDonCTDAO();
     Locale localeVN = new Locale("vi", "VN");
     NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
 
-    public CNSPCamUngJDialog(java.awt.Frame parent, boolean modal, BanHangCamUngJDialog bhjd, HoaDonShow HDCT) {
+    public CNSPCamUngJDialog(java.awt.Frame parent, boolean modal, BanHangCamUngJDialog bhjd, HoaDonCT HDCT) {
         super(parent, modal);
         initComponents();
         init();
@@ -45,7 +44,7 @@ public class CNSPCamUngJDialog extends javax.swing.JDialog {
         this.setLocationRelativeTo(null);
     }
     
-    private void setHDCT(HoaDonShow HDCT) {
+    private void setHDCT(HoaDonCT HDCT) {
         txtTenSP.setText(HDCT.getTenMon());
         txtGiaTienSP.setText(currencyVN.format(HDCT.getDonGia()));
         spnSoLuong.setValue(HDCT.getSoLuong());

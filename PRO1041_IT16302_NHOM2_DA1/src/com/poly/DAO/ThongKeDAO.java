@@ -68,6 +68,7 @@ public class ThongKeDAO {
                 entity.setMaNV(rs.getString("MaNV"));
                 entity.setNgayHD(rs.getDate("NgayHD"));
                 entity.setTongTien(rs.getFloat("TongTien"));
+                entity.setTenNV(rs.getString("TenNV"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
