@@ -903,7 +903,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         btnLineChart.setBackground(new java.awt.Color(255, 255, 255));
         btnLineChart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnLineChart.setText("Biểu đồ đường (Doanh thu từng tháng)");
+        btnLineChart.setText("BIỂU ĐỒ ĐƯỜNG");
         btnLineChart.setFocusable(false);
         btnLineChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -913,7 +913,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         btnBarChart.setBackground(new java.awt.Color(255, 255, 255));
         btnBarChart.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnBarChart.setText("Biểu đồ cột (Doanh thu từng tháng)");
+        btnBarChart.setText("BIỂU ĐỒ CỘT");
         btnBarChart.setFocusable(false);
         btnBarChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

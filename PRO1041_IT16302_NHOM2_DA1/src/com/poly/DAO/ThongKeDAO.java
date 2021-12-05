@@ -39,7 +39,7 @@ public class ThongKeDAO {
     }
 
     public List<HDTHONGKE> selectListByTenNV(String TenNV) {
-        String SELECT_BY_TENNV = "select hd.MaHD,hd.NgayHD,hd.Tongtien,hd.TenNV from hoadon hd WHERE hd.Trangthai = 1 AND NV.TenNV =N'" + TenNV + "'";
+        String SELECT_BY_TENNV = "select hd.MaHD,hd.NgayHD,hd.Tongtien,hd.TenNV from hoadon hd WHERE hd.Trangthai = 1 AND hd.TenNV =N'" + TenNV + "'";
         return selectBySql1(SELECT_BY_TENNV);
     }
 
