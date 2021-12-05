@@ -28,6 +28,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -51,6 +52,8 @@ import javax.swing.table.JTableHeader;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
 
 /**
@@ -78,12 +81,11 @@ public class BanHangJDialog extends javax.swing.JDialog {
     KhuVucDAO daokv = new KhuVucDAO();
     LoaiMonDAO daolm = new LoaiMonDAO();
     HoaDonCTDAO daohdct = new HoaDonCTDAO();
-    NhanVienDAO daonv=new NhanVienDAO();
+    NhanVienDAO daonv = new NhanVienDAO();
     DefaultTableCellRenderer renderer;
     private Locale localeVN = new Locale("vi", "VN");
     private NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-    
-    
+
     private void init() {
         this.setIconImage(XImage.getAppIcon());
         this.setLocationRelativeTo(null);
@@ -334,7 +336,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void datBan() {
         String maBan = getMaBan;
-        NhanVien nv=daonv.selectById(Auth.user.getMaNV());
+        NhanVien nv = daonv.selectById(Auth.user.getMaNV());
         if (!maBan.equals("")) {
             try {
                 daohd.insert(new HoaDon(maBan, nv.getMaNV(), new Date(), 0, false, nv.getTenNV()));
@@ -450,7 +452,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
             String maMon = (String) tblSanPham.getValueAt(this.rowsp, 1);
             Menu mon = daomn.selectById(maMon);
             int sl = (int) spnSoLuong.getValue();
-            daohdct.insert(new HoaDonCT(Integer.valueOf(txtMaHoaDon.getText()), mon.getMaMon(), sl, mon.getGia(),mon.getTenMon()));
+            daohdct.insert(new HoaDonCT(Integer.valueOf(txtMaHoaDon.getText()), mon.getMaMon(), sl, mon.getGia(), mon.getTenMon()));
             this.fillTbHD();
         } else {
             new ThongBaoJDialog(null, true).alert(2, "Chưa đặt bàn không thể Order");
@@ -473,21 +475,14 @@ public class BanHangJDialog extends javax.swing.JDialog {
 
     private void xembill() {
         daohd.updateTT(TTHD, Integer.valueOf(txtMaHoaDon.getText()), false);
-        this.xuatBill(Integer.valueOf(txtMaHoaDon.getText()));
-    }
-
-    private void xuatBill(int mahd) {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_hh_mm_ss");
+        String sourceFileName = "report\\reportHoaDon.jasper";
+        Map map = new HashMap();
+        map.put("MaHD", Integer.valueOf(txtMaHoaDon.getText()));
+        JdbcHelper jdbc = new JdbcHelper();
+        JasperViewer jasperViewer = null;
         try {
-            String sourceFileName = "report\\reportHoaDon.jasper";
-            String tenfile = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Bill " + now.format(formatter) + ".pdf";
-            Map map = new HashMap();
-            map.put("MaHD", mahd);
-            JdbcHelper jdbc = new JdbcHelper();
-            String rp=JasperFillManager.fillReportToFile(sourceFileName, map, jdbc.connection);
-            JasperExportManager.exportReportToPdfFile(rp, tenfile);
-            JasperViewer jasperViewer = new JasperViewer(rp, false);
+            JasperPrint rp = JasperFillManager.fillReport(sourceFileName, map, jdbc.connection);
+            jasperViewer = new JasperViewer(rp, false);
             JDialog jdl = new JDialog(this);
             jdl.setContentPane(jasperViewer.getContentPane());
             jdl.setSize(jasperViewer.getSize());
@@ -497,6 +492,36 @@ public class BanHangJDialog extends javax.swing.JDialog {
         } catch (JRException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    private void xuatBill(int mahd) {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_hh_mm_ss");
+        String sourceFileName = "report\\reportHoaDon.jasper";
+        File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Bill");
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        String tenfile = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Bill\\Bill " + now.format(formatter) + ".pdf";
+        Map map = new HashMap();
+        map.put("MaHD", mahd);
+        JdbcHelper jdbc = new JdbcHelper();
+        JasperViewer jasperViewer = null;
+        try {
+            String rp = JasperFillManager.fillReportToFile(sourceFileName, map, jdbc.connection);
+            JasperExportManager.exportReportToPdfFile(rp, tenfile);
+            jasperViewer = new JasperViewer(rp, false);
+            JDialog jdl = new JDialog(this);
+            jdl.setContentPane(jasperViewer.getContentPane());
+            jdl.setSize(jasperViewer.getSize());
+            jdl.setTitle("Xem Hóa Đơn");
+            jdl.setLocationRelativeTo(null);
+            jdl.setVisible(true);
+            new ThongBaoJDialog(null, true).alert(1, "Bill đã được lưu trong thư mục Bill trên Màn Hình Chính ");
+        } catch (JRException ex) {
+            System.out.println(ex.getMessage());
+        }
+
     }
 
     private void resetHD() {
@@ -806,10 +831,7 @@ public class BanHangJDialog extends javax.swing.JDialog {
         tblSanPham.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Stt", "Mã món", "Tên món", "Giá tiền"

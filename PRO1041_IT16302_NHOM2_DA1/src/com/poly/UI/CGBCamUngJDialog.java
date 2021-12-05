@@ -617,7 +617,6 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
         lblMon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblMon.setText("Món:");
 
-        tblHoaDonGoc.setAutoCreateRowSorter(true);
         tblHoaDonGoc.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         tblHoaDonGoc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -747,7 +746,6 @@ public class CGBCamUngJDialog extends javax.swing.JDialog {
         txtMaHoaDonBanChuyen.setEditable(false);
         txtMaHoaDonBanChuyen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        tblHoaDonDaChuyen.setAutoCreateRowSorter(true);
         tblHoaDonDaChuyen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         tblHoaDonDaChuyen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

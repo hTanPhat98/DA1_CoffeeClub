@@ -16,6 +16,8 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.poly.Helper.XImage;
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,6 +31,8 @@ public class DangNhapQRJDialog extends javax.swing.JDialog implements Runnable, 
 
     /**
      * Creates new form DangNhapQRJDialog
+     * @param parent
+     * @param modal
      */
     public DangNhapQRJDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -52,6 +56,7 @@ public class DangNhapQRJDialog extends javax.swing.JDialog implements Runnable, 
     private void init() {
         this.setIconImage(XImage.getAppIcon());
         this.setLocationRelativeTo(null);
+        this.addClosing();
         Dimension size = WebcamResolution.QVGA.getSize();
         webcam = Webcam.getWebcams().get(0); //0 is default webcam
         webcam.setViewSize(size);
@@ -100,7 +105,45 @@ public class DangNhapQRJDialog extends javax.swing.JDialog implements Runnable, 
         t.setDaemon(true);
         return t;
     }
+    
+    private void addClosing() {
+        this.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
 
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                webcam.close();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

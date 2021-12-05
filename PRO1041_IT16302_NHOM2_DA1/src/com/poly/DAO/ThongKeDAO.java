@@ -24,7 +24,7 @@ public class ThongKeDAO {
     }
 
     public List<HDTHONGKE> selectHDNV(int ngay, int thang, int nam) {
-        String SELECT_SQL = "SELECT HD.MaHD,HD.NgayHD,HD.Tongtien,NV.TenNV FROM HOADON HD JOIN NHANVIEN NV ON HD.MaNV = NV.MaNV WHERE HD.Trangthai = 1 AND DAY(NGAYHD)='" + ngay + "' AND MONTH(NGAYHD)='" + thang + "' AND YEAR(NGAYHD)= '" + nam + "'";
+        String SELECT_SQL = "SELECT HD.MaHD,HD.NgayHD,HD.Tongtien,HD.TenNV FROM HOADON HD WHERE HD.Trangthai = 1 AND DAY(NGAYHD)='" + ngay + "' AND MONTH(NGAYHD)='" + thang + "' AND YEAR(NGAYHD)= '" + nam + "'";
         return selectBySql1(SELECT_SQL);
     }
 
@@ -39,12 +39,12 @@ public class ThongKeDAO {
     }
 
     public List<HDTHONGKE> selectListByTenNV(String TenNV) {
-        String SELECT_BY_TENNV = "select hd.MaHD,hd.NgayHD,hd.Tongtien,nv.TenNV from hoadon hd join nhanvien nv on hd.MaNV = nv.MaNV WHERE hd.Trangthai = 1 AND NV.TenNV =N'" + TenNV + "'";
+        String SELECT_BY_TENNV = "select hd.MaHD,hd.NgayHD,hd.Tongtien,hd.TenNV from hoadon hd WHERE hd.Trangthai = 1 AND NV.TenNV =N'" + TenNV + "'";
         return selectBySql1(SELECT_BY_TENNV);
     }
 
     public List<HDTHONGKE> selectByTenNV() {
-        String SELECT_BY_TENNV = "select nv.TenNV from hoadon hd join nhanvien nv on hd.MaNV = nv.MaNV WHERE hd.Trangthai = 1 Group By nv.TenNV";
+        String SELECT_BY_TENNV = "select hd.TenNV from hoadon hd WHERE hd.Trangthai = 1 Group By hd.TenNV";
         return selectBySql2(SELECT_BY_TENNV);
     }
 

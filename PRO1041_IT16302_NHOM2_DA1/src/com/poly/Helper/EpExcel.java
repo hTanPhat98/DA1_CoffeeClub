@@ -43,7 +43,6 @@ public class EpExcel {
             bw.write("\n");
         }
         bw.close();
-        new ThongBaoJDialog(null, true).alert(1, "Đã xuất Excel ra Màn Hình Chính!");
         System.out.println("Write out to " + file);
     }
 }

@@ -15,7 +15,6 @@ import com.poly.Helper.XImage;
 import com.poly.Model.HDTHONGKE;
 import com.poly.Model.HoaDon;
 import com.poly.Model.HoaDonCT;
-import com.poly.Model.Menu;
 import com.poly.Model.NhanVien;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,6 +29,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -42,6 +43,7 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.util.ExportUtils;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -73,7 +75,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     HoaDonCTDAO hdctdao = new HoaDonCTDAO();
     DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
     DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
-
+    private JFreeChart chartT;
     List<HoaDon> list = new ArrayList<>();
 
     private void init() {
@@ -118,7 +120,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 tongtienHN = tongtienHN + hd.getTongTien();
             }
 
-            int tonghdHnay = list.size();
+            int tonghdHnay = listhn.size();
             txtTongHDHomNay.setText(String.valueOf(tonghdHnay));
             txtTongTienHomNay.setText(String.valueOf(tongtienHN));
         } catch (Exception e) {
@@ -133,8 +135,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         try {
             int month = now.getMonthValue();
             int day = now.getDayOfMonth();
-            List<HDTHONGKE> listHD = tkdao.selectHDNV(day, month, year
-            );
+            List<HDTHONGKE> listHD = tkdao.selectHDNV(day, month, year);
             switch (cboSort.getSelectedIndex()) {
                 case 1:
                     Collections.sort(listHD, (HDTHONGKE o1, HDTHONGKE o2) -> o1.getTenNV().compareTo(o2.getTenNV()));
@@ -218,7 +219,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     }
 
     private void showTenNV() {
-
         List<HDTHONGKE> listhdtk = tkdao.selectByTenNV();
         for (HDTHONGKE nv : listhdtk) {
             cboNhanVien.addItem(nv.getTenNV());
@@ -229,7 +229,6 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         String TenNV = (String) cboNhanVien.getSelectedItem();
         if (TenNV.equals("Tất cả")) {
             this.LoadLichSuHD();
-
         } else {
             DefaultTableModel model = (DefaultTableModel) tblLichSuHoaDon.getModel();
             model.setRowCount(0);
@@ -344,10 +343,9 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         }
         //CREATE CHART
         JFreeChart linechart = ChartFactory.createLineChart(
-                "Biểu đồ doanh thu năm " + year,
+                "Biểu đồ đường doanh thu năm " + year,
                 "",
                 "Doanh thu (VNĐ)", dataset, PlotOrientation.VERTICAL, false, true, false);
-
         //create plot object
         CategoryPlot lineCategoryPlot = linechart.getCategoryPlot();
         lineCategoryPlot.setRangeGridlinePaint(Color.GRAY);
@@ -362,10 +360,21 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         ChartPanel CP = new ChartPanel(linechart);
         jpnBieuDo.add(CP, BorderLayout.CENTER);
         jpnBieuDo.validate();
-
+        this.chartT = linechart;
     }
 
-    public void showBarChart(int year) {
+    private void xuatChartToPNG(JFreeChart chart) {
+        File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\ThongKe");
+        file.mkdir();
+        try {
+            ExportUtils.writeAsPNG(chart, 1280, 720, new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\ThongKe\\" + chart.getTitle().getText() + ".png"));
+            new ThongBaoJDialog(null, true).alert(1, "Ảnh biểu đồ đã xuất ra thư mục ThongKe trên Màn Hình Chính");
+        } catch (IOException ex) {
+            Logger.getLogger(ThongKeJDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void showBarChart(int year) {
         //Khởi tạo datatset cho chart
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -378,10 +387,9 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
         //Tạo chart
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Biểu đồ doanh thu năm " + year,
+                "Biểu đồ cột doanh thu năm " + year,
                 "",
                 "Doanh thu", dataset, PlotOrientation.VERTICAL, false, true, false);
-
         //Tạo thuộc tính hiện thị của đối tượng
         CategoryPlot barCategoryPlot = barChart.getCategoryPlot();
         barCategoryPlot.setRangeGridlinePaint(Color.GRAY); //kẻ ngang
@@ -397,12 +405,16 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         ChartPanel CP = new ChartPanel(barChart);
         jpnBieuDo.add(CP, BorderLayout.CENTER);
         jpnBieuDo.validate();
+        this.chartT = barChart;
     }
 
     private void exportExcelFile(JTable tbl, String tenfile) {
         try {
             EpExcel excel = new EpExcel();
-            excel.exportTable(tbl, new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\" + tenfile + ".xls"));
+            File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\ThongKe");
+            file.mkdir();
+            excel.exportTable(tbl, new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\ThongKe\\" + tenfile + ".xls"));
+            new ThongBaoJDialog(null, true).alert(1, "Đã xuất Excel ra thư mục ThongKe trên Màn Hình Chính!");
         } catch (IOException e) {
             new ThongBaoJDialog(null, true).alert(2, "Xuất Excel thất bại!");
             System.out.println(e);
@@ -531,6 +543,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         btnPrev = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         jpnBieuDo = new javax.swing.JPanel();
+        btnXuatPNG = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("THỐNG KÊ");
@@ -590,10 +603,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Stt", "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
@@ -700,10 +710,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblChiTietHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblChiTietHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Stt", "Mã HDCT", "Món", "Giá", "Số lượng", "Thành tiền"
@@ -796,10 +803,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblLichSuHoaDon.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblLichSuHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Stt", "Mã hóa đơn", "Ngày thanh toán", "Tổng tiền thanh toán", "Thu ngân"
@@ -981,7 +985,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pnlXuatExcel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -1024,10 +1028,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         tblCTHD.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tblCTHD.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Stt", "Mã HDCT", "Món", "Giá", "Số lượng", "Thành tiền"
@@ -1064,7 +1065,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             pnlCTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCTHDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1139,10 +1140,22 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         );
         jpnBieuDoLayout.setVerticalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 808, Short.MAX_VALUE)
+            .addGap(0, 784, Short.MAX_VALUE)
         );
 
         jpnFloor.add(jpnBieuDo, java.awt.BorderLayout.CENTER);
+
+        btnXuatPNG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnXuatPNG.setText("Xuất biểu đồ ra ảnh PNG");
+        btnXuatPNG.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.gray, java.awt.Color.lightGray, java.awt.Color.gray, java.awt.Color.lightGray));
+        btnXuatPNG.setContentAreaFilled(false);
+        btnXuatPNG.setFocusable(false);
+        btnXuatPNG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXuatPNGActionPerformed(evt);
+            }
+        });
+        jpnFloor.add(btnXuatPNG, java.awt.BorderLayout.PAGE_END);
 
         tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnFloor);
 
@@ -1158,7 +1171,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tabThongKe))
+                .addComponent(tabThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1229,6 +1242,10 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         this.nextBieuDo(ktbieudo);
     }//GEN-LAST:event_btnNextActionPerformed
 
+    private void btnXuatPNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatPNGActionPerformed
+        this.xuatChartToPNG(chartT);
+    }//GEN-LAST:event_btnXuatPNGActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1281,6 +1298,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrev;
     private javax.swing.JButton btnXuatExcel1;
+    private javax.swing.JButton btnXuatPNG;
     private javax.swing.JComboBox<String> cboNhanVien;
     private javax.swing.JComboBox<String> cboSoTien;
     private javax.swing.JComboBox<String> cboSort;
