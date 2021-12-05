@@ -543,7 +543,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         btnPrev = new javax.swing.JButton();
         btnNext = new javax.swing.JButton();
         jpnBieuDo = new javax.swing.JPanel();
-        btnXuatPNG = new javax.swing.JButton();
+        btnExChartToPNG = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("THỐNG KÊ");
@@ -985,7 +985,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
                 .addGroup(pnlLocDoanhThuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLineChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBarChart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pnlXuatExcel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -1065,7 +1065,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             pnlCTHDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCTHDLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 651, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1140,22 +1140,31 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         );
         jpnBieuDoLayout.setVerticalGroup(
             jpnBieuDoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 784, Short.MAX_VALUE)
+            .addGap(0, 768, Short.MAX_VALUE)
         );
 
         jpnFloor.add(jpnBieuDo, java.awt.BorderLayout.CENTER);
 
-        btnXuatPNG.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnXuatPNG.setText("Xuất biểu đồ ra ảnh PNG");
-        btnXuatPNG.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.gray, java.awt.Color.lightGray, java.awt.Color.gray, java.awt.Color.lightGray));
-        btnXuatPNG.setContentAreaFilled(false);
-        btnXuatPNG.setFocusable(false);
-        btnXuatPNG.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnXuatPNGActionPerformed(evt);
+        btnExChartToPNG.setBackground(new java.awt.Color(255, 255, 255));
+        btnExChartToPNG.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnExChartToPNG.setText("Xuất biểu đồ ra ảnh PNG");
+        btnExChartToPNG.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.gray, java.awt.Color.lightGray, java.awt.Color.gray, java.awt.Color.lightGray));
+        btnExChartToPNG.setFocusable(false);
+        btnExChartToPNG.setPreferredSize(new java.awt.Dimension(177, 40));
+        btnExChartToPNG.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnExChartToPNGMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnExChartToPNGMouseExited(evt);
             }
         });
-        jpnFloor.add(btnXuatPNG, java.awt.BorderLayout.PAGE_END);
+        btnExChartToPNG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExChartToPNGActionPerformed(evt);
+            }
+        });
+        jpnFloor.add(btnExChartToPNG, java.awt.BorderLayout.PAGE_END);
 
         tabThongKe.addTab("BIỂU ĐỒ THỐNG KÊ DOANH THU", jpnFloor);
 
@@ -1171,7 +1180,7 @@ public class ThongKeJDialog extends javax.swing.JDialog {
             .addGroup(pnlWallLayout.createSequentialGroup()
                 .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(tabThongKe, javax.swing.GroupLayout.DEFAULT_SIZE, 838, Short.MAX_VALUE))
+                .addComponent(tabThongKe))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1242,9 +1251,19 @@ public class ThongKeJDialog extends javax.swing.JDialog {
         this.nextBieuDo(ktbieudo);
     }//GEN-LAST:event_btnNextActionPerformed
 
-    private void btnXuatPNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatPNGActionPerformed
+    private void btnExChartToPNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExChartToPNGActionPerformed
         this.xuatChartToPNG(chartT);
-    }//GEN-LAST:event_btnXuatPNGActionPerformed
+    }//GEN-LAST:event_btnExChartToPNGActionPerformed
+
+    private void btnExChartToPNGMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExChartToPNGMouseEntered
+        btnExChartToPNG.setBackground(Color.GRAY);
+        btnExChartToPNG.setForeground(Color.WHITE);
+    }//GEN-LAST:event_btnExChartToPNGMouseEntered
+
+    private void btnExChartToPNGMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnExChartToPNGMouseExited
+        btnExChartToPNG.setBackground(Color.WHITE);
+        btnExChartToPNG.setForeground(Color.BLACK);
+    }//GEN-LAST:event_btnExChartToPNGMouseExited
 
     /**
      * @param args the command line arguments
@@ -1293,12 +1312,12 @@ public class ThongKeJDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBarChart;
+    private javax.swing.JButton btnExChartToPNG;
     private javax.swing.JButton btnLineChart;
     private javax.swing.JButton btnLocTheoNgay;
     private javax.swing.JButton btnNext;
     private javax.swing.JButton btnPrev;
     private javax.swing.JButton btnXuatExcel1;
-    private javax.swing.JButton btnXuatPNG;
     private javax.swing.JComboBox<String> cboNhanVien;
     private javax.swing.JComboBox<String> cboSoTien;
     private javax.swing.JComboBox<String> cboSort;

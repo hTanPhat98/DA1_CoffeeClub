@@ -79,7 +79,6 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jpnMenu.setBackground(new java.awt.Color(51, 51, 51));
         jpnMenu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jpnMenu.setForeground(new java.awt.Color(51, 51, 51));
 
         lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/logo-horizontal-white_350x70.png"))); // NOI18N
@@ -296,19 +295,19 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnBackground.setPreferredSize(new java.awt.Dimension(920, 720));
         jpnBackground.setLayout(null);
 
-        lblLich.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblLich.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblLich.setForeground(new java.awt.Color(255, 255, 255));
         lblLich.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblLich.setText("Hôm nay: dd/MM/yyyy");
         jpnBackground.add(lblLich);
-        lblLich.setBounds(710, 10, 150, 30);
+        lblLich.setBounds(690, 10, 170, 30);
 
-        lblDongHo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblDongHo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblDongHo.setForeground(new java.awt.Color(255, 255, 255));
         lblDongHo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblDongHo.setText("Thời gian: hh:mm:ss");
         jpnBackground.add(lblDongHo);
-        lblDongHo.setBounds(710, 50, 150, 30);
+        lblDongHo.setBounds(690, 50, 170, 30);
 
         lblBackgrounf.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblBackgrounf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/poly/Icons/background_main_920x720.png"))); // NOI18N
